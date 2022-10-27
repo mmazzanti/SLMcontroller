@@ -51,4 +51,5 @@ class Patter_generator:
         return (np.zeros((res_Y, res_X))).astype(np.uint8)
 
     def MakeZernike(self):
+	  print(1)
         pass
