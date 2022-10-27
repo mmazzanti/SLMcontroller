@@ -71,7 +71,7 @@ class LensTab(QWidget):
         self.focus_slider = DoubleSlider()
         self.focus_slider.setGeometry(50,50, 200, 50)
         self.focus_slider.setMinimum(0)
-        self.focus_slider.setMaximum(500)
+        self.focus_slider.setMaximum(2000)
         self.focus_slider.setTickPosition(QSlider.TickPosition.TicksBelow)
         self.focus_slider.setTickInterval(10)
         self.focus_slider.valueChanged.connect(self.update_lens)

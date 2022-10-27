@@ -44,8 +44,10 @@ class SLMWindow(QWidget):
         layout = QVBoxLayout()
         self.setLayout(layout)
         #self.setWindowFlag(QtCore.Qt.WindowType.FramelessWindowHint)
-        monitors = QScreen.virtualSiblings(self.screen())
-        monitor = monitors[window].availableGeometry()
+        self.Change_window(window)
+        #monitors = QScreen.virtualSiblings(self.screen())
+        # If the user selected a monitor that doesn't exist, use the primary monitor
+        #monitor = monitors[window].availableGeometry()
 
         self.setWindowFlags(QtCore.Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowStaysOnTopHint)
         self.setFixedSize(QSize(resX,resY))
@@ -54,13 +56,16 @@ class SLMWindow(QWidget):
         self.lbl.move(0, 0)
 
         # Move window to SLM screen
-        self.move(monitor.left(), monitor.top())
+        #self.move(monitor.left(), monitor.top())
         #self.move(0, 0)
 #        self.setCentralWidget(self.lbl)
 
     # Resize pattern window size
     def Change_window(self,window):
         monitors = QScreen.virtualSiblings(self.screen())
+        # If the user selected a monitor that doesn't exist, use the primary monitor
+        if len(monitors) <= window:
+            window = 0
         monitor = monitors[window].availableGeometry()
         self.move(monitor.left(), monitor.top())
 
@@ -119,7 +124,7 @@ class First(QtWidgets.QMainWindow):
         self.pattern_generator = Phase_pattern.Patter_generator()
         self.pattern = None
 
-        self.w = SLMWindow(self.settings_manager.get_X_res(), self.settings_manager.get_Y_res(),0)
+        self.w = SLMWindow(self.settings_manager.get_X_res(), self.settings_manager.get_Y_res(),self.settings_manager.get_SLM_window())
         self.holograms_manager = HologramsManager(self.w, self.settings_manager, self.pattern_generator)
 
         self.tabwidget = QTabWidget()
