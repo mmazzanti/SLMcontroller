@@ -1,0 +1,3 @@
+{
+    "files": ["settings.py","Phase_pattern.py","widget.py","opticalElement.py"]
+}
