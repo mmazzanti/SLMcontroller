@@ -119,7 +119,7 @@ class First(QtWidgets.QMainWindow):
         self.pattern_generator = Phase_pattern.Patter_generator()
         self.pattern = None
 
-        self.w = SLMWindow(self.settings_manager.get_X_res(), self.settings_manager.get_Y_res(),self.settings_manager.get_SLM_window())
+        self.w = SLMWindow(self.settings_manager.get_X_res(), self.settings_manager.get_Y_res(),0)
         self.holograms_manager = HologramsManager(self.w, self.settings_manager, self.pattern_generator)
 
         self.tabwidget = QTabWidget()
