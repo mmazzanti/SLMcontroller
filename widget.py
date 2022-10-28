@@ -54,11 +54,7 @@ class SLMWindow(QWidget):
         self.pattern_image = ImageWidget()
         self.lbl = QLabel(self)
         self.lbl.move(0, 0)
-
-        # Move window to SLM screen
-        #self.move(monitor.left(), monitor.top())
-        #self.move(0, 0)
-#        self.setCentralWidget(self.lbl)
+        self.setStyleSheet("background-color: black;")
 
     # Resize pattern window size
     def Change_window(self,window):
@@ -77,11 +73,12 @@ class SLMWindow(QWidget):
         self.lbl.resize(pixmap.width(), pixmap.height())
 
 class HologramsManager():
-    def __init__(self, SLMwindow, settings_manager, pattern_generator):
+    def __init__(self, SLMwindow, settings_manager, pattern_generator,tabwidget):
         self.optical_elements = {}
         self.SLMWindow = SLMwindow
         self.settings_manager = settings_manager
         self.pattern_generator = pattern_generator
+        self.tabwidget = tabwidget
 
     def addElementToList(self, id, elem):
         self.optical_elements[id] = elem
@@ -92,7 +89,11 @@ class HologramsManager():
     def isListEmpty(self):
         return len(self.optical_elements) == 0
 
-    def removeElementFromList(self, id, elem):
+    def removeElementFromList(self, id):
+        del self.optical_elements[id]
+        # self.tabwidget.removeWidget(elem)
+        # self.optical_elements.pop(id)
+        print("removing")
         pass
 
     def closeSLMWindow(self):
@@ -123,11 +124,14 @@ class First(QtWidgets.QMainWindow):
         self.settings_manager = settings.SettingsManager()
         self.pattern_generator = Phase_pattern.Patter_generator()
         self.pattern = None
+        self.tabwidget = QTabWidget()
+        self.tabwidget.setTabsClosable(True)
+        self.tabwidget.tabCloseRequested.connect(self.closeTab)
 
         self.w = SLMWindow(self.settings_manager.get_X_res(), self.settings_manager.get_Y_res(),self.settings_manager.get_SLM_window())
-        self.holograms_manager = HologramsManager(self.w, self.settings_manager, self.pattern_generator)
+        self.holograms_manager = HologramsManager(self.w, self.settings_manager, self.pattern_generator,self.tabwidget)
 
-        self.tabwidget = QTabWidget()
+        
         self.optical_elements = {}
         self.possible_optical_elements = ["Lens", "Grating", "Flatness correction", "Zernike", "LUT"]
         self.tabs_constructors = [self.lens_tab, self.grating_tab, self.flatness_correction_tab, self.zernike_tab, self.LUT_tab]
@@ -150,6 +154,13 @@ class First(QtWidgets.QMainWindow):
 
         wid.setLayout(grid)
         self.show()
+
+    def closeTab(self,index):
+        widget = self.tabwidget.widget(index)
+        if widget is not None:
+            widget.deleteLater()
+        self.tabwidget.removeTab(index)
+        self.holograms_manager.removeElementFromList(id(widget))
 
     def lens_tab(self):
         tab = opticalElement.LensTab(self.pattern_generator, self.settings_manager, self.holograms_manager)

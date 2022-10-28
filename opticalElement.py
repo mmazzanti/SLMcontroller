@@ -1,7 +1,9 @@
 # This Python file uses the following encoding: utf-8
-from PyQt6.QtWidgets import QDialog, QDialogButtonBox, QDoubleSpinBox, QGridLayout, QGroupBox, QComboBox, QVBoxLayout, QHBoxLayout, QLabel, QWidget, QSlider, QCheckBox, QSpinBox
+from PyQt6.QtWidgets import QDialog, QDialogButtonBox, QDoubleSpinBox, QGridLayout, QGroupBox, QComboBox, QVBoxLayout, QHBoxLayout, QLabel, QWidget, QSlider, QCheckBox, QSpinBox , QPushButton
 from PyQt6.QtCore import Qt, pyqtSignal
 from PyQt6 import QtCore, QtWidgets
+from PyQt6.QtGui import QFont
+
 
 import numpy as np
 
@@ -53,45 +55,67 @@ class LensTab(QWidget):
         self.pattern_generator = pattern_generator
         self.settings_manager = settings_manager
         self.hologram_manager = hologram_manager
-        self.focus = 0
+        self.minfocus = 2
+        self.maxfocus = 2000
+        self.focus = self.minfocus
+
         self.init_GUI()
 
     def init_GUI(self):
-        self.slider_layout = QHBoxLayout()
-
-        self.label = QLabel(self)
-        self.label.setText("Focus: 0 mm")
+        self.slider_layout = QVBoxLayout()
+        self.general_controls_layout = QVBoxLayout()
 
         self.isactive = QCheckBox("Activate element : ")
         self.isactive.setLayoutDirection(Qt.LayoutDirection.RightToLeft)
+        self.liveupdate = QCheckBox("Live updating : ")
+        self.liveupdate.setLayoutDirection(Qt.LayoutDirection.RightToLeft)
+        self.general_controls_layout.addWidget(self.isactive)
+        self.general_controls_layout.addWidget(self.liveupdate)
 
-        self.spin_focus = QSpinBox(text="Focus ")
-
+        self.spin_focus = QDoubleSpinBox(text="Focus ")
+        self.spin_focus.setSuffix(' mm')
+        self.spin_focus.setKeyboardTracking(False)
+        self.spin_focus.setSingleStep(0.1)
+        self.spin_focus.setMaximum(self.maxfocus)
+        self.spin_focus.setMinimum(self.minfocus)
+        self.spin_focus.valueChanged.connect(self.update_lens)
 
         self.focus_slider = DoubleSlider()
         self.focus_slider.setGeometry(50,50, 200, 50)
         self.focus_slider.setMinimum(0)
         self.focus_slider.setMaximum(2000)
+        self.focus_slider.setMinimum(self.minfocus)
         self.focus_slider.setTickPosition(QSlider.TickPosition.TicksBelow)
         self.focus_slider.setTickInterval(10)
         self.focus_slider.valueChanged.connect(self.update_lens)
 
+        self.slider_layout.addWidget(self.spin_focus)
         self.slider_layout.addWidget(self.focus_slider)
-        self.slider_layout.addWidget(self.label)
 
         self.layout = QGridLayout()
         self.layout.addLayout(self.slider_layout,0,0)
-        self.layout.addWidget(self.isactive,1,0)
+        self.layout.addLayout(self.general_controls_layout,1,0)
         #self.layout.addWidget(self.label,1,0)
 
         self.setLayout(self.layout)
 
+    def removeme(self):
+        self.hologram_manager.removeElementFromList(id(self), self)
+        pass
+
     def update_lens(self):
         self.focus = self.sender().value()
-        self.label.setText("Focus: "+str(self.focus)+" mm")
+        self.focus_slider.setValue(self.focus)
+        self.spin_focus.setValue(self.focus)
+        if self.liveupdate.isChecked():
+            self.update_pattern()
+            self.hologram_manager.updateSLMWindow()
+
+    def update_pattern(self):
+        self.pattern = self.pattern_generator.GenerateLens(self.focus, self.settings_manager.get_wavelength(), self.settings_manager.get_pixel_pitch(), self.settings_manager.get_X_res(), self.settings_manager.get_Y_res())
 
     def get_pattern(self):
-        self.pattern = self.pattern_generator.GenerateLens(self.focus, self.settings_manager.get_wavelength(), self.settings_manager.get_pixel_pitch(), self.settings_manager.get_X_res(), self.settings_manager.get_Y_res())
+        self.update_pattern()
         return self.pattern
 
     def is_active(self):
@@ -149,7 +173,7 @@ class GratingTab(QWidget):
         self.lmm_layout.addWidget(self.lmm_slider)
 
     def make_angle_slider(self):
-        self.angle_layout = QHBoxLayout()
+        self.angle_layout = QVBoxLayout()
 
         self.spin_angle = QDoubleSpinBox(text="Grating angle")
         self.spin_angle.setSuffix(' π')
