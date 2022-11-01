@@ -80,7 +80,10 @@ class SettingsManager:
     def get_pixel_pitch(self):
         return float(self.settings.value("SLM_pixel_pitch"))
     def get_SLM_window(self):
-        return int(self.settings.value("SLM_window"))
+        if self.settings.value("SLM_window") is not None:
+            return int(self.settings.value("SLM_window"))
+        else:
+            return int(self.defaults("SLM_window"))
 
 
 

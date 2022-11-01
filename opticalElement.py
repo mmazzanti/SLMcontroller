@@ -128,6 +128,8 @@ class GratingTab(QWidget):
         self.pattern_generator = pattern_generator
         self.settings_manager = settings_manager
         self.hologram_manager = hologram_manager
+        self.minlmm = 0
+        self.maxlmm = 1e-3/(2*self.settings_manager.get_pixel_pitch()*1e-6)
         self.lmm = 0.
         self.angle = 0.
         self.init_GUI()
@@ -160,13 +162,15 @@ class GratingTab(QWidget):
         self.spin_lmm.valueChanged.connect(self.update_lmm)
         self.spin_lmm.setKeyboardTracking(False)
         self.spin_lmm.setSingleStep(0.1)
+        self.spin_lmm.setMaximum(self.maxlmm)
+        self.spin_lmm.setMinimum(self.minlmm)
 
         self.lmm_slider = DoubleSlider()
         self.lmm_slider.setGeometry(50,50, 200, 50)
         self.lmm_slider.setMinimum(0)
-        self.lmm_slider.setMaximum(1e-3/(self.settings_manager.get_pixel_pitch()*1e-6))
+        self.lmm_slider.setMaximum(self.maxlmm)
         self.lmm_slider.setTickPosition(QSlider.TickPosition.TicksBelow)
-        self.lmm_slider.setTickInterval(1/10)
+        self.lmm_slider.setTickInterval(10)
         self.lmm_slider.valueChanged.connect(self.update_lmm)
 
         self.lmm_layout.addWidget(self.spin_lmm)
@@ -221,7 +225,7 @@ class GratingTab(QWidget):
 
 class DoubleSlider(QSlider):
     doubleValueChanged = pyqtSignal(float)
-    def __init__(self, decimals=3, *args, **kargs):
+    def __init__(self, decimals=2, *args, **kargs):
         super(DoubleSlider, self).__init__(Qt.Orientation.Horizontal,*args, **kargs)
         self._multi = 10 ** decimals
 
@@ -238,7 +242,7 @@ class DoubleSlider(QSlider):
         return super(DoubleSlider, self).setMinimum(value * self._multi)
 
     def setMaximum(self, value):
-        return super(DoubleSlider, self).setMaximum(value * self._multi)
+        return super(DoubleSlider, self).setMaximum(int(value * self._multi))
 
     def setSingleStep(self, value):
         return super(DoubleSlider, self).setSingleStep(value * self._multi)
