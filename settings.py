@@ -83,7 +83,7 @@ class SettingsManager:
         if self.settings.value("SLM_window") is not None:
             return int(self.settings.value("SLM_window"))
         else:
-            return int(self.defaults("SLM_window"))
+            return int(self.defaults["SLM_window"])
 
 
 
