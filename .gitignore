@@ -4,6 +4,7 @@
 Camera/
 Tests/
 Data/
+.vscode/
 
 *~
 *.autosave
