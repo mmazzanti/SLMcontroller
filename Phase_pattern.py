@@ -4,7 +4,7 @@ import numba as nb
 
 @nb.jit
 def _generateGrating(X,Y,pxl,theta):
-    grating = (255*(Y/pxl*np.sin(theta)+X/pxl*np.cos(theta)))%255
+    grating = (256*(Y/pxl*np.sin(theta)+X/pxl*np.cos(theta)))%256
     return grating.astype(np.uint8)
 
 @nb.jit
@@ -14,7 +14,7 @@ def _generateLens(X, Y, x_offset, y_offset, wl, focus, pixel_pitch):
     mask = r < rN/pixel_pitch
     gamma = np.pi/(wl*focus)
     phi = gamma*(((X - x_offset)*pixel_pitch)**2+((Y - y_offset)*pixel_pitch)**2)/(2*np.pi)
-    lens = (mask*phi*255)%255
+    lens = (mask*phi*256)%256
     return lens.astype(np.uint8)
 class Patter_generator:
     def __init__(self):

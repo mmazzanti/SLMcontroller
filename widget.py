@@ -40,7 +40,7 @@ class SLMWindow(QWidget):
     will appear as a free-floating window as we want.
     """
     def __init__(self,resX,resY,window):
-        super().__init__()
+        super().__init__(parent=None)
         layout = QVBoxLayout()
         self.setLayout(layout)
         #self.setWindowFlag(QtCore.Qt.WindowType.FramelessWindowHint)
@@ -71,6 +71,7 @@ class SLMWindow(QWidget):
     def UpdatePattern(self,pixmap):
         self.lbl.setPixmap(pixmap)
         self.lbl.resize(pixmap.width(), pixmap.height())
+        self.update()
 
 class HologramsManager():
     def __init__(self, SLMwindow, settings_manager, pattern_generator,tabwidget):
@@ -79,6 +80,7 @@ class HologramsManager():
         self.settings_manager = settings_manager
         self.pattern_generator = pattern_generator
         self.tabwidget = tabwidget
+        self.pattern = None
 
     def addElementToList(self, id, elem):
         self.optical_elements[id] = elem
@@ -89,12 +91,17 @@ class HologramsManager():
     def isListEmpty(self):
         return len(self.optical_elements) == 0
 
+    def removeAll(self):
+        todelete = []
+        for el in self.optical_elements:
+            if el is not None:
+                todelete.append(el)
+        for el in todelete:
+            self.optical_elements[el].__del__()
+
     def removeElementFromList(self, id):
         del self.optical_elements[id]
-        # self.tabwidget.removeWidget(elem)
-        # self.optical_elements.pop(id)
-        print("removing")
-        pass
+
 
     def closeSLMWindow(self):
         pass #Hide SLM window
@@ -103,17 +110,45 @@ class HologramsManager():
         self.SLMWindow = None
         self.optical_elements = None
 
-    def updateSLMWindow(self):
-        self.pattern = self.pattern_generator.empty_pattern(self.settings_manager.get_X_res(), self.settings_manager.get_Y_res())
-        for el in self.optical_elements:
+    # This function is used to render a pattern generated from an algorithm, 
+    # bypassing the active optical elements
+    def renderAlgorithmPattern(self, pattern, others):
+        if self.pattern is None:
+            self.pattern = self.pattern_generator.empty_pattern(self.settings_manager.get_X_res(), self.settings_manager.get_Y_res())
+        self.pattern = pattern
+        if others == True:
+            self.getPatterns()
+        self.renderPattern()
+
+    #This part corrects for the non-linearities of the SLM
+    #For each wavelenght the maximum phase value is given by the company
+    #e.g. at 760nm 255 ---> 226
+    #So we need to renormalize the hologram such that value%226
+    def RenormalizePattern(self):
+        self.pattern = self.pattern%(self.settings_manager.get_phase_correction()+1)
+
+    # This function gets all the patterns from the active elements and sums them up
+    def getPatterns(self):
+         for el in self.optical_elements:
             if el is not None:
                 if self.optical_elements[el].is_active():
                     self.pattern += self.optical_elements[el].get_pattern()
+
+    # This function does the actual render of the phase pattern. Updates the QPixmap used on the SLM window
+    def renderPattern(self):
+        self.RenormalizePattern()
         q_img = QImage(self.pattern, self.settings_manager.get_X_res(), self.settings_manager.get_Y_res(), self.settings_manager.get_X_res(), QImage.Format.Format_Grayscale8)
 #        label = QLabel(self)
         pixmap = QPixmap(q_img)
         self.SLMWindow.ResizeWindow(self.settings_manager.get_X_win_size(),self.settings_manager.get_Y_win_size())
         self.SLMWindow.UpdatePattern(pixmap)
+
+    # Function to update the SLM window when a new pattern is generated
+    def updateSLMWindow(self):
+        self.pattern = self.pattern_generator.empty_pattern(self.settings_manager.get_X_res(), self.settings_manager.get_Y_res())
+        self.getPatterns()
+        self.renderPattern()
+        
 
 
 class First(QtWidgets.QMainWindow):
@@ -132,9 +167,8 @@ class First(QtWidgets.QMainWindow):
         self.holograms_manager = HologramsManager(self.w, self.settings_manager, self.pattern_generator,self.tabwidget)
 
         
-        self.optical_elements = {}
-        self.possible_optical_elements = ["Lens", "Grating", "Flatness correction", "Zernike", "LUT"]
-        self.tabs_constructors = [self.lens_tab, self.grating_tab, self.flatness_correction_tab, self.zernike_tab, self.LUT_tab]
+        self.possible_optical_elements = ["Lens", "Grating", "Flatness correction", "Zernike", "LUT", "Spot optimization"]
+        self.tabs_constructors = [self.lens_tab, self.grating_tab, self.flatness_correction_tab, self.zernike_tab, self.LUT_tab, self.Spot_optim]
 
         wid = QtWidgets.QWidget(self)
         self.setCentralWidget(wid)
@@ -173,11 +207,17 @@ class First(QtWidgets.QMainWindow):
         self.holograms_manager.addElementToList(id(tab), tab)
 
     def flatness_correction_tab(self):
-        pass
+        tab = opticalElement.FlatnessCorrectionTab(self.pattern_generator, self.settings_manager, self.holograms_manager)
+        self.tabwidget.addTab(tab,"Flatness Correction")
+        self.holograms_manager.addElementToList(id(tab), tab)
     def zernike_tab(self):
         pass
     def LUT_tab(self):
         pass
+    def Spot_optim(self):
+        tab = opticalElement.SpotOptimTab(self.pattern_generator, self.settings_manager, self.holograms_manager)
+        self.tabwidget.addTab(tab,"Optimizer")
+        self.holograms_manager.addElementToList(id(tab), tab)
 
     def edit_SLM_settings(self):
         dlg = settings.SettingsDialog(self.settings_manager, self)
@@ -187,6 +227,7 @@ class First(QtWidgets.QMainWindow):
         # TODO: ADD HERE RESIZING OF SLM PATTERN TO MATCH RESOLUTION
 
     def closeEvent(self, event):
+        self.holograms_manager.removeAll()
         print("Closing Hologram window")
         QApplication.instance().quit()
 #        del self.holograms_manager
@@ -211,10 +252,8 @@ class First(QtWidgets.QMainWindow):
         if self.holograms_manager.isListEmpty() and self.tabwidget== None:
             # If the user still didn't choose any optical element generate the tabs layout ?
             pass
-        choosen = ""
         inputter = opticalElement.opticalElement(self.possible_optical_elements, self)
         if inputter.exec():
-            selected = inputter.get_selected()
             self.tabs_constructors[inputter.get_selected()]()
 
     def InitButtons(self,buttons):
@@ -228,7 +267,7 @@ class First(QtWidgets.QMainWindow):
         button_settings.triggered.connect(self.edit_SLM_settings)
         buttons["settings"] = button_settings
 
-        SLM_hologram_window = QPushButton("Open Hologram window")
+        SLM_hologram_window = QPushButton("Show Hologram/Update")
         SLM_hologram_window.clicked.connect(self.on_pushButton_clicked)
         buttons["SLM_hologram_window"] = SLM_hologram_window
 
@@ -253,6 +292,7 @@ class First(QtWidgets.QMainWindow):
 
 def main():
     app = QtWidgets.QApplication(sys.argv)
+    app.setStyle('macos')
     main = First()
 
     main.show()

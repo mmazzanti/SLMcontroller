@@ -5,7 +5,7 @@ from PyQt6.QtWidgets import QDialog, QDialogButtonBox, QGridLayout, QGroupBox, Q
 
 
 class SettingsManager:
-    """Create a settings manager for the SuperChess application."""
+
     def __init__(self):
         # SLM settings document (contains resolution, name etc.)
         #self.settings = QSettings("SLM_pattern.ini", QSettings.Format.IniFormat)
@@ -13,6 +13,7 @@ class SettingsManager:
         self.widget_mappers = {
                 'QCheckBox': ('checkState', 'setCheckState',bool),
                 'QLineEdit': ('text', 'setText',str),
+                'QSpinBox': ('value', 'setValue',int),
                 'QSpinBox': ('value', 'setValue',int),
                 'QDoubleSpinBox': ('value', 'setValue',float),
                 'QRadioButton': ('isChecked', 'setChecked',int),
@@ -23,7 +24,8 @@ class SettingsManager:
                          'pattern_window_size_X' : 800,
                          'pattern_window_size_Y' : 600,
                          'Laser wavelength':800,
-                         'SLM_window': 0
+                         'SLM_window': 0,
+                         'Phase_correction' : 255
         }
 
     def save_from_widget(self, settings_widgets):
@@ -74,18 +76,22 @@ class SettingsManager:
     # WARNING! This might be different than the SLM resolution!
     # TODO : Make it dependent on the SLM name
     def get_X_win_size(self):
-        return self.settings.value("pattern_window_size_X")
+        return int(self.settings.value("pattern_window_size_X"))
+
     def get_Y_win_size(self):
-        return self.settings.value("pattern_window_size_Y")
+        return int(self.settings.value("pattern_window_size_Y"))
+
+    def get_phase_correction(self):
+        return int(self.settings.value("Phase_correction"))
+
     def get_pixel_pitch(self):
         return float(self.settings.value("SLM_pixel_pitch"))
+
     def get_SLM_window(self):
         if self.settings.value("SLM_window") is not None:
             return int(self.settings.value("SLM_window"))
         else:
             return int(self.defaults["SLM_window"])
-
-
 
 class SettingsDialog(QDialog):
     """Create a settings dialog to edit all the settings of the application."""
@@ -117,6 +123,10 @@ class SettingsDialog(QDialog):
         self.wavelength.setMaximum(2000)
         self.wavelength.setMinimum(0)
 
+        self.correction = QSpinBox(text="Phase correction")
+        self.correction.setMaximum(255)
+        self.correction.setMinimum(0)
+
         self.SLM_res_X = QSpinBox(text="X resolution of SLM")
         self.SLM_res_X.setMaximum(10000)
         self.SLM_res_X.setSuffix(' px')
@@ -139,6 +149,7 @@ class SettingsDialog(QDialog):
                     'SLM_name': self.SLM_name,
                     'SLM_window' : self.SLM_window,
                     'Laser wavelength': self.wavelength,
+                    'Phase_correction': self.correction,
                     'SLM_size_X': self.SLM_res_X,
                     'SLM_size_Y': self.SLM_res_Y,
                     'pattern_window_size_X': self.SLM_winsize_X,
@@ -164,6 +175,7 @@ class SettingsDialog(QDialog):
         slayout.addWidget(self.make_group("Laser parameters", self.wavelength))
         slayout.addWidget(self.make_group("SLM resolution", self.SLM_res_X,self.SLM_res_Y))
         slayout.addWidget(self.make_group("SLM pixel pitch", self.pixel_pitch))
+        slayout.addWidget(self.make_group("SLM phase correction", self.correction))
         slayout.addWidget(self.make_group("Pattern window size", self.SLM_winsize_X,self.SLM_winsize_Y))
 
         #Ok/cancel settings buttons
