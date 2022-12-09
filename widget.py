@@ -4,7 +4,7 @@
 
 from PyQt6 import QtCore, QtWidgets
 from PyQt6.QtCore import Qt, QSize, QSettings
-from PyQt6.QtWidgets import QMainWindow, QLabel, QGridLayout, QWidget, QPushButton, QToolBar, QApplication, QHBoxLayout, QSpinBox, QVBoxLayout, QFileDialog, QLabel, QErrorMessage, QTabWidget
+from PyQt6.QtWidgets import QMessageBox, QLabel, QGridLayout, QWidget, QPushButton, QToolBar, QApplication, QHBoxLayout, QSpinBox, QVBoxLayout, QFileDialog, QLabel, QErrorMessage, QTabWidget
 from PyQt6.QtGui import QPixmap, QImage, QAction, QScreen
 
 import numpy as np
@@ -132,7 +132,16 @@ class HologramsManager():
          for el in self.optical_elements:
             if el is not None:
                 if self.optical_elements[el].is_active():
-                    self.pattern += self.optical_elements[el].get_pattern()
+                    pattern_from_el = self.optical_elements[el].get_pattern()
+                    if (pattern_from_el.shape[1] != self.settings_manager.get_X_res()) or (pattern_from_el.shape[0] != self.settings_manager.get_Y_res()) :
+                        dlg = QMessageBox(self.tabwidget)
+                        dlg.setIcon(QMessageBox.Icon.Warning)
+                        dlg.setWindowTitle("WARNING!")
+                        dlg.setText("One of the optical elements don't match with the SLM resolution. Please check the settings.")
+                        button = dlg.exec()
+                        if button == QMessageBox.StandardButton.Ok:
+                            return	
+                    self.pattern += pattern_from_el
 
     # This function does the actual render of the phase pattern. Updates the QPixmap used on the SLM window
     def renderPattern(self):
@@ -154,7 +163,7 @@ class HologramsManager():
 class First(QtWidgets.QMainWindow):
     def __init__(self, parent=None):
         super(First, self).__init__(parent)
-        self.setMinimumSize(QSize(400, 500))
+        self.setMinimumSize(QSize(400, 600))
         self.setWindowTitle("SLM hologram control")
         self.settings_manager = settings.SettingsManager()
         self.pattern_generator = Phase_pattern.Patter_generator()
