@@ -1,5 +1,5 @@
 # This Python file uses the following encoding: utf-8
-from PyQt6.QtWidgets import QDialog, QDialogButtonBox, QDoubleSpinBox,QMessageBox, QLineEdit, QGridLayout, QGroupBox, QComboBox, QVBoxLayout, QHBoxLayout, QLabel, QWidget, QSlider, QCheckBox, QSpinBox , QPushButton
+from PyQt6.QtWidgets import QDialog, QDialogButtonBox, QDoubleSpinBox, QMessageBox, QLineEdit, QGridLayout, QGroupBox, QComboBox, QVBoxLayout, QHBoxLayout, QLabel, QWidget, QSlider, QCheckBox, QSpinBox , QPushButton
 from PyQt6.QtCore import Qt, pyqtSignal, QThread, QPoint
 from PyQt6 import QtCore, QtWidgets
 from PyQt6.QtGui import QImage, QPainter
@@ -314,7 +314,7 @@ class FlatnessCorrectionTab(QWidget):
                 button = dlg.exec()
                 if button == QMessageBox.StandardButton.Ok:
                     return	
-            if (self.pattern.shape[0] != self.SLM_x_res) or (self.pattern.shape[0] != self.SLM_y_res) :
+            if (self.pattern.shape[1] != self.SLM_x_res) or (self.pattern.shape[0] != self.SLM_y_res) :
                 dlg = QMessageBox(self)
                 dlg.setIcon(QMessageBox.Icon.Warning)
                 dlg.setWindowTitle("WARNING!")
@@ -460,7 +460,7 @@ class SpotOptimTab(QWidget):
         self.mesh = np.zeros((self.SLM_y_res, self.SLM_x_res))
         for i in range(0,self.SLM_y_res):
             for j in range(0,self.SLM_x_res):
-                tmp = gmsh.model.mesh.getElementsByCoordinates(i, j, 0)[0]
+                tmp = gmsh.model.mesh.getElementsByCoordinates(j, i, 0)[0]
                 self.mesh[i,j] = tmp
                 self.ids_list.append(tmp)
         self.fixed = gmsh.model.mesh.getElementsByCoordinates(self.SLM_x_res/2, self.SLM_y_res/2, 0)[0]
