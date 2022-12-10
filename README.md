@@ -40,6 +40,9 @@ This adds a virtual diffractive grating. It is possible to control the lines/mm 
 ### Flatness correction
 This controls the flatness correction pattern typically used to correct for flatness imperfections of the SLM. The SLM manufacturing company normally provides a file for each wavelength supported by the SLM. This can be added to the total pattern by selecting the proper flatness correction for the used wavelength.
 The flatness correction is normally an image and its size should match the SLM size.
+<p align="center">
+   <img src="Documentation/Img/flatness_correction.png" alt="Flatness correction tab"/>
+</p>
 
 ![Flatness correction](Documentation/Img/flatness_correction.png "Flatness correction tab")
 
