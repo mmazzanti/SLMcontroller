@@ -42,3 +42,8 @@ This controls the flatness correction pattern typically used to correct for flat
 The flatness correction is normally an image and its size should match the SLM size.
 
 ![Flatness correction](Documentation/Img/flatness_correction.png "Flatness correction tab")
+
+img[src*='#center'] { 
+    display: block;
+    margin: auto;
+}
