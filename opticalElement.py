@@ -11,6 +11,7 @@ import Phase_pattern
 import time
 import cv2
 import os
+import threading
 
 class opticalElement(QDialog):
     def __init__(self, elements_map, parent = None):
@@ -146,27 +147,14 @@ class LensTab(QWidget):
     def is_active(self):
         return self.isactive.isChecked()
 
-class MeshVisualizer(QThread):
-    def __init__(self):
-        self._active = True
-        pass
-    def run(self):
-        self._active = True
-        gmsh.fltk.initialize()
-        while(self._active):
-            gmsh.fltk.wait()
-        gmsh.fltk.finalize()
 
-    def __del__(self):
-        self.wait()
-    def stop(self):
-        self._active = False
 class OptimizerAlgorithm(QThread):
 
-    def __init__(self,hologram_manager):
+    def __init__(self,hologram_manager,cameraWindow):
         QThread.__init__(self)
         self.pattern = None
         self.frequencies = None
+        self.cameraWindow = cameraWindow
         self.times = None
         self.mesh = None
         self.SLM_x_res = None
@@ -182,12 +170,16 @@ class OptimizerAlgorithm(QThread):
     def run(self):
         self.initPattern()
         self.SaveData()
+        print("Times : ", self.times, " len ", len(self.times))
+        print("IDs : ", self.ids_list , " len ", len(self.ids_list))
         for t,real_time in enumerate(self.times):
             self.isPhaseReady = False
             self.GeneratePhases(t)
             self.hologram_manager.renderAlgorithmPattern(self.pattern, True)
             print("Time: ", t)
-            time.sleep(1)
+            time.sleep(2)
+            frame = self.cameraWindow.take_picture()
+            self.SaveImg(frame,t)
             ## Check if thread is active
             if not self._active:
                 break
@@ -220,19 +212,27 @@ class OptimizerAlgorithm(QThread):
             for j in range(0,self.SLM_x_res):
                 self.pattern[i,j] = self.random_phases[self.ids_list.index(self.mesh[i,j])]
 
+
+    def SaveImg(self,frame,time):
+        np.save(self.mypath+"/Frames/frame_" + str(time) , np.array(frame))
+        np.save(self.mypath+"/Intensities/intensity_" + str(time) , np.array(frame.sum(axis=(0,1,2))) )
+
     def SaveData(self):
         counter = 0
-        mypath = 'Data/Optimizer_'+(str(counter)) +'/'
-        while os.path.exists(mypath):   
+        self.mypath = 'Data/Optimizer_'+(str(counter)) +'/'
+        while os.path.exists(self.mypath):   
             counter += 1
-            mypath = 'Optimizer_'+(str(counter)) +'/'
-            print(mypath)
-        os.makedirs(mypath)
-        np.save(mypath+"starting_phases", self.random_phases)
-        np.save(mypath+"mesh_data", self.mesh)
-        np.save(mypath+"frequencies", self.frequencies)
-        np.save(mypath+"times", self.times)
-        np.save(mypath+"IDs", self.ids_list)
+            self.mypath = 'Data/Optimizer_'+(str(counter)) +'/'
+            print(self.mypath)
+        os.makedirs(self.mypath)
+        os.makedirs(self.mypath+"Frames")
+        os.makedirs(self.mypath+"Intensities")
+        np.save(self.mypath+"starting_phases", self.random_phases)
+        np.save(self.mypath+"mesh_data", self.mesh)
+        np.save(self.mypath+"frequencies", self.frequencies)
+        np.save(self.mypath+"times", self.times)
+        np.save(self.mypath+"IDs", self.ids_list)
+
 
 
     def GeneratePhases(self,time):
@@ -360,32 +360,62 @@ class ImageWidget(QWidget):
         qp.end()
 
 
+class MeshVisualizer(QThread):
+    def __init__(self,parent=None):
+        QThread.__init__(self, parent)
+        self._active = True
+
+
+    def showMesh(self):
+        while(self._active):
+            gmsh.fltk.wait()
+            self._active = gmsh.fltk.isAvailable()
+
+
+    def run(self):
+        self._active = True
+        t = threading.Thread(target=self.showMesh)
+        gmsh.fltk.initialize()
+        t.daemon = True
+        t.start()
+        
+
+    def __del__(self):
+        self.wait()
+        
+    def stop(self):
+        self._active = False
+        gmsh.fltk.finalize()
+
 class SpotOptimTab(QWidget):
-    def __init__(self, pattern_generator, settings_manager, hologram_manager):
+    def __init__(self, pattern_generator, settings_manager, hologram_manager,cameraWindow):
         super().__init__()
         self.pattern_generator = pattern_generator
         self.settings_manager = settings_manager
         self.hologram_manager = hologram_manager
+        self.cameraWindow = cameraWindow
         self.algorithms = [1,2,3,5,6,7,8,9,11]
         self.algorithms_names = ["MeshAdapt", "Automatic", "Initial mesh only", "Delaunay", "Frontal-Delaunay", "BAMG", "Frontal-Delaunay quads", "Packing paralleograms","Quasi-structured Quad"]
         self.openmeshvisualizer = True
         self.wasINIT = False
+        self.th_active = True
         self.points = [0,0,0,0] # 4 points array where to store the points tags
         self.lines = [0,0,0,0] # 4 points array where to store the lines tags
         self.SLM_x_res = self.settings_manager.get_X_res()
         self.SLM_y_res = self.settings_manager.get_Y_res()
         self.scaling_x = 0
         self.scaling_y = 0
-        self.visualizer = MeshVisualizer()
+
         self.init_GMESH()
         self.init_GUI()
+        self.visualizer = MeshVisualizer(self)
         
         # Mesh data matrix
 
         self.mesh = np.zeros((self.SLM_y_res, self.SLM_x_res))
         self.ids_list = []
         self.frequencies = []
-        self.theOptimizer = OptimizerAlgorithm(self.hologram_manager)
+        self.theOptimizer = OptimizerAlgorithm(self.hologram_manager,self.cameraWindow)
 
 
     def __del__(self):
@@ -553,10 +583,17 @@ class SpotOptimTab(QWidget):
         return False
 
     def show_mesh(self):
+        # self.th_active = True
+        # self.vis_th = threading.Thread(target=self.thread_gmsh_visualizer, args=())
+        # self.vis_th.start()
         self.visualizer.run()
         
     def close_mesh(self):
         self.visualizer.stop()
+        # self.th_active = False
+        # time.sleep(2)
+        
+
 class GratingTab(QWidget):
     def __init__(self, pattern_generator, settings_manager, hologram_manager):
         super().__init__()
