@@ -6,7 +6,9 @@ The software takes care of rendering the hologram on top of any graphical interf
 The software offers various types of static holograms that are normally used in the field of optical tweezers.
 
 From the main window it is possible to add new optical elements and toggle the rendering of the hologram.
+
 ![Main window](Documentation/Img/main.png "The main window")
+
 Before doing that however the user should set-up the parameters of his SLM and system. 
 In the settings windows it is possible to set the following parameters :
 * SLM ID : This is an identifier for that particular SLM. In future I plan to provide support for multiple SLMs. Under it the user can select on which monitor the SLM pattern should be rendered. 0 = main monitor. Here the typical selection should be 1 (first external monitor, SLM)
@@ -15,6 +17,7 @@ In the settings windows it is possible to set the following parameters :
 * SLM pixel pitch : The pixel size of the SLM
 * SLM phase correction : This is the correction value for a 2π phase modulation. The value is nomally provided by the manufacturing company. Typically 2π --> 255 but at different wavelengths this value can vary
 * Pattern window size : This should be the screen resolution used for the SLM (eg. Full-HD) not the number of pixels of the SLM (although the two might match). The unused (SLM resolution - window size) pixels will be rendered as black. 
+
 ![Settings](Documentation/Img/settings.png "Software settings")
 
 ## Optical elements
@@ -24,14 +27,18 @@ Some optical elements have a "live update" feature. The live update permits to c
 
 ### Fresnel lens pattern
 It is possible to add a virtual lens on the SLM by generating a fresnel lens pattern (fresnel zone plate). This can be done by adding a new "lens" optical element.
+
 ![Lens](Documentation/Img/lens.png "Fresnel lens tab")
+
 In the tab it is possible to control the focus of the lens and activate/deactivate it.
 
 ### Grating
 This adds a virtual diffractive grating. It is possible to control the lines/mm of the grating and its orientation. The number of lines per pixel will depend on the size of each SLM pixel.
+
 ![Flatness correction](Documentation/Img/grating.png "Grating tab")
 
 ### Flatness correction
 This controls the flatness correction pattern typically used to correct for flatness imperfections of the SLM. The SLM manufacturing company normally provides a file for each wavelength supported by the SLM. This can be added to the total pattern by selecting the proper flatness correction for the used wavelength.
 The flatness correction is normally an image and its size should match the SLM size.
+
 ![Flatness correction](Documentation/Img/flatness_correction.png "Flatness correction tab")
