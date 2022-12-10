@@ -11,6 +11,7 @@ import numpy as np
 import random
 import sys
 import settings
+import camera
 import Phase_pattern
 import opticalElement
 
@@ -49,7 +50,7 @@ class SLMWindow(QWidget):
         # If the user selected a monitor that doesn't exist, use the primary monitor
         #monitor = monitors[window].availableGeometry()
 
-        self.setWindowFlags(QtCore.Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowStaysOnTopHint)
+        self.setWindowFlags(Qt.WindowType.BypassWindowManagerHint | Qt.WindowType.X11BypassWindowManagerHint | QtCore.Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowStaysOnTopHint)
         self.setFixedSize(QSize(resX,resY))
         self.pattern_image = ImageWidget()
         self.lbl = QLabel(self)
@@ -164,12 +165,14 @@ class First(QtWidgets.QMainWindow):
     def __init__(self, parent=None):
         super(First, self).__init__(parent)
         self.setMinimumSize(QSize(400, 600))
+        #centerPoint = QGuiApplication.primaryScreen().availableGeometry()
         self.setWindowTitle("SLM hologram control")
         self.settings_manager = settings.SettingsManager()
         self.pattern_generator = Phase_pattern.Patter_generator()
         self.pattern = None
         self.tabwidget = QTabWidget()
         self.tabwidget.setTabsClosable(True)
+        self.cameraWindow = None
         self.tabwidget.tabCloseRequested.connect(self.closeTab)
 
         self.w = SLMWindow(self.settings_manager.get_X_res(), self.settings_manager.get_Y_res(),self.settings_manager.get_SLM_window())
@@ -224,7 +227,15 @@ class First(QtWidgets.QMainWindow):
     def LUT_tab(self):
         pass
     def Spot_optim(self):
-        tab = opticalElement.SpotOptimTab(self.pattern_generator, self.settings_manager, self.holograms_manager)
+        if self.cameraWindow is None:
+            dlg = QMessageBox(self)
+            dlg.setIcon(QMessageBox.Icon.Warning)
+            dlg.setWindowTitle("WARNING!")
+            dlg.setText("Initialize camera first!")
+            button = dlg.exec()
+            if button == QMessageBox.StandardButton.Ok:
+                return
+        tab = opticalElement.SpotOptimTab(self.pattern_generator, self.settings_manager, self.holograms_manager,self.cameraWindow)
         self.tabwidget.addTab(tab,"Optimizer")
         self.holograms_manager.addElementToList(id(tab), tab)
 
@@ -234,6 +245,10 @@ class First(QtWidgets.QMainWindow):
         # Update where the SLM window is (TODO: IS IT GOOD TO DO THIS HERE ??)
         self.w.Change_window(self.settings_manager.get_SLM_window())
         # TODO: ADD HERE RESIZING OF SLM PATTERN TO MATCH RESOLUTION
+    
+    def start_camera(self):
+        self.cameraWindow = camera.CameraWindow()
+        self.cameraWindow.show()
 
     def closeEvent(self, event):
         self.holograms_manager.removeAll()
@@ -270,11 +285,16 @@ class First(QtWidgets.QMainWindow):
         button_exit.setStatusTip("Exit")
         button_exit.triggered.connect(QApplication.instance().quit)
         button_exit.setCheckable(True)
-        buttons["exit"] = button_exit
+        buttons["Exit"] = button_exit
+
+
+        button_camera = QAction("Start Camera", self)
+        button_camera.triggered.connect(self.start_camera)
+        buttons["Start Camera"] = button_camera
 
         button_settings = QAction("Settings", self)
         button_settings.triggered.connect(self.edit_SLM_settings)
-        buttons["settings"] = button_settings
+        buttons["Settings"] = button_settings
 
         SLM_hologram_window = QPushButton("Show Hologram/Update")
         SLM_hologram_window.clicked.connect(self.on_pushButton_clicked)
@@ -287,13 +307,14 @@ class First(QtWidgets.QMainWindow):
     def InitToolbar(self,toolbar,buttons):
         toolbar.setIconSize(QSize(16, 16))
         toolbar.addSeparator()
-        toolbar.addAction(buttons["settings"])
-        toolbar.addAction(buttons["exit"])
+        toolbar.addAction(buttons["Settings"])
+        toolbar.addAction(buttons["Start Camera"])
+        toolbar.addAction(buttons["Exit"])
 
     def InitMenu(self,menu,buttons):
         file_menu = menu.addMenu("&File")
-        file_menu.addAction(buttons["settings"])
-        file_menu.addAction(buttons["exit"])
+        file_menu.addAction(buttons["Settings"])
+        file_menu.addAction(buttons["Exit"])
 
     def update_pattern(self):
         self.holograms_manager.updateSLMWindow()

@@ -62,15 +62,15 @@ class SettingsManager:
         if self.settings.value("SLM_size_X") is not None:
             return int(self.settings.value("SLM_size_X"))
         else:
-            return self.defaults['SLM_size_X']
+            return int(self.defaults['SLM_size_X'])
     def get_Y_res(self):
         if self.settings.value("SLM_size_Y") is not None:
             return int(self.settings.value("SLM_size_Y"))
         else:
-            return self.defaults['SLM_size_Y']
+            return int(self.defaults['SLM_size_Y'])
 
     def get_wavelength(self):
-        return self.settings.value("Laser wavelength")
+        return float(self.settings.value("Laser wavelength"))
 
     # Returns size of the pattern window
     # WARNING! This might be different than the SLM resolution!
