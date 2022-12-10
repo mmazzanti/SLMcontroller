@@ -26,6 +26,8 @@ In the settings windows it is possible to set the following parameters :
 ## Optical elements
 It is possible to add various optical elements through the software. Each optical element will have a control tab where it can be activated/deactivated. The final full phase pattern rendered on the SLM will be the sum of all the active optical elements at the moment the user press "Show hologram/Update"
 
+At the center of the optical element tab it is possible to see a small preview of the pattern associated to that element.
+
 Some optical elements have a "live update" feature. The live update permits to change the parameters of the optical element and automatically re-render the whole SLM pattern each time a value is changed. Beware that this works fine on good PCs but can require quite some time on old PCs or when many optical elements are active at once.
 
 ### Fresnel lens pattern
