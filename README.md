@@ -35,7 +35,7 @@ In the tab it is possible to control the focus of the lens and activate/deactiva
 ### Grating
 This adds a virtual diffractive grating. It is possible to control the lines/mm of the grating and its orientation. The number of lines per pixel will depend on the size of each SLM pixel.
 
-![Flatness correction](Documentation/Img/grating.png "Grating tab"){: .center-image-caption}
+![Flatness correction](Documentation/Img/grating.png#center "Grating tab")
 
 ### Flatness correction
 This controls the flatness correction pattern typically used to correct for flatness imperfections of the SLM. The SLM manufacturing company normally provides a file for each wavelength supported by the SLM. This can be added to the total pattern by selecting the proper flatness correction for the used wavelength.
