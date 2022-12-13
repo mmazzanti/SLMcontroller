@@ -51,3 +51,11 @@ The flatness correction is normally an image and its size should match the SLM s
 <p align="center">
    <img src="Documentation/Img/flatness_correction.png" alt="Flatness correction tab"/>
 </p>
+
+
+# Displayed pattern
+This is a grayscale image [0,255] of the sum of all optical elements that have been activated. The rendered pattern is calculated as following:
+
+Wrapped pattern = mod(Corrected pattern,256)
+
+Displayed pattern = Wrapped pattern * SLM phase correction /255
