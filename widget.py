@@ -126,7 +126,9 @@ class HologramsManager():
     #e.g. at 760nm 255 ---> 226
     #So we need to renormalize the hologram such that value%226
     def RenormalizePattern(self):
-        self.pattern = self.pattern%(self.settings_manager.get_phase_correction()+1)
+        # Wrapped pattern = Total phase (sum of various optical elements) % 256
+        # Displayed pattern = Wrapped pattern * (2pi_correction/255)
+        self.pattern = ((self.pattern%256)*(self.settings_manager.get_phase_correction())/255).astype(np.uint8)
 
     # This function gets all the patterns from the active elements and sums them up
     def getPatterns(self):
