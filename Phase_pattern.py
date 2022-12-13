@@ -5,7 +5,7 @@ import numba as nb
 @nb.jit
 def _generateGrating(X,Y,pxl,theta):
     grating = (256*(Y/pxl*np.sin(theta)+X/pxl*np.cos(theta)))%256
-    return grating.astype(np.uint8)
+    return grating
 
 @nb.jit
 def _generateLens(X, Y, x_offset, y_offset, wl, focus, pixel_pitch):
@@ -15,7 +15,7 @@ def _generateLens(X, Y, x_offset, y_offset, wl, focus, pixel_pitch):
     gamma = np.pi/(wl*focus)
     phi = gamma*(((X - x_offset)*pixel_pitch)**2+((Y - y_offset)*pixel_pitch)**2)/(2*np.pi)
     lens = (mask*phi*256)%256
-    return lens.astype(np.uint8)
+    return lens
 class Patter_generator:
     def __init__(self):
         self.X = None
@@ -37,7 +37,7 @@ class Patter_generator:
 
     def GenerateGrating(self, wl, pixel_pitch, lmm, theta, res_X, res_Y):
         grating=np.zeros((res_Y, res_X))
-        if (lmm == 0 ): return grating.astype(np.uint8)
+        if (lmm == 0 ): return grating
 
         # Number of pixel per line
         pixel_pitch = pixel_pitch*1e-6
@@ -46,7 +46,7 @@ class Patter_generator:
         return _generateGrating(self.X,self.Y,pxl,theta)
 
     def empty_pattern(self,res_X, res_Y):
-        return (np.zeros((res_Y, res_X))).astype(np.uint8)
+        return np.zeros((res_Y, res_X))
 
     def generate_mesh(self, res_X, res_Y):
         if self.X is None or self.Y is None:

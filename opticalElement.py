@@ -238,8 +238,7 @@ class OptimizerAlgorithm(QThread):
     def GeneratePhases(self,time):
         for i in range(0,self.SLM_y_res):
             for j in range(0,self.SLM_x_res):
-                self.pattern[i,j] += self.frequencies[self.ids_list.index(self.mesh[i,j])]*self.times[time]*(2*np.pi)*256%256
-        self.pattern = self.pattern.astype(np.uint8)
+                self.pattern[i,j] += (self.frequencies[self.ids_list.index(self.mesh[i,j])]*self.times[time]*(2*np.pi)*256)%256
 
 
 
@@ -341,7 +340,7 @@ class ImageWidget(QWidget):
         self.scale = 1
 
     def setImage(self, image):
-        self.image_data = image
+        self.image_data = image.astype(np.uint8)
         self.scale = self.image_data.shape[1]/self.frameGeometry().width()
         disp_size = int(self.image_data.shape[1]//self.scale), int(self.image_data.shape[0]//self.scale)
         img = cv2.resize(self.image_data, disp_size, interpolation=cv2.INTER_CUBIC)
