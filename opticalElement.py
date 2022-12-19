@@ -228,6 +228,7 @@ class OptimizerAlgorithm(QThread):
         os.makedirs(self.mypath+"Frames")
         os.makedirs(self.mypath+"Intensities")
         np.save(self.mypath+"starting_phases", self.random_phases)
+        np.save(self.mypath+"offset", self.hologram_manager.getPatterns())
         np.save(self.mypath+"mesh_data", self.mesh)
         np.save(self.mypath+"frequencies", self.frequencies)
         np.save(self.mypath+"times", self.times)
