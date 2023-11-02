@@ -8,13 +8,16 @@ from PyQt6.QtWidgets import QMessageBox, QLabel, QGridLayout, QWidget, QPushButt
 from PyQt6.QtGui import QPixmap, QImage, QAction, QScreen
 
 import numpy as np
-import random
 import sys
-import settings
-import camera
-import Phase_pattern
-import opticalElement
-
+import src.settings as settings
+import src.camera.camera as camera
+import src.Phase_pattern as Phase_pattern
+import src.OpticalElement as opticalElement
+import src.Lens as Lens
+import src.Grating as Grating
+import src.FourierWavefrontOptim as FourierWavefrontOptim
+import src.WavefrontOptim as WavefrontOptim
+import src.FlatnessCorrection as FlatnessCorrection
 
 SLM_size_X = 600
 SLM_size_Y = 500
@@ -82,6 +85,7 @@ class HologramsManager():
         self.pattern_generator = pattern_generator
         self.tabwidget = tabwidget
         self.pattern = None
+        self.wasexec = False
 
     def addElementToList(self, id, elem):
         self.optical_elements[id] = elem
@@ -117,8 +121,10 @@ class HologramsManager():
         if self.pattern is None:
             self.pattern = self.pattern_generator.empty_pattern(self.settings_manager.get_X_res(), self.settings_manager.get_Y_res())
         self.pattern = pattern
+        #if not self.wasexec:
         if others == True:
             self.getPatterns()
+        #    self.wasexec = True
         self.renderPattern()
 
     #This part corrects for the non-linearities of the SLM
@@ -143,7 +149,7 @@ class HologramsManager():
                         dlg.setText("One of the optical elements don't match with the SLM resolution. Please check the settings.")
                         button = dlg.exec()
                         if button == QMessageBox.StandardButton.Ok:
-                            return	
+                            return	4444
                     self.pattern += pattern_from_el
 
     # This function does the actual render of the phase pattern. Updates the QPixmap used on the SLM window
@@ -166,7 +172,7 @@ class HologramsManager():
 class First(QtWidgets.QMainWindow):
     def __init__(self, parent=None):
         super(First, self).__init__(parent)
-        self.setMinimumSize(QSize(400, 600))
+        self.setMinimumSize(QSize(400, 700))
         #centerPoint = QGuiApplication.primaryScreen().availableGeometry()
         self.setWindowTitle("SLM hologram control")
         self.settings_manager = settings.SettingsManager()
@@ -181,8 +187,8 @@ class First(QtWidgets.QMainWindow):
         self.holograms_manager = HologramsManager(self.w, self.settings_manager, self.pattern_generator,self.tabwidget)
 
         
-        self.possible_optical_elements = ["Lens", "Grating", "Flatness correction", "Zernike", "LUT", "Spot optimization"]
-        self.tabs_constructors = [self.lens_tab, self.grating_tab, self.flatness_correction_tab, self.zernike_tab, self.LUT_tab, self.Spot_optim]
+        self.possible_optical_elements = ["Lens", "Grating", "Flatness correction", "Zernike", "LUT", "Spot optimization", "Spot optimization (ext)"]
+        self.tabs_constructors = [self.lens_tab, self.grating_tab, self.flatness_correction_tab, self.zernike_tab, self.LUT_tab, self.Spot_optim, self.Spot_optim_ext]
 
         wid = QtWidgets.QWidget(self)
         self.setCentralWidget(wid)
@@ -211,19 +217,20 @@ class First(QtWidgets.QMainWindow):
         self.holograms_manager.removeElementFromList(id(widget))
 
     def lens_tab(self):
-        tab = opticalElement.LensTab(self.pattern_generator, self.settings_manager, self.holograms_manager)
+        tab = Lens.LensTab(self.pattern_generator, self.settings_manager, self.holograms_manager)
         self.tabwidget.addTab(tab,"Lens")
         self.holograms_manager.addElementToList(id(tab), tab)
 
     def grating_tab(self):
-        tab = opticalElement.GratingTab(self.pattern_generator, self.settings_manager, self.holograms_manager)
+        tab = Grating.GratingTab(self.pattern_generator, self.settings_manager, self.holograms_manager)
         self.tabwidget.addTab(tab,"Grating")
         self.holograms_manager.addElementToList(id(tab), tab)
 
     def flatness_correction_tab(self):
-        tab = opticalElement.FlatnessCorrectionTab(self.pattern_generator, self.settings_manager, self.holograms_manager)
+        tab = FlatnessCorrection.FlatnessCorrectionTab(self.pattern_generator, self.settings_manager, self.holograms_manager)
         self.tabwidget.addTab(tab,"Flatness Correction")
         self.holograms_manager.addElementToList(id(tab), tab)
+
     def zernike_tab(self):
         pass
     def LUT_tab(self):
@@ -237,9 +244,14 @@ class First(QtWidgets.QMainWindow):
             button = dlg.exec()
             if button == QMessageBox.StandardButton.Ok:
                 return
-        tab = opticalElement.SpotOptimTab(self.pattern_generator, self.settings_manager, self.holograms_manager,self.cameraWindow)
-        self.tabwidget.addTab(tab,"Optimizer")
+        tab = FourierWavefrontOptim.SpotOptimTab(self.pattern_generator, self.settings_manager, self.holograms_manager,self.cameraWindow)
+        self.tabwidget.addTab(tab,"Optimizer (camera)")
         self.holograms_manager.addElementToList(id(tab), tab)
+
+    def Spot_optim_ext(self):
+        tab = WavefrontOptim.SpotOptimTab_ext(self.pattern_generator, self.settings_manager, self.holograms_manager)
+        self.tabwidget.addTab(tab,"Optimizer (ext)")
+        self.holograms_manager.addElementToList(id(tab), tab)    
 
     def edit_SLM_settings(self):
         dlg = settings.SettingsDialog(self.settings_manager, self)

@@ -11,11 +11,12 @@ def _generateGrating(X,Y,pxl,theta):
 def _generateLens(X, Y, x_offset, y_offset, wl, focus, pixel_pitch):
     rN = wl*focus/(2*pixel_pitch)
     r = np.sqrt((X - x_offset)**2 + (Y - y_offset)**2)
-    mask = r < rN/pixel_pitch
+    mask = r < np.abs(rN/pixel_pitch)
     gamma = np.pi/(wl*focus)
     phi = gamma*(((X - x_offset)*pixel_pitch)**2+((Y - y_offset)*pixel_pitch)**2)/(2*np.pi)
     lens = (mask*phi*256)%256
     return lens
+
 class Patter_generator:
     def __init__(self):
         self.X = None
@@ -27,6 +28,8 @@ class Patter_generator:
 
         lens=np.zeros((res_Y, res_X))
         # Convert everything to meters
+        if focus == 0 :
+            focus = 1
         focus = focus * 1e-3
         wl = wl * 1e-9
         pixel_pitch = pixel_pitch*1e-6
