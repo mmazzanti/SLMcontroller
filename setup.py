@@ -14,8 +14,13 @@ if sys.platform == "win32":
 
 setup(
     name="SLM Controller",
+    url='https://github.com/mmazzanti/SLM_controller',
+    author='Matteo Mazzanti',
+    author_email='githubcontactme@gmail.com',
+    license='MIT',
     version="0.1",
     description="GUI controller for SLM",
     options={"SLM_controller": build_exe_options},
+    packages=['camera,opticalElement,Phase_pattern,settings'],
     executables=[Executable("widget.py", base=base)],
 )
