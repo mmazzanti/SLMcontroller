@@ -75,10 +75,8 @@ class MeshingHandler(Process):
             print("parsing mesh")
             self.parseMesh()
             # Once done parsing notify the main thread
-            print("Notifying main process")
             with self.parsingCond:
                 self.parsingCond.notify_all()
-            print("Notified")
 
         if self.closeGUI.is_set():
             self.showGUI.clear()
@@ -109,8 +107,7 @@ class MeshingHandler(Process):
         self.generalEvent.clear()
         if not self.wasINIT:
             self.init_GMESH()
-            #gmsh.initialize()
-            print("initializing gmsh")
+
         while self.Enabled:
             # Check if the process should terminate (user closed the interface)
             self.checkUserMeshing()
@@ -139,10 +136,8 @@ class MeshingHandler(Process):
             self.p['value'] += 10
             time.sleep(0.1)
             #self.root.after(100, self.startbar)
-        print("I'm returning")
         self.root.withdraw()
         self.root.quit()
-        print("I'm returning2")
         return 
     
     def showMeshGUI(self):
@@ -190,8 +185,6 @@ class MeshingHandler(Process):
         gmsh.model.mesh.generate(2)
         gmsh.model.mesh.createEdges()
         gmsh.model.mesh.createFaces()
-        print("mesh sizes : ", self.SLM_x_res, self.SLM_y_res)
-        print("redoing mesh : ", self.algorithm, self.function)
 
     def reconstructMesh(self):
         if self.wasINIT: 
@@ -211,7 +204,7 @@ class MeshingHandler(Process):
             self.showMeshGUI()
             gmsh.initialize()
         self.wasINIT = True
-        print("initializing mesh")
+
         gmsh.model.add("SLM Meshing")
         lc = 0.5*max(self.SLM_x_res,self.SLM_y_res)
         self.points[0]=gmsh.model.geo.addPoint(0, 0, 0, meshSize = lc)# lc, 1)
@@ -243,9 +236,7 @@ class MeshingHandler(Process):
                 self.ids_list.append(tmp)
         self.ids_list = [*set(self.ids_list)]
         self.queue.put(self.mesh)
-        print("This is the mesh in the second thread :", self.mesh)
         self.queue.put(self.ids_list)
-        print("This is the ids in the second thread :", self.ids_list)
         print("done parsing mesh")
     
         
@@ -255,29 +246,3 @@ class MeshingHandler(Process):
         self.SLM_y_res = self.queue.get()
         self.algorithm = self.queue.get()
         self.function = self.queue.get()
-
-    # def checkParams(self,randomarg):
-    #     while self._running:
-    #         print("Running")
-    #         self.generalEvent.wait()
-    #         print("notified for some reason")
-
-    #         if self.genMeshE.is_set():
-    #             print("generating mesh")
-    #             self.redomesh()
-    #             self.genMeshE.clear()
-
-    #         if self.parseMeshE.is_set():
-    #             self.parseMeshE.clear()
-    #             print("parsing mesh")
-    #             self.parseMesh()
-
-    #         if self.closeGUI.is_set():
-    #             self.showGUI.clear()
-    #             print("ending mesh Handler thread")
-    #             self._running = False
-                
-    #         self.generalEvent.clear()
-
-    #         # self.redomesh()
-    #         # self.genMeshE.clear()
