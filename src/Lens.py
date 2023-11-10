@@ -13,8 +13,8 @@ class LensTab(QWidget):
         self.pattern_generator = pattern_generator
         self.settings_manager = settings_manager
         self.hologram_manager = hologram_manager
-        self.minfocus = -20000
-        self.maxfocus = 20000
+        self.minfocus = -2000
+        self.maxfocus = 2000
         self.focus = self.minfocus
 
         self.init_GUI()
@@ -36,7 +36,7 @@ class LensTab(QWidget):
         self.spin_focus = QDoubleSpinBox(text="Focus ")
         self.spin_focus.setSuffix(' mm')
         self.spin_focus.setKeyboardTracking(False)
-        self.spin_focus.setSingleStep(0.1)
+        self.spin_focus.setSingleStep(0.01)
         self.spin_focus.setMaximum(self.maxfocus)
         self.spin_focus.setMinimum(self.minfocus)
         self.spin_focus.valueChanged.connect(self.update_lens_slide)
@@ -46,7 +46,7 @@ class LensTab(QWidget):
         self.focus_slider.setMaximum(self.maxfocus)
         self.focus_slider.setMinimum(self.minfocus)
         self.focus_slider.setTickPosition(QSlider.TickPosition.TicksBelow)
-        self.focus_slider.setTickInterval(10)
+        self.focus_slider.setTickInterval(300000)
         self.focus_slider.valueChanged.connect(self.update_lens_spin)
 
         self.slider_layout.addWidget(self.spin_focus)
@@ -75,14 +75,18 @@ class LensTab(QWidget):
     def update_lens_spin(self):
         self.focus = self.sender().value()
         #self.focus_slider.setValue(self.focus)
-        self.spin_focus.setValue(self.focus)
+        if self.spin_focus.value() != self.focus:
+            self.spin_focus.setValue(self.focus)
+        #self.spin_focus.setValue(self.focus)
         if self.liveupdate.isChecked():
             self.update_pattern()
             self.hologram_manager.updateSLMWindow()
 
     def update_lens_slide(self):
         self.focus = self.sender().value()
-        self.focus_slider.setValue(self.focus)
+        #self.focus_slider.setValue(self.focus)
+        if self.focus_slider.value() != self.focus:
+            self.focus_slider.setValue(self.focus)
         #self.spin_focus.setValue(self.focus)
         if self.liveupdate.isChecked():
             self.update_pattern()

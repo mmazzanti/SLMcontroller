@@ -3,7 +3,7 @@
 
 
 from PyQt6 import QtCore, QtWidgets
-from PyQt6.QtCore import Qt, QSize, QSettings
+from PyQt6.QtCore import Qt, QSize, QWaitCondition
 from PyQt6.QtWidgets import QMessageBox, QLabel, QGridLayout, QWidget, QPushButton, QToolBar, QApplication, QHBoxLayout, QSpinBox, QVBoxLayout, QFileDialog, QLabel, QErrorMessage, QTabWidget
 from PyQt6.QtGui import QPixmap, QImage, QAction, QScreen
 
@@ -18,6 +18,9 @@ import src.Grating as Grating
 import src.FourierWavefrontOptim as FourierWavefrontOptim
 import src.WavefrontOptim as WavefrontOptim
 import src.FlatnessCorrection as FlatnessCorrection
+import src.Meshing_process as Meshing_process
+
+from multiprocessing import RLock, Event, Queue, Process, Condition, freeze_support
 
 SLM_size_X = 600
 SLM_size_Y = 500
@@ -120,7 +123,7 @@ class HologramsManager():
     def renderAlgorithmPattern(self, pattern, others):
         if self.pattern is None:
             self.pattern = self.pattern_generator.empty_pattern(self.settings_manager.get_X_res(), self.settings_manager.get_Y_res())
-        self.pattern = pattern
+        self.pattern = np.copy(pattern)
         #if not self.wasexec:
         if others == True:
             self.getPatterns()
@@ -170,7 +173,7 @@ class HologramsManager():
 
 
 class First(QtWidgets.QMainWindow):
-    def __init__(self, parent=None):
+    def __init__(self, mesh_process, parent=None):
         super(First, self).__init__(parent)
         self.setMinimumSize(QSize(400, 700))
         #centerPoint = QGuiApplication.primaryScreen().availableGeometry()
@@ -182,6 +185,7 @@ class First(QtWidgets.QMainWindow):
         self.tabwidget.setTabsClosable(True)
         self.cameraWindow = None
         self.tabwidget.tabCloseRequested.connect(self.closeTab)
+        self.mesh_process = mesh_process
 
         self.w = SLMWindow(self.settings_manager.get_X_res(), self.settings_manager.get_Y_res(),self.settings_manager.get_SLM_window())
         self.holograms_manager = HologramsManager(self.w, self.settings_manager, self.pattern_generator,self.tabwidget)
@@ -249,7 +253,8 @@ class First(QtWidgets.QMainWindow):
         self.holograms_manager.addElementToList(id(tab), tab)
 
     def Spot_optim_ext(self):
-        tab = WavefrontOptim.SpotOptimTab_ext(self.pattern_generator, self.settings_manager, self.holograms_manager)
+        tab = WavefrontOptim.SpotOptimTab_ext(self.pattern_generator, self.settings_manager, self.holograms_manager, self.mesh_process)
+        tab.setEventsHandlers(genMesh, parseMesh, generalEvent, showGUI, closeGUI, parsingCond, queue)
         self.tabwidget.addTab(tab,"Optimizer (ext)")
         self.holograms_manager.addElementToList(id(tab), tab)    
 
@@ -268,9 +273,6 @@ class First(QtWidgets.QMainWindow):
         self.holograms_manager.removeAll()
         print("Closing Hologram window")
         QApplication.instance().quit()
-#        del self.holograms_manager
-#        self.w = None
-
 
 
     def on_pushButton_clicked(self):
@@ -333,15 +335,40 @@ class First(QtWidgets.QMainWindow):
     def update_pattern(self):
         self.holograms_manager.updateSLMWindow()
 
+def closeSecondProcess():
+    terminate.set()
+    generalEvent.set()
 
 def main():
     app = QtWidgets.QApplication(sys.argv)
     app.setStyle('macos')
-    main = First()
+    main = First(mesh_process)
 
     main.show()
-    sys.exit(app.exec())
+    retval = app.exec()
+    # Close Gmsh process
+    closeSecondProcess()
+    
+    sys.exit(retval)
 
+
+
+genMesh = Event()
+generalEvent = Event()
+
+parseMesh = Event()
+# wait condition for the main process to stop till the second one isn't done generating
+parsingCond = Condition()
+
+showGUI = Event()
+closeGUI = Event()
+# Event to terminate meshing process
+terminate = Event()
 
 if __name__ == '__main__':
+    #ctx = get_context('spawn')
+    queue = Queue()
+    mesh_process = Meshing_process.MeshingHandler(generalEvent, showGUI, closeGUI, terminate, genMesh , parseMesh, parsingCond, queue, 0, 0, 0 , "")
+    mesh_process.start()
     main()
+
