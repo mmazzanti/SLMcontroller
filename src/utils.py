@@ -1,6 +1,6 @@
 
 from PyQt6.QtWidgets import QSlider, QWidget
-from PyQt6.QtCore import Qt, pyqtSignal, QPoint, QThread
+from PyQt6.QtCore import Qt, pyqtSignal, QPoint, QThread, QRunnable, pyqtSlot
 from PyQt6.QtGui import QImage, QPainter
 
 import cv2
@@ -36,7 +36,7 @@ class ImageWidget(QWidget):
 
 class DoubleSlider(QSlider):
     doubleValueChanged = pyqtSignal(float)
-    def __init__(self, decimals=2, *args, **kargs):
+    def __init__(self, decimals=3, *args, **kargs):
         super(DoubleSlider, self).__init__(Qt.Orientation.Horizontal,*args, **kargs)
         self._multi = 10 ** decimals
 
@@ -65,9 +65,13 @@ class DoubleSlider(QSlider):
         super(DoubleSlider, self).setValue(int(value * self._multi))
 
 
-class MeshVisualizer(QThread):
-    def __init__(self,parent=None):
-        QThread.__init__(self, parent)
+class MeshVisualizer(QRunnable):
+    def __init__(self, *args, **kwargs):
+        super(MeshVisualizer, self).__init__()
+        gmsh.fltk.initialize()
+        self._active = True
+    # def __init__(self,parent=None):
+    #     QThread.__init__(self, parent)
 
 
     # def showMesh(self):
@@ -80,12 +84,13 @@ class MeshVisualizer(QThread):
     #         self._active = gmsh.fltk.isAvailable()
     #     gmsh.fltk.finalize()
         
-
     def run(self):
-        self._active = True
         #t = threading.Thread(target=self.showMesh)
-        gmsh.fltk.initialize()
-        gmsh.fltk.run()
+        #gmsh.fltk.initialize()
+        #gmsh.fltk.run()
+        while self._active:
+            gmsh.fltk.wait()
+            #self.wait()
         # t.daemon = True
         # t.start()
         
@@ -95,9 +100,11 @@ class MeshVisualizer(QThread):
         pass
         #select_elements([probe_zone,reference_zone])
 
-    def __del__(self):
-        self.wait()
+    # def __del__(self):
+    #     self.wait()
         
     def stop(self):
         gmsh.fltk.finalize()
+        self.wait(2)
         self._active = False
+        self.exit(0)

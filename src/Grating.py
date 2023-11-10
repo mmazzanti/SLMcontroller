@@ -61,7 +61,7 @@ class GratingTab(QWidget):
         self.spin_lmm.setSuffix(' l/mm')
         self.spin_lmm.valueChanged.connect(self.update_lmm_slide)
         self.spin_lmm.setKeyboardTracking(False)
-        self.spin_lmm.setSingleStep(0.1)
+        self.spin_lmm.setSingleStep(0.01)
         self.spin_lmm.setMaximum(self.maxlmm)
         self.spin_lmm.setMinimum(self.minlmm)
 
@@ -70,7 +70,7 @@ class GratingTab(QWidget):
         self.lmm_slider.setMinimum(0)
         self.lmm_slider.setMaximum(self.maxlmm)
         self.lmm_slider.setTickPosition(QSlider.TickPosition.TicksBelow)
-        self.lmm_slider.setTickInterval(10)
+        self.lmm_slider.setTickInterval(3000)
         self.lmm_slider.valueChanged.connect(self.update_lmm_spin)
 
         self.lmm_layout.addWidget(self.spin_lmm)
@@ -83,13 +83,14 @@ class GratingTab(QWidget):
         self.spin_angle.setSuffix(' π')
         self.spin_angle.valueChanged.connect(self.update_angle_slide)
         self.spin_angle.setKeyboardTracking(False)
-        self.spin_angle.setSingleStep(0.1)
+        self.spin_angle.setSingleStep(0.01)
 
         self.angle_slider = utils.DoubleSlider()
         self.angle_slider.setGeometry(50,50, 200, 50)
         self.angle_slider.setMinimum(0)
         # Maximum number of lines per mm is limited by the pixel pitch of the SLM (better even avoiding getting closer to this limit)
         self.angle_slider.setMaximum(2.)
+        self.angle_slider.setTickInterval(100)
         self.angle_slider.setTickPosition(QSlider.TickPosition.TicksBelow)
         self.angle_slider.valueChanged.connect(self.update_angle_spin)
 
@@ -99,15 +100,18 @@ class GratingTab(QWidget):
     def update_lmm_spin(self):
         self.lmm = self.sender().value()
         #self.lmm_slider.setValue(self.lmm)
-        self.spin_lmm.setValue(self.lmm)
+       
+        if self.spin_lmm.value() != self.lmm:
+            self.spin_lmm.setValue(self.lmm)
         if self.liveupdate.isChecked():
             self.update_pattern()
             self.hologram_manager.updateSLMWindow()
     
     def update_lmm_slide(self):
         self.lmm = self.sender().value()
-        #self.lmm_slider.setValue(self.lmm)
-        self.spin_lmm.setValue(self.lmm)
+        if(self.lmm_slider.value() != self.lmm):
+            self.lmm_slider.setValue(self.lmm)
+        #self.spin_lmm.setValue(self.lmm)
         if self.liveupdate.isChecked():
             self.update_pattern()
             self.hologram_manager.updateSLMWindow()

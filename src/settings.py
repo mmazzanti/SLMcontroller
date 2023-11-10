@@ -1,7 +1,8 @@
 # This Python file uses the following encoding: utf-8
 
-from PyQt6.QtCore import QSettings
+from PyQt6.QtCore import QSettings, QRegularExpression
 from PyQt6.QtWidgets import QDialog, QDialogButtonBox, QGridLayout, QGroupBox, QDoubleSpinBox, QRadioButton, QVBoxLayout, QSpinBox,QLineEdit
+from PyQt6.QtGui import QValidator, QRegularExpressionValidator
 
 
 class SettingsManager:
@@ -25,7 +26,10 @@ class SettingsManager:
                          'pattern_window_size_Y' : 600,
                          'Laser wavelength':800,
                          'SLM_window': 0,
-                         'Phase_correction' : 255
+                         'Phase_correction' : 255,
+                         #'IPserver' : '127.0.0.1',
+                         'IPclient' : '0.0.0.0'
+                         #'Strict' : 0
         }
 
     def save_from_widget(self, settings_widgets):
@@ -53,7 +57,7 @@ class SettingsManager:
                 fn = getattr(widget, setter)
                 if isinstance(value, type):
                     fn(value)  # Set the widget.
-                else  :
+                else:
                     fn(type(value))
 
     # Returns resolution of that SLM from settings
@@ -86,6 +90,9 @@ class SettingsManager:
 
     def get_pixel_pitch(self):
         return float(self.settings.value("SLM_pixel_pitch"))
+    
+    def get_IPclient(self):
+        return str(self.settings.value("IPclient"))
 
     def get_SLM_window(self):
         if self.settings.value("SLM_window") is not None:
@@ -143,7 +150,16 @@ class SettingsDialog(QDialog):
 
         self.pixel_pitch = QDoubleSpinBox(text="SLM pixel pitch")
         self.pixel_pitch.setSuffix('  μm')
-        #self.pixel_pitch.setMaximum(100)
+
+        #self.IPserver = QLineEdit(text = "0.0.0.0")
+        self.IPclient = QLineEdit(text = "0.0.0.0")
+
+        Octet = "(?:[0-1]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5])"
+
+        #self.IPserver.setValidator(QRegularExpressionValidator(QRegularExpression("^" + Octet + "\." + Octet + "\." + Octet + "\." + Octet + "$"),self.IPserver))
+        self.IPclient.setValidator(QRegularExpressionValidator(QRegularExpression("^" + Octet + "\." + Octet + "\." + Octet + "\." + Octet + "$"),self.IPclient))
+
+        #self.Strict = QRadioButton(text = "Strict mode")
 
         self.settings_widgets = {
                     'SLM_name': self.SLM_name,
@@ -155,6 +171,9 @@ class SettingsDialog(QDialog):
                     'pattern_window_size_X': self.SLM_winsize_X,
                     'pattern_window_size_Y': self.SLM_winsize_Y,
                     'SLM_pixel_pitch': self.pixel_pitch,
+                    #'IPserver': self.IPserver,
+                    'IPclient': self.IPclient
+                    #'Strict' : self.Strict
                 }
         #self.settings_manager = SettingsManager()
     def make_group(self, group_name, *widgets):
@@ -177,6 +196,7 @@ class SettingsDialog(QDialog):
         slayout.addWidget(self.make_group("SLM pixel pitch", self.pixel_pitch))
         slayout.addWidget(self.make_group("SLM phase correction", self.correction))
         slayout.addWidget(self.make_group("Pattern window size", self.SLM_winsize_X,self.SLM_winsize_Y))
+        slayout.addWidget(self.make_group("Network", self.IPclient))
 
         #Ok/cancel settings buttons
         _buttons = QDialogButtonBox.StandardButton
@@ -197,3 +217,32 @@ class SettingsDialog(QDialog):
 
     def load_settings(self):
         self.settings_manager.load_to_widget(self.settings_widgets)
+
+
+class IP4Validator(QValidator):
+    def __init__(self, parent=None):
+        super(IP4Validator, self).__init__(parent)
+
+    def validate(self, address, pos):
+        print("Validating")
+        if not address:
+            return QValidator.State.Acceptable, pos
+        octets = address.split(".")
+        size = len(octets)
+        if size > 4:
+            return QValidator.State.Invalid, pos
+        emptyOctet = False
+        for octet in octets:
+            if not octet or octet == "___" or octet == "   ": # check for mask symbols
+                emptyOctet = True
+                continue
+            try:
+                value = int(str(octet).strip(' _')) # strip mask symbols
+            except:
+                return QValidator.State.Intermediate, pos
+            if value < 0 or value > 255:
+                return QValidator.State.Ivalid, pos
+        if size < 4 or emptyOctet:
+            return QValidator.State.Intermediate, pos
+        return QValidator.State.Acceptable, pos
+    
