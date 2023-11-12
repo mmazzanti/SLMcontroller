@@ -19,8 +19,10 @@ import src.FourierWavefrontOptim as FourierWavefrontOptim
 import src.WavefrontOptim as WavefrontOptim
 import src.FlatnessCorrection as FlatnessCorrection
 import src.Meshing_process as Meshing_process
+import src.Remote_control as Remote_control
 
 from multiprocessing import RLock, Event, Queue, Process, Condition, freeze_support
+import threading
 
 SLM_size_X = 600
 SLM_size_Y = 500
@@ -256,7 +258,11 @@ class First(QtWidgets.QMainWindow):
         tab = WavefrontOptim.SpotOptimTab_ext(self.pattern_generator, self.settings_manager, self.holograms_manager, self.mesh_process)
         tab.setEventsHandlers(genMesh, parseMesh, generalEvent, showGUI, closeGUI, parsingCond, queue)
         self.tabwidget.addTab(tab,"Optimizer (ext)")
-        self.holograms_manager.addElementToList(id(tab), tab)    
+        self.holograms_manager.addElementToList(id(tab), tab)
+        flask_thread = threading.Thread(target=lambda: app.run(host=self.settings_manager.get_IPclient(), port=self.settings_manager.get_Portclient(), debug=True, use_reloader=False))
+        flask_thread.daemon = True
+        flask_thread.start()
+        self.add_endpoint_connections(tab)
 
     def edit_SLM_settings(self):
         dlg = settings.SettingsDialog(self.settings_manager, self)
@@ -273,6 +279,9 @@ class First(QtWidgets.QMainWindow):
         self.holograms_manager.removeAll()
         print("Closing Hologram window")
         QApplication.instance().quit()
+    
+    def add_endpoint_connections(self,tab):
+        app.add_endpoint('/nextStep', 'action', tab.triggerNextStep, methods=['GET'])
 
 
     def on_pushButton_clicked(self):
@@ -365,9 +374,13 @@ closeGUI = Event()
 # Event to terminate meshing process
 terminate = Event()
 
+flask_app = Remote_control.Flask(__name__)
+app = Remote_control.NetworkManager(flask_app)
+
 if __name__ == '__main__':
     #ctx = get_context('spawn')
     queue = Queue()
+    # Start meshing process, this will be needed to show GMESH GUI in another process
     mesh_process = Meshing_process.MeshingHandler(generalEvent, showGUI, closeGUI, terminate, genMesh , parseMesh, parsingCond, queue, 0, 0, 0 , "")
     mesh_process.start()
     main()

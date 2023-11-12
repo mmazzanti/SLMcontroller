@@ -1,5 +1,10 @@
 from flask import Flask, jsonify, abort, request
+import threading
+import numpy as np
+import time
 
+host_name = "127.0.0.1"
+port = 23336
 
 class NetworkManager(object):
     def __init__(self, app, **configs, ):
@@ -23,16 +28,24 @@ class NetworkManager(object):
 
 flask_app = Flask(__name__)
 app = NetworkManager(flask_app)
+test = np.random.rand(10,5)
 
-def action():
+def testaction():
     """ Function which is triggered in flask app """
-    return "Hello World"
+    return jsonify(test.tolist()) # return
+
 
 # Add endpoint for the action function
-app.add_endpoint('/action', 'action', action, methods=['GET'])
-if __name__ == "__main__":
-    app.run(debug=True,ssl_context='adhoc')
 
+if __name__ == "__main__":
+    #app.run(debug=True,ssl_context='adhoc')
+    app.add_endpoint('/action', 'action', testaction, methods=['GET'])
+    flask_thread = threading.Thread(target=lambda: app.run(host=host_name, port=port, debug=True, use_reloader=False))
+    flask_thread.daemon = True
+    flask_thread.start()
+    print("after run")
+    time.sleep(10)
+    exit(0)
 # class NetworkManager():
 #     def __init__(self,Optimizer):
 #         self.optimizerThread = Optimizer

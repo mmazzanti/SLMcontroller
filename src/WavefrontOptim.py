@@ -12,6 +12,7 @@ import numpy as np
 from numba import jit
 from numba.typed import List
 
+from flask import jsonify
 
 
 class SpotOptimTab_ext(QWidget):
@@ -287,6 +288,7 @@ class SpotOptimTab_ext(QWidget):
 
     def triggerNextStep(self):
         self.waitCond.wakeAll()
+        return jsonify(self.theOptimizer.getPhase())
 
     def update_grating_lmm_slide(self):
         self.lmm_grating = self.sender().value()
@@ -456,6 +458,7 @@ class OptimizerAlgorithm(QThread):
             self._active = True
             self.isPhaseReady = False
             self.trigger = mutex
+            self.phase = 0
 
             self._active = False
             self.waitCond = waitCond
@@ -520,6 +523,9 @@ class OptimizerAlgorithm(QThread):
     # This to be used only when forcing the algorithm to start at a previous phase
     def setPhase(self, phase):
         self.phase = phase
+
+    def getPhase(self):
+        return self.phase
 
     def setPhaseStep(self, phaseStep):
         self.phaseStep = phaseStep

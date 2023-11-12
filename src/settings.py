@@ -28,7 +28,8 @@ class SettingsManager:
                          'SLM_window': 0,
                          'Phase_correction' : 255,
                          #'IPserver' : '127.0.0.1',
-                         'IPclient' : '0.0.0.0'
+                         'IPclient' : '0.0.0.0',
+                         'Portclient' : '5000'
                          #'Strict' : 0
         }
 
@@ -93,6 +94,9 @@ class SettingsManager:
     
     def get_IPclient(self):
         return str(self.settings.value("IPclient"))
+    
+    def get_Portclient(self):
+        return str(self.settings.value("Portclient"))
 
     def get_SLM_window(self):
         if self.settings.value("SLM_window") is not None:
@@ -153,12 +157,13 @@ class SettingsDialog(QDialog):
 
         #self.IPserver = QLineEdit(text = "0.0.0.0")
         self.IPclient = QLineEdit(text = "0.0.0.0")
+        self.Portclient = QLineEdit(text = "5000")
 
         Octet = "(?:[0-1]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5])"
 
         #self.IPserver.setValidator(QRegularExpressionValidator(QRegularExpression("^" + Octet + "\." + Octet + "\." + Octet + "\." + Octet + "$"),self.IPserver))
         self.IPclient.setValidator(QRegularExpressionValidator(QRegularExpression("^" + Octet + "\." + Octet + "\." + Octet + "\." + Octet + "$"),self.IPclient))
-
+        self.Portclient.setValidator(QRegularExpressionValidator(QRegularExpression("^[0-9]{1,5}$"),self.Portclient))
         #self.Strict = QRadioButton(text = "Strict mode")
 
         self.settings_widgets = {
@@ -172,7 +177,8 @@ class SettingsDialog(QDialog):
                     'pattern_window_size_Y': self.SLM_winsize_Y,
                     'SLM_pixel_pitch': self.pixel_pitch,
                     #'IPserver': self.IPserver,
-                    'IPclient': self.IPclient
+                    'IPclient': self.IPclient,
+                    'Portclient': self.Portclient
                     #'Strict' : self.Strict
                 }
         #self.settings_manager = SettingsManager()
@@ -196,7 +202,7 @@ class SettingsDialog(QDialog):
         slayout.addWidget(self.make_group("SLM pixel pitch", self.pixel_pitch))
         slayout.addWidget(self.make_group("SLM phase correction", self.correction))
         slayout.addWidget(self.make_group("Pattern window size", self.SLM_winsize_X,self.SLM_winsize_Y))
-        slayout.addWidget(self.make_group("Network", self.IPclient))
+        slayout.addWidget(self.make_group("Network", self.IPclient,self.Portclient))
 
         #Ok/cancel settings buttons
         _buttons = QDialogButtonBox.StandardButton
