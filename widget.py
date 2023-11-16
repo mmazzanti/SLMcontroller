@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
-
 from PyQt6 import QtCore, QtWidgets
 from PyQt6.QtCore import Qt, QSize, QWaitCondition
 from PyQt6.QtWidgets import QMessageBox, QLabel, QGridLayout, QWidget, QPushButton, QToolBar, QApplication, QHBoxLayout, QSpinBox, QVBoxLayout, QFileDialog, QLabel, QErrorMessage, QTabWidget
@@ -256,7 +254,7 @@ class First(QtWidgets.QMainWindow):
 
     def Spot_optim_ext(self):
         tab = WavefrontOptim.SpotOptimTab_ext(self.pattern_generator, self.settings_manager, self.holograms_manager, self.mesh_process)
-        tab.setEventsHandlers(genMesh, parseMesh, generalEvent, showGUI, closeGUI, parsingCond, queue)
+        tab.setEventsHandlers(eventsDict, conditionsDict, queue)
         self.tabwidget.addTab(tab,"Optimizer (ext)")
         self.holograms_manager.addElementToList(id(tab), tab)
         flask_thread = threading.Thread(target=lambda: app.run(host=self.settings_manager.get_IPclient(), port=self.settings_manager.get_Portclient(), debug=True, use_reloader=False))
@@ -281,8 +279,10 @@ class First(QtWidgets.QMainWindow):
         QApplication.instance().quit()
     
     def add_endpoint_connections(self,tab):
-        app.add_endpoint('/nextStep', 'action', tab.triggerNextStep, methods=['GET'])
-
+        app.add_endpoint('/nextStep', 'nextStep', tab.triggerNextStep, methods=['GET'])
+        app.add_endpoint('/refzone', 'refzone', tab.getRefZone, methods=['GET'])
+        app.add_endpoint('/refzone/<refzone>', 'refzone/<refzone>', tab.setRefZone, methods=['GET'])
+        app.add_endpoint('/probzone/<probzone>', 'probzone/<probzone>', tab.setProbZone, methods=['GET'])
 
     def on_pushButton_clicked(self):
         self.w.show()
@@ -345,8 +345,8 @@ class First(QtWidgets.QMainWindow):
         self.holograms_manager.updateSLMWindow()
 
 def closeSecondProcess():
-    terminate.set()
-    generalEvent.set()
+    eventsDict['terminate'].set()
+    eventsDict['generalEvent'].set()
 
 def main():
     app = QtWidgets.QApplication(sys.argv)
@@ -360,20 +360,20 @@ def main():
     
     sys.exit(retval)
 
+# Events list for :
+# 0 - Mesh generation request
+# 1 - General event to check user request
+# 2 - Parse mesh request
+# 3 - Parsing condition (this is a condition, process has to wait till parsing is done)
+# 4 - Show GUI event (opens GMSH GUI)
+# 5 - Close GUI event (closes GMSH GUI)
+# 6 - Terminate meshing handler process
+eventsDict = {"genMesh":Event(),"generalEvent":Event(),"parseMesh":Event(),"showGUI":Event(),"closeGUI":Event(),"terminate":Event(), "savefile":Event(), "loadfile":Event()}
+conditionsDict = {"parsingCond":Condition(), "savefile":Condition(), "loadfile":Condition()}
 
+#genMesh, generalEvent, parseMesh, parsingCond, showGUI, closeGUI, terminate = Event(), Event() , Event(), Condition(), Event(), Event(), Event()
 
-genMesh = Event()
-generalEvent = Event()
-
-parseMesh = Event()
-# wait condition for the main process to stop till the second one isn't done generating
-parsingCond = Condition()
-
-showGUI = Event()
-closeGUI = Event()
-# Event to terminate meshing process
-terminate = Event()
-
+# Flask app for remote control
 flask_app = Remote_control.Flask(__name__)
 app = Remote_control.NetworkManager(flask_app)
 
@@ -381,7 +381,7 @@ if __name__ == '__main__':
     #ctx = get_context('spawn')
     queue = Queue()
     # Start meshing process, this will be needed to show GMESH GUI in another process
-    mesh_process = Meshing_process.MeshingHandler(generalEvent, showGUI, closeGUI, terminate, genMesh , parseMesh, parsingCond, queue, 0, 0, 0 , "")
+    mesh_process = Meshing_process.MeshingHandler(eventsDict, conditionsDict, queue, 0, 0, 0 , "")
     mesh_process.start()
     main()
 
