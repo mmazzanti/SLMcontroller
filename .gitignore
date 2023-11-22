@@ -3,8 +3,9 @@
 
 OLD/*
 Meshes/*
+docs/*
 Camera/
-Tests/
+tests/
 Data/
 .vscode/
 

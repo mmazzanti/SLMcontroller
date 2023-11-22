@@ -1,7 +1,8 @@
 
-from PyQt6.QtWidgets import QSlider, QWidget
-from PyQt6.QtCore import Qt, pyqtSignal, QPoint, QThread, QRunnable, pyqtSlot
+from PyQt6.QtWidgets import QSlider, QWidget, QTabBar, QLineEdit
+from PyQt6.QtCore import Qt, pyqtSignal, QPoint, QThread, QRunnable, pyqtSlot, QEvent
 from PyQt6.QtGui import QImage, QPainter
+from PyQt6 import QtCore
 
 import cv2
 import numpy as np
@@ -65,6 +66,45 @@ class DoubleSlider(QSlider):
         super(DoubleSlider, self).setValue(int(value * self._multi))
 
 
+class OpticalTabBar(QTabBar):
+    def __init__(self, parent):
+        super().__init__(parent)
+        self._editor = QLineEdit(self)
+        self._editor.setWindowFlags(QtCore.Qt.WindowType.Popup)
+        self._editor.setFocusProxy(self)
+        self._editor.editingFinished.connect(self.handleEditingFinished)
+        self._editor.installEventFilter(self)
+
+    def eventFilter(self, widget, event):
+        if ((event.type() == QEvent.Type.MouseButtonPress and
+             not self._editor.geometry().contains(event.globalPosition().toPoint())) or
+            (event.type() == QEvent.Type.KeyPress and
+             event.key() == Qt.Key.Key_Escape)):
+            self._editor.hide()
+            return True
+        return super().eventFilter(widget, event)
+
+    def mouseDoubleClickEvent(self, event):
+        index = self.tabAt(event.pos())
+        if index >= 0:
+            self.editTab(index)
+
+    def editTab(self, index):
+        rect = self.tabRect(index)
+        self._editor.setFixedSize(rect.size())
+        # TODO : Renders at the wrong location (problem with mapToGlobal location)
+        self._editor.move(self.parent().mapToGlobal(rect.topRight()))
+        self._editor.setText(self.tabText(index))
+        if not self._editor.isVisible():
+            self._editor.show()
+
+    def handleEditingFinished(self):
+        index = self.currentIndex()
+        if index >= 0:
+            self._editor.hide()
+            self.setTabText(index, self._editor.text())
+
+
 class MeshVisualizer(QRunnable):
     def __init__(self, *args, **kwargs):
         super(MeshVisualizer, self).__init__()
@@ -73,16 +113,6 @@ class MeshVisualizer(QRunnable):
     # def __init__(self,parent=None):
     #     QThread.__init__(self, parent)
 
-
-    # def showMesh(self):
-    #     gmsh.fltk.initialize()
-    #     while(self._active):
-    #         gmsh.fltk.wait()
-    #         #gmsh.fltk.update()
-    #         #gmsh.fltk.awake("update")
-    #         print("running")
-    #         self._active = gmsh.fltk.isAvailable()
-    #     gmsh.fltk.finalize()
         
     def run(self):
         #t = threading.Thread(target=self.showMesh)

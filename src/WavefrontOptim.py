@@ -12,7 +12,10 @@ import numpy as np
 from numba import jit
 from numba.typed import List
 
-from flask import jsonify
+from PIL import Image
+from io import BytesIO
+
+from flask import jsonify, send_file
 
 
 class SpotOptimTab_ext(QWidget):
@@ -302,20 +305,26 @@ class SpotOptimTab_ext(QWidget):
         # Change ref zone in the GUI
         self.zones_ref_combobox.setCurrentText(str(refzone))
         # Set the new reference zone
-        self.ref_zone = refzone
+        self.ref_zone = int(refzone)
         # Change it also in the algorithm
-        self.theOptimizer.setRefZone(refzone)
+        self.theOptimizer.setRefZone(int(refzone))
         # Return the value of the new reference zone
         # Used for Flask as a return code to double check everything went fine
         return jsonify(RefZone = self.theOptimizer.getRefZone(),ProbZone = self.theOptimizer.getProbZone(),Phase = self.theOptimizer.getPhase())
     
-    def getRefZone(self):
+    def getProbRefZone(self):
+        r"""Returns the zones IDs and optimizer process state (running/not running) zone remotely
+        Returns
+        -------
+        json(Reference zone, Probe zone, Phase, Optimizer status)
+            Returns information on the probe zone, reference zone and current phase in json format for remote clients.
+        """
         # If the algorithm is running take the ref_zone from it (more updated)
         if self.theOptimizer.isThreadRunning():
-            return jsonify(self.theOptimizer.getRefZone())
+            return jsonify(RefZone = self.theOptimizer.getRefZone(),ProbZone = self.theOptimizer.getProbZone(),Phase = self.theOptimizer.getPhase(), Optimizer = self.theOptimizer.isThreadRunning())
         # Otherwise use the one shown in the GUI
         else: 
-            return jsonify(RefZone = self.theOptimizer.getRefZone(),ProbZone = self.theOptimizer.getProbZone(),Phase = self.theOptimizer.getPhase())
+            return jsonify(RefZone = self.theOptimizer.getRefZone(),ProbZone = self.theOptimizer.getProbZone(),Phase = self.theOptimizer.getPhase(), Optimizer = self.theOptimizer.isThreadRunning())
 
     def setProbZone(self,probzone):
         r"""Sets the probe zone remotely
@@ -337,13 +346,69 @@ class SpotOptimTab_ext(QWidget):
         # Used for Flask as a return code to double check everything went fine
         return jsonify(ProbZone = self.theOptimizer.getProbZone(),RefZone = self.theOptimizer.getRefZone(),Phase = self.theOptimizer.getPhase())
     
-    def getRefZone(self):
-        # If the algorithm is running take the ref_zone from it (more updated)
-        if self.theOptimizer.isThreadRunning():
-            return jsonify(self.theOptimizer.getRefZone())
-        # Otherwise use the one shown in the GUI
-        else: 
-            return jsonify(RefZone = self.theOptimizer.getRefZone(),ProbZone = self.theOptimizer.getProbZone(),Phase = self.theOptimizer.getPhase())
+    def setPhase(self,phase):
+        r"""Sets the phase remotely
+         Parameters
+        ----------
+        phase : int
+            Phase value to set
+        Returns
+        -------
+        json(Phase)
+            Returns information on the current phase in json format for remote clients.
+        """
+        self.theOptimizer.setPhase(int(phase))
+        return jsonify(ProbZone = self.theOptimizer.getProbZone(),RefZone = self.theOptimizer.getRefZone(),Phase = self.theOptimizer.getPhase())
+    
+    def setPhaseStep(self,phaseStep):
+        r"""Sets the phase step remotely
+         Parameters
+        ----------
+        phaseStep : int
+            Phase step to set
+        Returns
+        -------
+        json(Phase step)
+            Returns information on the current phase step in json format for remote clients.
+        """
+        self.theOptimizer.setPhaseStep(int(phaseStep))
+        return jsonify(ProbZone = self.theOptimizer.getProbZone(),RefZone = self.theOptimizer.getRefZone(),Phase = self.theOptimizer.getPhase() ,PhaseStep = self.theOptimizer.getPhaseStep())
+    
+    def getPhasePatternIMG(self):
+        r"""Returns the phase pattern
+        Returns
+        -------
+        HTTP Response IMG (Phase pattern)
+            Returns information on the current phase pattern in PNG image format for remote clients.
+        """
+        if self.theOptimizer.getPhasePattern() is None:
+            return None
+        img = Image.fromarray(self.theOptimizer.getPhasePattern().astype('uint8'))
+        # create file-object in memory
+        file_object = BytesIO()
+        # write PNG in file-object
+        img.save(file_object, 'PNG')
+        # move to beginning of file so `send_file()` it will read from start 
+        file_object.seek(0)
+        return send_file(file_object,mimetype='image/PNG',as_attachment=False,download_name='pattern.png')
+
+    
+    def getIdsList(self):
+        r"""Returns the IDs list
+        Returns
+        -------
+        json(IDs list)
+            Returns information on the current IDs list in json format for remote clients.
+        """
+        return jsonify(IDsList = self.theOptimizer.getIdsList())
+    
+    # def getRefZone(self):
+    #     # If the algorithm is running take the ref_zone from it (more updated)
+    #     if self.theOptimizer.isThreadRunning():
+    #         return jsonify(self.theOptimizer.getRefZone())
+    #     # Otherwise use the one shown in the GUI
+    #     else: 
+    #         return jsonify(RefZone = self.theOptimizer.getRefZone(),ProbZone = self.theOptimizer.getProbZone(),Phase = self.theOptimizer.getPhase())
 
 
 
@@ -566,6 +631,8 @@ class OptimizerAlgorithm(QThread):
             self.pattern = load_pattern(self.mesh, self.grating_pattern,self.interf_grating_pattern,self.phase,self.SLM_x_res,self.SLM_y_res,self.refZoneID,self.probZoneID)
         self.pattern = next_step_fast(self.SLM_x_res, self.SLM_y_res, self.mesh, self.interf_grating_pattern, self.probZoneID, self.pattern, self.phase)
         print("Phase offset at this step: ", self.phase)
+        
+        # Increment phase for next step
         self.phase = self.phase + self.phaseStep
         self.hologram_manager.renderAlgorithmPattern(self.pattern, True)
         self.prevzones = [self.refZoneID, self.probZoneID]
@@ -593,6 +660,9 @@ class OptimizerAlgorithm(QThread):
     def setPhaseStep(self, phaseStep):
         self.phaseStep = phaseStep
 
+    def getPhaseStep(self):
+        return self.phaseStep
+
     def setProbZone(self,probZoneID):
         self.probZoneID = probZoneID
     
@@ -607,6 +677,12 @@ class OptimizerAlgorithm(QThread):
 
     def setIdsList(self, ids_list):
         self.ids_list = ids_list
+
+    def getIdsList(self):
+        return self.ids_list
+    
+    def getPhasePattern(self):
+        return self.pattern
 
     def isThreadReady(self):
         return self.mesh is not None or self.settings_manager is not None or self.ids_list is not None or self.probZoneID is not None or self.refZoneID is not None
