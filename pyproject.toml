@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools >= 61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "SLM controller"
+version = "1.0"
+dependencies = [
+    "Flask>3.0.0"
+    "gmsh>4.11.1",
+    "matplotlib>3.7.1",
+    "numba>=0.58.1",
+    "numpy>=1.26.2",
+    "opencv_python>=4.7.0.72",
+    "opencv_python_headless>=4.8.0.76",
+    "PyQt6>=6.6.0",
+    "PyQt6_sip>=13.6.0",
+    "scipy>=1.11.4",
+    "setuptools>=68.2.2
+]
+requires-python = ">=3.11"
+authors = [
+  {name = "Matteo Mazzanti", email = "githubpagescontactme@gmail.com"}
+]
+maintainers = [
+  {name = "Matteo Mazzanti", email = "githubpagescontactme@gmail.com"}
+]
+description = "A pyqt6 based app for controlling SLMs, provided with GUI and remote controls"
+readme = "README.rst"
+license = {file = "LICENSE.txt"}
+keywords = ["SLM", "Holography", "Spatial Light Modulator", "Computational Holography"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python"
+]
+
+[project.urls]
+Homepage = "https://github.com/mmazzanti/SLM-controller"
+Documentation = "https://readthedocs.org"
+Repository = "https://github.com/mmazzanti/SLM-controller.git"
+"Bug Tracker" = "https://github.com/mmazzanti/SLM-controller/issues"
+Changelog = "https://github.com/mmazzanti/SLM-controller/master/CHANGELOG.md"
+
+[project.entry-points."widget.main"]
+tomatoes = "spam:main_tomatoes"
