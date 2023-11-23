@@ -475,6 +475,8 @@ class First(QtWidgets.QMainWindow):
         grid.addWidget(self.tabwidget,0,0)
 
     def AddOpticalElement(self):
+        """Adds a new optical element to the GUI
+        """
         if self.holograms_manager.isListEmpty() and self.tabwidget== None:
             # If the user still didn't choose any optical element generate the tabs layout ?
             pass
@@ -483,6 +485,11 @@ class First(QtWidgets.QMainWindow):
             self.tabs_constructors[inputter.get_selected()]()
 
     def InitButtons(self,buttons):
+        """Initializes the GUI buttons
+
+        Args:
+            buttons (dict): Dictionary of buttons used in the GUI
+        """
         button_exit = QAction("Exit", self)
         button_exit.setStatusTip("Exit")
         button_exit.triggered.connect(QApplication.instance().quit)
@@ -507,6 +514,12 @@ class First(QtWidgets.QMainWindow):
         buttons["Add_optical_elem"] = AddOpticalElement
 
     def InitToolbar(self,toolbar,buttons):
+        """Initializes the GUI toolbar
+
+        Args:
+            toolbar (QToolBar): QToolBar of the GUI
+            buttons (dict): Dictionary of buttons used in the GUI
+        """
         toolbar.setIconSize(QSize(16, 16))
         toolbar.addSeparator()
         toolbar.addAction(buttons["Settings"])
@@ -514,51 +527,69 @@ class First(QtWidgets.QMainWindow):
         toolbar.addAction(buttons["Exit"])
 
     def InitMenu(self,menu,buttons):
+        """Initializes the GUI menu
+
+        Args:
+            menu (QGridLayout): QGridLayout of the GUI
+            buttons (dict): Dictionary of buttons used in the GUI
+        """
         file_menu = menu.addMenu("&File")
         file_menu.addAction(buttons["Settings"])
         file_menu.addAction(buttons["Exit"])
 
     def update_pattern(self):
+        """Updates the SLM window with the new phase pattern
+        """
         self.holograms_manager.updateSLMWindow()
 
 def closeSecondProcess():
+    """Closes the GMSH GUI process
+    """
     eventsDict['terminate'].set()
     eventsDict['generalEvent'].set()
 
-def main():
-    app = QtWidgets.QApplication(sys.argv)
-    app.setStyle('macos')
-    main = First(mesh_process)
-
-    main.show()
-    retval = app.exec()
-    # Close Gmsh process
-    closeSecondProcess()
-    
-    sys.exit(retval)
 
 # Events list for :
 # 0 - Mesh generation request
 # 1 - General event to check user request
 # 2 - Parse mesh request
-# 3 - Parsing condition (this is a condition, process has to wait till parsing is done)
-# 4 - Show GUI event (opens GMSH GUI)
-# 5 - Close GUI event (closes GMSH GUI)
-# 6 - Terminate meshing handler process
+# 3 - Show GUI event (opens GMSH GUI)
+# 4 - Close GUI event (closes GMSH GUI)
+# 5 - Terminate meshing handler process
+# 6 - Save meshing file
+# 7 - Load meshing file
 eventsDict = {"genMesh":Event(),"generalEvent":Event(),"parseMesh":Event(),"showGUI":Event(),"closeGUI":Event(),"terminate":Event(), "savefile":Event(), "loadfile":Event()}
+
+
+# Conditions list for :
+# 0 - Mesh generation request
+# 1 - Save meshing file
+# 2 - Load meshing file
 conditionsDict = {"parsingCond":Condition(), "savefile":Condition(), "loadfile":Condition()}
 
-#genMesh, generalEvent, parseMesh, parsingCond, showGUI, closeGUI, terminate = Event(), Event() , Event(), Condition(), Event(), Event(), Event()
-
-# Flask app for remote control
-flask_app = Remote_control.Flask(__name__)
-app = Remote_control.NetworkManager(flask_app)
-
 if __name__ == '__main__':
-    #ctx = get_context('spawn')
+    # Pyinstaller fix
+    freeze_support()
+
+    # Flask app for remote control
+    flask_app = Remote_control.Flask(__name__)
+    app = Remote_control.NetworkManager(flask_app)
+    # Queue for inter-processing communication
     queue = Queue()
+
     # Start meshing process, this will be needed to show GMESH GUI in another process
     mesh_process = Meshing_process.MeshingHandler(eventsDict, conditionsDict, queue, 0, 0, 0 , "")
     mesh_process.start()
-    main()
+
+    # Start GUI
+    GUIapp = QtWidgets.QApplication(sys.argv)
+    GUIapp.setStyle('macos')
+    main = First(mesh_process)
+    main.show()
+    retval = GUIapp.exec()
+
+    # Close Gmsh process
+    closeSecondProcess()
+    
+    sys.exit(retval)
 

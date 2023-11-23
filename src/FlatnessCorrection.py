@@ -7,7 +7,27 @@ import os
 import numpy as np
 
 class FlatnessCorrectionTab(QWidget):
+    """Generates a tab used to load an optical flatness correction element (this is usually a 8bit image given by the SLM producer).
+    Attributes:
+        pattern (:numpy.ndarray:): Array containing the loaded flatness correction image.
+        pattern_generator (:Pattern_generator:): Pattern generator object used to generate the flatness correction image.
+        settings_manager (:SettingsManager:): Settings manager object used to get the SLM resolution.
+        hologram_manager (:HologramsManager:): Hologram manager object used to update the SLM window.
+        image_data (:numpy.ndarray:): Array containing the loaded flatness correction image.
+        loaded_file (str): Path to the loaded flatness correction image.
+        scale (int): Scale used to display the flatness correction image.
+        script_folder (str): Path to the folder containing the script.
+        SLM_x_res (int): SLM X resolution.
+        SLM_y_res (int): SLM Y resolution.
+    """
     def __init__(self, pattern_generator, settings_manager, hologram_manager):
+        """Constructor for the FlatnessCorrectionTab class.
+
+        Args:
+            pattern_generator (:Pattern_generator:): Pattern generator object. Added for consistency with other classes (not used here)
+            settings_manager (:SettingsManager:): Settings manager object used to get the wavelength, SLM resolution and SLM pixel pitch.
+            hologram_manager (:HologramsManager:): Hologram manager object used to update the SLM window.
+        """
         super().__init__()
         self.pattern_generator = pattern_generator
         self.settings_manager = settings_manager
@@ -21,9 +41,21 @@ class FlatnessCorrectionTab(QWidget):
         self.Init_GUI()
 
     def __del__(self):
+        """Destructor for the FlatnessCorrectionTab class.
+
+        Todo:
+            Implement this?
+        """
         pass
 
     def Init_GUI(self):
+        """Generates the GUI elements of the tab.
+        The tab will contain :
+            - A text field to enter the path to the flatness correction image.
+            - A button to load the flatness correction image.
+            - A checkbox to activate the flatness correction.
+            - An image preview of the flatness correction image.
+        """
         self.layout = QGridLayout()
         
         self.image_loading_layout = QVBoxLayout()
@@ -55,6 +87,8 @@ class FlatnessCorrectionTab(QWidget):
 
 
     def update_pattern(self):
+        """Updates the flatness correction image loading it from a file
+        """
         self.SLM_x_res = self.settings_manager.get_X_res()
         self.SLM_y_res = self.settings_manager.get_Y_res()
         if self.loaded_file != self.image_path.text():
@@ -89,9 +123,19 @@ class FlatnessCorrectionTab(QWidget):
             self.pattern_image.setImage(self.pattern)
 
     def get_pattern(self):
+        """Returns the flatness correction image.
+
+        Returns:
+            :numpy.ndarray: Array containing the flatness correction image.
+        """
         self.update_pattern()
         return self.pattern
 
     def is_active(self):
+        """Checks if the flatness correction element is active.
+
+        Returns:
+            bool: True if the flatness correction element is active, False otherwise.
+        """
         return self.isactive.isChecked()
 

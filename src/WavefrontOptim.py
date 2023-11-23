@@ -19,11 +19,78 @@ from flask import jsonify, send_file
 
 
 class SpotOptimTab_ext(QWidget):
+    """Spot optimization tab used to control the spot optimization process.
+    The algorithm is based on https://www.nature.com/articles/nphoton.2010.85.
+
+    This code is meant to be controlled remotely from a separate acquisition system that will measure the intensity of the interference between probe and reference zones.
+    The control is done via Flask.
+    The following endpoints are available:
+        - /optimiser/nextStep : triggers the next step of the algorithm
+        - /optimiser/refzone : returns the current reference zone
+        - /optimiser/refzone/<refzone> : sets the reference zone to <refzone>
+        - /optimiser/probzone : returns the current probe zone
+        - /optimiser/probzone/<probzone> : sets the probe zone to <probzone>
+        - /optimiser/phase : returns the current phase
+        - /optimiser/phase/<phase> : sets the phase to <phase>
+        - /optimiser/phaseStep/<phaseStep> : sets the phase step to <phaseStep>
+        - /optimiser/IDsList : returns the list of IDs of the active optical elements
+        - /optimiser/phasePattern : returns the current phase pattern
+
+    --- Setting up the algorithm ---
+    First the user has to define the probe and references zones on the SLM. This can be done using gmsh.
+    Mesh parameters and algorithms can be choosen in the tab. Once obtaining a satisfactory meshing this can be saved and loaded later.
+    The mesh can be visualized using the gmsh GUI. This requires to start the GUI on another process as certain OS do not allow GUI to be started outside the main thread.
+    The second process is started at the start of the program and kept dormant if not used.
+    
+    It allows for an user to choose the parameters for 2 gratings:
+        - one to "dump" the 1st order power of the SLM to an unused zone
+        - one to that will be assigned to the reference and probe zones in order to scan for their interference
+
+    Once chosen the parameters the code will parse all the zones in the mesh and assign them a tag. 
+    The user can then choose the reference and probe zones from the GUI.
+
+    Starting the algorithm will allow to scan the selected reference zone phase offset in a range [0,2pi].
+
+    Attributes:
+        pattern_generator (:Pattern_generator:): Pattern generator object used to generate the grating.
+        settings_manager (:SettingsManager:): Settings manager object used to get the wavelength, SLM resolution and SLM pixel pitch.
+        hologram_manager (:HologramsManager:): Hologram manager object used to update the SLM window.
+        algorithms (list): List of available meshing algorithms.
+        algorithms_names (list): List of names of the available meshing algorithms.
+        openmeshvisualizer (bool): Flag to indicate if the mesh visualizer is open or not.
+        wasINIT (bool): Flag to indicate if the mesh has been initialized or not.
+        th_active (bool): Flag to indicate if the algorithm is running or not.
+        process_step (int): Current step of the algorithm.
+        points (list): List of points used to define the SLM boundaries in the meshing software.
+        lines (list): List of lines used to define the SLM boundaries in the meshing software.
+        SLM_x_res (int): SLM X resolution.
+        SLM_y_res (int): SLM Y resolution.
+        minlmm (float): Minimum number of lines per mm that can be used to generate the grating.
+        maxlmm (float): Maximum number of lines per mm that can be used to generate the grating.
+        lmm_grating (float): Number of lines per mm used to generate the offset grating.
+        angle_grating (float): Angle of the offset grating in radians.
+        lmm_interf_grating (float): Number of lines per mm used to generate the grating used for interference.
+        angle_interf_grating (float): Angle of the grating in radians used for interference.
+        meshProcess (:MeshingProcess:): Meshing process object used to generate and visualize the mesh.
+        mutex (:QMutex:): Mutex used to control the second process.
+        waitCond (:QWaitCondition:): Wait condition used to control the second process.
+        theOptimizer (:OptimizerAlgorithm:): Optimizer algorithm object used to control the second process.
+    """
     def __del__(self):
+        """Destructor for the SpotOptimTab_ext class. Stops the optimization thread and closes the mesh GUI process.
+        """
         self.stop_algo()
         self.close_mesh()
         
     def __init__(self, pattern_generator, settings_manager, hologram_manager, meshing_process):
+        """Constructor for the SpotOptimTab_ext class.
+
+        Args:
+            pattern_generator (:Pattern_generator:): Pattern generator object used to generate the grating.
+            settings_manager (:SettingsManager:): Settings manager object used to get the wavelength, SLM resolution and SLM pixel pitch.
+            hologram_manager (:HologramsManager:): Hologram manager object used to update the SLM window.
+            meshing_process (:MeshingProcess:): Meshing process object used to generate and visualize the mesh.
+        """
         super().__init__()
         self.pattern_generator = pattern_generator
         self.settings_manager = settings_manager
@@ -68,6 +135,16 @@ class SpotOptimTab_ext(QWidget):
         self.theOptimizer = OptimizerAlgorithm(self.hologram_manager,self.pattern_generator, self.settings_manager,self.mutex,self.waitCond)
 
     def setEventsHandlers(self,eventsDict, conditionsDict, queue):
+        """Sets the events handlers for the class.
+         As for the gmsh GUI process, Events and Conditions are generated in __main__ and passed to the class.
+         Events are used to trigger actions in the meshProcess process (e.g. generate mesh, load mesh, save mesh, etc.)
+         Conditions are used to synchronize the two processes (e.g. wait for the mesh to be generated before loading it)
+
+        Args:
+            eventsDict (dict): Dictionary containing the events.
+            conditionsDict (dict): Dictionary containing the conditions.
+            queue (queue): Queue used to communicate with the gmsh GUI process.
+        """
         # Called after initializing the class, here we give the object control over the mutex to control the second process
         self.eventsDict = eventsDict
         self.conditionsDict = conditionsDict
@@ -75,6 +152,8 @@ class SpotOptimTab_ext(QWidget):
 
 
     def init_GUI(self):
+        """Generates the GUI elements of the tab.
+        """
         self.loadshowmeshlayout =  QGridLayout()
         self.showmesh_layout = QHBoxLayout()
         self.mesh_layout = QVBoxLayout()
@@ -199,6 +278,8 @@ class SpotOptimTab_ext(QWidget):
         self.setLayout(self.mesh_layout)
 
     def selectRefZone(self):
+        """Updates the reference zone when the user selects a new one from the GUI.
+        """
         # Check if we don't have elements in the ComboBox, a mesh update will empty the list
         # Emptying the list will trigger a value update that will try to do int('') crashing
         if self.zones_ref_combobox.count() <=0:
@@ -207,6 +288,8 @@ class SpotOptimTab_ext(QWidget):
             self.ref_zone = int(self.zones_ref_combobox.currentText())
 
     def selectProbZone(self):
+        """Updates the probe zone when the user selects a new one from the GUI.
+        """
         # Check if we don't have elements in the ComboBox, a mesh update will empty the list
         # Emptying the list will trigger a value update that will try to do int('') crashing
         if self.zones_prob_combobox.count() <=0:
@@ -215,6 +298,8 @@ class SpotOptimTab_ext(QWidget):
             self.prob_zone = int(self.zones_prob_combobox.currentText())
 
     def loadMeshFromFile(self):
+        """Loads a mesh from a file in gmsh .msh format.
+        """
         # Opens a prompt for the user to select a mesh file
         self.putVariablesInQueue(self.queue, self.eventsDict['genMesh'], self.eventsDict['generalEvent'])
         name = QFileDialog.getOpenFileName(self,"Open File","${HOME}","GMSH (*.msh);;",)
@@ -234,6 +319,8 @@ class SpotOptimTab_ext(QWidget):
                 return
     
     def saveMeshToFile(self):
+        """Saves the current mesh to a file in gmsh .msh format.
+        """
         name = QFileDialog.getSaveFileName(self, "Save File", "","GMSH (*.msh);;")
         self.queue.put(name[0])
         self.eventsDict['savefile'].set()
@@ -253,6 +340,8 @@ class SpotOptimTab_ext(QWidget):
 
 
     def populate_zone_selector(self):
+        """Populates the reference and probe zone selection comboboxes once the mesh has been generated
+        """
         self.zones_ref_combobox.clear()
         self.zones_prob_combobox.clear()
         for el in self.ids_list:
@@ -260,11 +349,20 @@ class SpotOptimTab_ext(QWidget):
             self.zones_prob_combobox.addItem(str(el))
 
     def is_active(self):
+        """Returns the status of the algorithm.
+        """
         return False
     
     # This part for setting the grating parameters needed for generating constructing/distructive interference
 
     def make_lmm_slider(self, lmm_layout, spin_lmm, lmm_slider):
+        """Generates the slider to control the offset grating parameters and adds it to the GUI.
+
+        Args:
+            lmm_layout (:QVBoxLayout:): Layout to which the slider will be added.
+            spin_lmm (:QDoubleSpinBox:): Spinbox to control the offset grating parameters.
+            lmm_slider (:utils.DoubleSlider:): Slider to control the offset grating parameters.
+        """
         #self.lmm_layout = QVBoxLayout()
         lmm = 100
         #self.spin_lmm = QDoubleSpinBox(text="l/mm ")
@@ -286,6 +384,13 @@ class SpotOptimTab_ext(QWidget):
         lmm_layout.addWidget(lmm_slider)
 
     def make_angle_slider(self, angle_layout, spin_angle, angle_slider):
+        """Generates the slider to control the offset grating parameters and adds it to the GUI.
+
+        Args:
+            angle_layout (:QVBoxLayout:): Layout to which the slider will be added.
+            spin_angle (:QDoubleSpinBox:): Spinbox to control the offset grating parameters.
+            angle_slider (:utils.DoubleSlider:): Slider to control the offset grating parameters.
+        """
         spin_angle.setSuffix(' π')
         spin_angle.setKeyboardTracking(False)
         spin_angle.setSingleStep(0.1)
@@ -302,6 +407,11 @@ class SpotOptimTab_ext(QWidget):
         angle_layout.addWidget(angle_slider)
     
     def setRefZone(self,refzone):
+        """Sets the reference zone.
+
+        Args:
+            refzone (int/str): Reference zone to set. Flask will input this as a string.
+        """
         # Change ref zone in the GUI
         self.zones_ref_combobox.setCurrentText(str(refzone))
         # Set the new reference zone
@@ -313,11 +423,10 @@ class SpotOptimTab_ext(QWidget):
         return jsonify(RefZone = self.theOptimizer.getRefZone(),ProbZone = self.theOptimizer.getProbZone(),Phase = self.theOptimizer.getPhase())
     
     def getProbRefZone(self):
-        r"""Returns the zones IDs and optimizer process state (running/not running) zone remotely
-        Returns
-        -------
-        json(Reference zone, Probe zone, Phase, Optimizer status)
-            Returns information on the probe zone, reference zone and current phase in json format for remote clients.
+        """Returns the zones IDs and optimizer process state (running/not running) zone remotely
+
+        Returns:
+             json(Reference zone, Probe zone, Phase, Optimizer status): Returns information on the probe zone, reference zone and current phase in json format for remote clients.
         """
         # If the algorithm is running take the ref_zone from it (more updated)
         if self.theOptimizer.isThreadRunning():
@@ -327,15 +436,12 @@ class SpotOptimTab_ext(QWidget):
             return jsonify(RefZone = self.theOptimizer.getRefZone(),ProbZone = self.theOptimizer.getProbZone(),Phase = self.theOptimizer.getPhase(), Optimizer = self.theOptimizer.isThreadRunning())
 
     def setProbZone(self,probzone):
-        r"""Sets the probe zone remotely
-         Parameters
-        ----------
-        probzone : int
-            Zone number of the probe zone
-        Returns
-        -------
-        json(Probe zone, Reference zone, Phase)
-            Returns information on the probe zone, reference zone and current phase in json format for remote clients.
+        """Sets the probe zone remotely
+         Args:
+            probzone (int/str): Probe zone to set. Flask will input this as a string.
+
+        Returns:
+            json(Probe zone, Reference zone, Phase): Returns information on the probe zone, reference zone and current phase in json format for remote clients.
         """
         self.zones_prob_combobox.setCurrentText(str(probzone))
         # Set the new reference zone
@@ -345,42 +451,40 @@ class SpotOptimTab_ext(QWidget):
         # Return the value of the new reference zone
         # Used for Flask as a return code to double check everything went fine
         return jsonify(ProbZone = self.theOptimizer.getProbZone(),RefZone = self.theOptimizer.getRefZone(),Phase = self.theOptimizer.getPhase())
-    
+
+
     def setPhase(self,phase):
-        r"""Sets the phase remotely
-         Parameters
-        ----------
-        phase : int
-            Phase value to set
-        Returns
-        -------
-        json(Phase)
-            Returns information on the current phase in json format for remote clients.
+        """Sets the phase remotely
+
+        Args:
+            phase (int/str): Phase to set. Flask will input this as a string.
+
+        Returns:
+            json(Probe zone, Reference zone, Phase): Returns information on the probe zone, reference zone and current phase in json format for remote clients.
         """
+
         self.theOptimizer.setPhase(int(phase))
         return jsonify(ProbZone = self.theOptimizer.getProbZone(),RefZone = self.theOptimizer.getRefZone(),Phase = self.theOptimizer.getPhase())
-    
+
     def setPhaseStep(self,phaseStep):
-        r"""Sets the phase step remotely
-         Parameters
-        ----------
-        phaseStep : int
-            Phase step to set
-        Returns
-        -------
-        json(Phase step)
-            Returns information on the current phase step in json format for remote clients.
+        """Sets the phase step remotely. The phase steps is the amount of phase used to increase the phase of the reference zone at each step of the algorithm.
+
+        Args:
+            phaseStep (int/str): Phase step to set. Flask will input this as a string.
+
+        Returns:
+            json(Probe zone, Reference zone, Phase, PhaseStep): Returns information on the probe zone, reference zone, current phase and phase steps in json format for remote clients.
         """
         self.theOptimizer.setPhaseStep(int(phaseStep))
         return jsonify(ProbZone = self.theOptimizer.getProbZone(),RefZone = self.theOptimizer.getRefZone(),Phase = self.theOptimizer.getPhase() ,PhaseStep = self.theOptimizer.getPhaseStep())
     
     def getPhasePatternIMG(self):
-        r"""Returns the phase pattern
-        Returns
-        -------
-        HTTP Response IMG (Phase pattern)
-            Returns information on the current phase pattern in PNG image format for remote clients.
+        """Returns the phase pattern
+
+        Returns:
+            HTTP Response IMG (Phase pattern): Returns information on the current phase pattern in PNG image format for remote clients.
         """
+
         if self.theOptimizer.getPhasePattern() is None:
             return None
         img = Image.fromarray(self.theOptimizer.getPhasePattern().astype('uint8'))
@@ -391,76 +495,97 @@ class SpotOptimTab_ext(QWidget):
         # move to beginning of file so `send_file()` it will read from start 
         file_object.seek(0)
         return send_file(file_object,mimetype='image/PNG',as_attachment=False,download_name='pattern.png')
-
     
     def getIdsList(self):
-        r"""Returns the IDs list
-        Returns
-        -------
-        json(IDs list)
-            Returns information on the current IDs list in json format for remote clients.
+        """Returns the IDs list
+
+        Returns:
+            json(IDs list): Returns information on the current IDs list in json format for remote clients.
         """
+
         return jsonify(IDsList = self.theOptimizer.getIdsList())
-    
-    # def getRefZone(self):
-    #     # If the algorithm is running take the ref_zone from it (more updated)
-    #     if self.theOptimizer.isThreadRunning():
-    #         return jsonify(self.theOptimizer.getRefZone())
-    #     # Otherwise use the one shown in the GUI
-    #     else: 
-    #         return jsonify(RefZone = self.theOptimizer.getRefZone(),ProbZone = self.theOptimizer.getProbZone(),Phase = self.theOptimizer.getPhase())
-
-
-
 
     def triggerNextStep(self):
+        """Triggers the next step of the algorithm
+
+        Returns:
+            json(Phase) : Returns information on the current phase of the probe zone in json format for remote clients.
+        """
         self.waitCond.wakeAll()
         return jsonify(self.theOptimizer.getPhase())
 
     def update_grating_lmm_slide(self):
+        """Updates the offset grating lmm in the slider when the user changes the spin value.
+        """
         self.lmm_grating = self.sender().value()
         self.grating_lmm_slider.setValue(self.lmm_grating)
+
     def update_grating_lmm_spin(self):
+        """Updates the offset grating lmm in the spinbox when the user changes the slider value.
+        """
         self.lmm_grating = self.sender().value()
         self.grating_lmm_spin.setValue(self.lmm_grating)
 
     def update_interf_grating_lmm_slide(self):
+        """Updates the interference grating lmm in the slider when the user changes the spin value.
+        """
         self.lmm_interf_grating = self.sender().value()
         self.interf_grating_lmm_slider.setValue(self.lmm_interf_grating) 
+
     def update_interf_grating_lmm_spin(self):
+        """Updates the interference grating lmm in the spinbox when the user changes the slider value.
+        """
         self.lmm_interf_grating = self.sender().value()
         self.interf_grating_lmm_spin.setValue(self.lmm_interf_grating)
 
     def update_grating_angle_slide(self):
+        """Updates the offset grating angle in the slider when the user changes the spin value.
+        """
         self.angle_grating = self.sender().value()
         self.grating_angle_slider.setValue(self.angle_grating)
+
     def update_grating_angle_spin(self):
+        """Updates the offset grating angle in the spinbox when the user changes the slider value.
+        """
         self.angle_grating = self.sender().value()
         self.grating_angle_spin.setValue(self.angle_grating)
+
     def update_interf_grating_angle_slide(self):
+        """Updates the interference grating angle in the slider when the user changes the spin value.
+        """
         self.angle_interf_grating = self.sender().value()
         self.interf_grating_angle_slider.setValue(self.angle_interf_grating) 
+
     def update_interf_grating_angle_spin(self):
+        """Updates the interference grating angle in the spinbox when the user changes the slider value.
+        """
         self.angle_interf_grating = self.sender().value()
         self.interf_grating_angle_spin.setValue(self.angle_interf_grating)
 
     def load_zones(self):
+        """Loads the reference and probe zones from the GUI.
+        """
         # Activate probe and reference zones
         for id, zone in enumerate(self.ids_list):
             if zone == self.prob_zone or zone == self.ref_zone:
                 self.active_zones[id] = 1
 
     def stop_algo(self):
+        """Stops the optimization algorithm.
+        """
         print("Stopping optimization")
         self.theOptimizer.stop()
         self.waitCond.wakeAll()
         print("Done")
     
-    # def change_mesh_algo(self,algorithm):
-    #     gmsh.option.setNumber("Mesh.Algorithm", algorithm)
-
     def putVariablesInQueue(self, queue, event, notify):
-        # Tells the second process the type of event
+        """Puts the variables needed to generate the mesh in the queue and notifies the second process.
+
+        Args:
+            queue (queue): Queue used to communicate with the gmsh GUI process.
+            event (event): Event used to notify the second process what to do (e.g. generate mesh, render mesh etc.).
+            notify (event): Event used to notify the second process that data is ready.
+        """
         event.set()
         self.SLM_x_res = self.settings_manager.get_X_res()
         self.SLM_y_res = self.settings_manager.get_Y_res()
@@ -474,22 +599,29 @@ class SpotOptimTab_ext(QWidget):
         notify.set()
 
     def show_mesh(self):
+        """Notifies the gmsh process to render the mesh in the GUI.
+        """
         self.eventsDict['showGUI'].set()
         
     def close_mesh(self):
+        """Notifies the gmsh process to close meshing visualization the GUI.
+        """
         self.eventsDict['closeGUI'].set()
-        # To be implemented, second thread of second process has to stop main
 
     def generate_mesh(self,F):
+        """Notifies the meshing process that a new mesh should be generated and which parameter (function) to use.
+
+        Args:
+            F (string): Function used to generate the mesh.
+        """
         self.putVariablesInQueue(self.queue, self.eventsDict['genMesh'], self.eventsDict['generalEvent'])
         # Waiting for second process to generate the Mesh
         #print("aked to generate")
 
     def load_mesh_ids(self):
-        # Tell the second process to start parsing the mesh
-        #self.mutex.lock()
+        """Notifies the second process to start parsing the mesh
+        """
         print("Now parsing, please wait...")
-        #self.parsingCond.acquire()
         self.eventsDict['parseMesh'].set()
         self.eventsDict['generalEvent'].set()
         with self.conditionsDict['parsingCond']:
@@ -507,6 +639,8 @@ class SpotOptimTab_ext(QWidget):
 
 
     def start_algo(self):
+        """Starts the optimization algorithm. If the algorithm is alredy running, triggers a next step.
+        """
         if self.theOptimizer.isThreadRunning():
             self.waitCond.wakeAll()
             return
@@ -556,7 +690,7 @@ class SpotOptimTab_ext(QWidget):
             button = dlg.exec()
             if button == QMessageBox.StandardButton.Ok:
                 return
-        # TODO : Let user choose a starting phase
+        # TODO : Let user choose a starting phase. This can be done only remotely ATM
         self.theOptimizer.setPhase(0)
         self.theOptimizer.activate(self.lmm_grating, self.angle_grating, self.lmm_interf_grating,self.angle_interf_grating)
         self.theOptimizer.start()
@@ -565,15 +699,39 @@ class SpotOptimTab_ext(QWidget):
 
 
 class OptimizerAlgorithm(QThread):
+    """Class used to control the optimization algorithm.
+
+    Attributes:
+        pattern_generator (:Pattern_generator:): Pattern generator object used to generate the grating.
+        settings_manager (:SettingsManager:): Settings manager object used to get the wavelength, SLM resolution and SLM pixel pitch.
+        hologram_manager (:HologramsManager:): Hologram manager object used to update the SLM window.
+        pattern (np.array): Phase pattern used to generate the grating.
+        pattern_generator (:Pattern_generator:): Pattern generator object used to generate the grating.
+        settings_manager (:SettingsManager:): Settings manager object used to get the wavelength, SLM resolution and SLM pixel pitch.
+        times (np.array): Times used to generate the grating.
+        mesh (np.array): Mesh used to generate the grating.
+        SLM_x_res (int): SLM X resolution.
+        SLM_y_res (int): SLM Y resolution.
+        ids_list (list): List of IDs used to define the zones in the mesh.
+        phaseStep (int): Phase step used to increment the phase of the reference zone at each step of the algorithm.
+        probZoneID (int): Probe zone ID.
+        refZoneID (int): Reference zone ID.
+        prevzones (list): List of the previous probe and reference zones.
+        hologram_manager (:HologramsManager:): Hologram manager object used to update the SLM window.
+        _active (bool): Flag to indicate if the algorithm is running or not.
+        waitCond (:QWaitCondition:): Wait condition used to control the second process.
+        trigger (:QMutex:): Mutex used to control the second process.
+        phase (int): Current phase of the reference zone.
+        grating_lastvals (np.array): Last values of the grating parameters.
+        interf_grating_lastvals (np.array): Last values of the grating parameters used for interference.
+    """
     def __init__(self,hologram_manager, pattern_generator, settings_manager,mutex,waitCond):
             QThread.__init__(self)
             self.pattern = None
-            self.frequencies = None
             self.pattern_generator = pattern_generator
             self.settings_manager = settings_manager
             self.times = None
             self.mesh = None
-            self.freqs = None
             self.SLM_x_res = None
             self.SLM_y_res = None
             self.ids_list = None
@@ -596,10 +754,20 @@ class OptimizerAlgorithm(QThread):
             self.interf_grating_lastvals = np.array([])
 
     def activate(self,grating_lmm, grating_angle,interf_grating_lmm,interf_grating_angle):
+        """Activates the algorithm.
+
+        Args:
+            grating_lmm (float): l/mm of the offset grating.
+            grating_angle (float): Angle of the offset grating.
+            interf_grating_lmm (float): l/mm of the interference grating.
+            interf_grating_angle (float): Angle of the interference grating.
+        """
         self.setGrating(grating_lmm, grating_angle)
         self.setInterfGrating(interf_grating_lmm,interf_grating_angle)
 
     def run(self):
+        """Runs the optimization algorithm. The algorithm will wait for a waitCond signal before proceeding to the next step.
+        """
         if self.phase is None:
            self.setPhase(0)
         self.initPattern()
@@ -615,13 +783,16 @@ class OptimizerAlgorithm(QThread):
         self.stop()
 
     def stop(self):
+        """Stops the optimization algorithm.
+
+        Todo:
+            Save the data (meshing zones, phases etc.) somewhere here (not sure if useful). Re-init important local variables
+        """
         self._active=False
-        # TODO : Here we should save the data
-        # And re-init important local variables
         self.phase = None
 
     def next_step(self):
-        r"""Moves to the next step of the optimization algorithm
+        """Moves to the next step of the optimization algorithm
         Checks that gratings and zones parameters weren't changed (perhaps remotely)
         If they were it needs to regenerate the grating patterns
         """
@@ -640,56 +811,135 @@ class OptimizerAlgorithm(QThread):
 
 
     def setInterfGrating(self,interf_grating_lmm,interf_grating_angle):
+        """Sets the parameters of the interference grating.
+
+        Args:
+            interf_grating_lmm (float): l/mm of the interference grating.
+            interf_grating_angle (float): Angle of the interference grating.
+        """
         self.interf_grating_lmm = interf_grating_lmm
         self.interf_grating_angle = interf_grating_angle
 
     def setGrating(self, grating_lmm, grating_angle):
+        """Sets the parameters of the offset grating.
+
+        Args:
+            grating_lmm (float): l/mm of the offset grating.
+            grating_angle (float): Angle of the offset grating.
+        """
         self.grating_lmm = grating_lmm
         self.grating_angle = grating_angle
     
     def setMesh(self, mesh):
+        """Sets the mesh used to separate the SLM in zones.
+        """
         self.mesh = mesh
 
     # This to be used only when forcing the algorithm to start at a previous phase
     def setPhase(self, phase):
+        """Sets the phase of the reference zone.
+        """
         self.phase = phase
 
     def getPhase(self):
+        """Returns the phase of the reference zone.
+
+        Returns:
+            float: Phase of the reference zone.
+        """
         return self.phase
 
     def setPhaseStep(self, phaseStep):
+        """Sets the phase step used to increment the phase of the reference zone at each step of the algorithm.
+
+        Args:
+            phaseStep (float): Phase step to set.
+        """
         self.phaseStep = phaseStep
 
     def getPhaseStep(self):
+        """Returns the phase step used to increment the phase of the reference zone at each step of the algorithm.
+
+        Returns:
+            float: Phase step.
+        """
         return self.phaseStep
 
     def setProbZone(self,probZoneID):
+        """Sets the probe zone.
+
+        Args:
+            probZoneID (int): Probe zone ID.
+        """
         self.probZoneID = probZoneID
     
     def getProbZone(self):
+        """Returns the probe zone ID.
+
+        Returns:
+            int: Probe zone ID.
+        """
         return self.probZoneID
 
     def setRefZone(self,refZoneID):
+        """Sets the reference zone.
+
+        Args:
+            refZoneID (int): Reference zone ID.
+        """
         self.refZoneID = refZoneID
     
     def getRefZone(self):
+        """Returns the reference zone ID.
+
+        Returns:
+            int: Reference zone ID.
+        """
         return self.refZoneID
 
     def setIdsList(self, ids_list):
+        """Sets the IDs list (list of available zones)
+
+        Args:
+            ids_list (list): List of available zones.
+        """
         self.ids_list = ids_list
 
     def getIdsList(self):
+        """Returns the IDs list (list of available zones)
+
+        Returns:
+            list: List of available zones.
+        """
         return self.ids_list
     
     def getPhasePattern(self):
+        """Returns the phase pattern.
+
+        Returns:
+            np.array: Phase pattern.
+        """
         return self.pattern
 
     def isThreadReady(self):
+        """Returns True if the algorithm is ready to start.
+
+        Returns:
+            bool: True if the algorithm is ready to start.
+        """
         return self.mesh is not None or self.settings_manager is not None or self.ids_list is not None or self.probZoneID is not None or self.refZoneID is not None
+    
     def isThreadRunning(self):
+        """Checks if the algorithm is running.
+
+        Returns:
+            bool: True if the algorithm is running.
+        """
         return self._active
     
     def remeshing(self):
+        """Checks if the grating parameters were changed and if so, regenerates the grating patterns.
+        """
         if not np.array_equal(self.grating_lastvals,np.array([self.settings_manager.get_wavelength(), self.settings_manager.get_pixel_pitch(), self.grating_lmm, self.grating_angle*np.pi, self.SLM_x_res, self.SLM_y_res])) and not np.array_equal(self.interf_grating_lastvals,np.array([self.settings_manager.get_wavelength(), self.settings_manager.get_pixel_pitch(), self.interf_grating_lmm, self.interf_grating_angle*np.pi, self.SLM_x_res, self.SLM_y_res])):
             print("remeshing")
             self.grating_pattern = self.pattern_generator.GenerateGrating(self.settings_manager.get_wavelength(), self.settings_manager.get_pixel_pitch(), self.grating_lmm, self.grating_angle*np.pi, self.SLM_x_res, self.SLM_y_res)
@@ -699,6 +949,8 @@ class OptimizerAlgorithm(QThread):
 
 
     def initPattern(self):
+        """Initializes the phase patterns for offset and interference gratings.
+        """
         print("Initializating ... ")
         self.SLM_x_res = self.settings_manager.get_X_res()
         self.SLM_y_res = self.settings_manager.get_Y_res()
@@ -710,6 +962,22 @@ class OptimizerAlgorithm(QThread):
 
 @jit(nopython=True)
 def next_step_fast(SIZEX, SIZEY, mesh, interf_grating, probZoneID, pattern, phase):
+    """Generates the next step of the optimization algorithm. Uses jit from numba to speed up the computation.
+    This updates only the part of the pattern corresponding to the probe zone.
+    In case the probe/reference zones have been changed load_pattern should be used instead.
+
+    Args:
+        SIZEX (int): SLM X resolution.
+        SIZEY (int): SLM Y resolution.
+        mesh (np.array): Mesh used to separate the SLM in zones.
+        interf_grating (np.array): Interference grating pattern.
+        probZoneID (int): Probe zone ID.
+        pattern (np.array): Phase pattern.
+        phase (float): Current phase of the reference zone.
+
+    Returns:
+        np.array: New phase pattern.
+    """
     for i in range(0,SIZEY):
         for j in range(0,SIZEX):
             tmp = mesh[i,j]
@@ -723,6 +991,21 @@ def next_step_fast(SIZEX, SIZEY, mesh, interf_grating, probZoneID, pattern, phas
 
 @jit(nopython=True) # Set "nopython" mode for best performance, equivalent to @njit
 def load_pattern(mesh, grating, interf_grating, phase, SIZEX, SIZEY, refZoneID, probZoneID):
+    """Loads the phase pattern. Uses jit from numba to speed up the computation.
+
+    Args:
+        mesh (np.array): Mesh used to separate the SLM in zones.
+        grating (np.array): Offset grating pattern.
+        interf_grating (np.array): Interference grating pattern.
+        phase (float): Current phase of the reference zone.
+        SIZEX (int): SLM X resolution.
+        SIZEY (int): SLM Y resolution.
+        refZoneID (int): Reference zone ID.
+        probZoneID (int): Probe zone ID.
+
+    Returns:
+        np.array: Phase pattern.
+    """
     pattern = np.zeros((SIZEY,SIZEX))
     for i in range(0,SIZEY):
             for j in range(0,SIZEX):

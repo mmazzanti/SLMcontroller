@@ -1,9 +1,8 @@
-from multiprocessing import Process
+from multiprocessing import Process, freeze_support
 import threading
 
 import tkinter as tk
 from tkinter import ttk
-
 
 import sys
 import time
@@ -17,6 +16,7 @@ class MeshingHandler(Process):
     def __init__(self, eventsDict, conditionsDict, queue, SLM_x_res, SLM_y_res, algorithm, F):
     # execute the base constructor
         print('starting process')
+        freeze_support()
         Process.__init__(self)
         # Settings running thread parameter (true = running, false = not running)
         self._running = True
