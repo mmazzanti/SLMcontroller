@@ -107,6 +107,8 @@ class MeshingHandler(Process):
 
         while self.Enabled:
             # Check if the process should terminate (user closed the interface)
+            print("waiting for event")
+            self.eventsDict['generalEvent'].wait()
             self.checkUserMeshing()
             if self.eventsDict['showGUI'].is_set():
                 if not self.fltkInit:
@@ -118,8 +120,12 @@ class MeshingHandler(Process):
                 else:
                     # GUI was closed through other means (X)
                     self.eventsDict['closeGUI'].set()
+                    self.eventsDict['generalEvent'].clear()
                 # Check user requested events (remesh, closeGUI etc.)
-            
+            else:
+                # Just woke up to check user requested events (remesh, closeGUI etc.)
+                # Go back to sleep
+                self.eventsDict['generalEvent'].clear()
         # Prepare to terminate
         if gmsh.isInitialized():
             if(gmsh.fltk.isAvailable):
@@ -131,7 +137,7 @@ class MeshingHandler(Process):
     def updatebar(self):
         while self.p['value'] < 100:
             self.p['value'] += 10
-            time.sleep(0.1)
+            time.sleep(0.05)
             #self.root.after(100, self.startbar)
         self.root.withdraw()
         self.root.quit()

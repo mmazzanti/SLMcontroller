@@ -189,6 +189,7 @@ class HologramsManager():
             pattern (np.array): Phase pattern to be rendered on the SLM
             others (bool): If True, the other active optical elements will be rendered on the SLM as well
         """
+        print("rendering")
         if self.pattern is None:
             self.pattern = self.pattern_generator.empty_pattern(self.settings_manager.get_X_res(), self.settings_manager.get_Y_res())
         self.pattern = np.copy(pattern)
@@ -392,7 +393,8 @@ class First(QtWidgets.QMainWindow):
         The spot optimization algorithm used in the SpotOptimTab_ext is based on https://www.nature.com/articles/nphoton.2010.85
         The algorithm relies on an external feedback for the spot intensity measurement.
         The algorithm steps and parameters can be controlled remotely on the network using the following endpoints:
-        - /optimiser/nextStep : triggers the next step of the algorithm
+        - /optimiser/start : starts the algorithm (if already running, triggers a next step)
+        - /optimiser/nextStep : triggers the next step of the algorithm (once scaned till the end of the phase pattern, this will return phase = null)
         - /optimiser/refzone : returns the current reference zone
         - /optimiser/refzone/<refzone> : sets the reference zone to <refzone>
         - /optimiser/probzone : returns the current probe zone
@@ -439,20 +441,23 @@ class First(QtWidgets.QMainWindow):
         Args:
             tab (WavefrontOptim.SpotOptimTab_ext): SpotOptimTab_ext object (for now the only tab that uses the endpoints)
         """
+        app.add_endpoint('/optimiser/start', 'optimiser/start', tab.start_algo_rem, methods=['GET'])
+
         app.add_endpoint('/optimiser/nextStep', 'optimiser/nextStep', tab.triggerNextStep, methods=['GET'])
 
         app.add_endpoint('/optimiser/refzone', 'optimiser/refzone', tab.getProbRefZone, methods=['GET'])
-        app.add_endpoint('/optimiser/refzone/<refzone>', 'optimiser/refzone/<refzone>', tab.setRefZone, methods=['GET'])
+        app.add_endpoint('/optimiser/refzone/<refzone>', 'optimiser/refzone/<int:refzone>', tab.setRefZone, methods=['GET'])
 
         app.add_endpoint('/optimiser/probzone', 'optimiser/probzone', tab.getProbRefZone, methods=['GET'])
-        app.add_endpoint('/optimiser/probzone/<probzone>', 'optimiser/probzone/<probzone>', tab.setProbZone, methods=['GET'])
+        app.add_endpoint('/optimiser/probzone/<probzone>', 'optimiser/probzone/<int:probzone>', tab.setProbZone, methods=['GET'])
 
         app.add_endpoint('/optimiser/phase', 'optimiser/phase', tab.getProbRefZone, methods=['GET'])
-        app.add_endpoint('/optimiser/phase/<phase>', 'optimiser/phase/<phase>', tab.setPhase, methods=['GET'])
-        app.add_endpoint('/optimiser/phaseStep/<phaseStep>', 'optimiser/phaseStep/<phaseStep>', tab.setPhaseStep, methods=['GET'])
+        app.add_endpoint('/optimiser/phase/<phase>', 'optimiser/phase/<float:phase>', tab.setPhase, methods=['GET'])
+        app.add_endpoint('/optimiser/phaseStep/<float:phaseStep>', 'optimiser/phaseStep/<phaseStep>', tab.setPhaseStep, methods=['GET'])
 
         app.add_endpoint('/optimiser/IDsList', 'optimiser/IDsList', tab.getIdsList, methods=['GET'])
-        app.add_endpoint('/optimiser/phasePattern', 'optimiser/phasePattern', tab.getPhasePatternIMG,methods=['GET'])
+        app.add_endpoint('/optimiser/phasePattern', 'optimiser/phasePattern', tab.getPhasePatternIMG, methods=['GET'])
+        app.add_endpoint('/optimiser/phasePatternData', 'optimiser/phasePatternData', tab.getPhasePattern, methods=['GET'])
 
     def on_pushButton_clicked(self):
         """Updates the SLM window with the new phase pattern. Connected to the "Show Hologram/Update" button.
@@ -547,6 +552,8 @@ def closeSecondProcess():
     """
     eventsDict['terminate'].set()
     eventsDict['generalEvent'].set()
+
+    
 
 
 # Events list for :
