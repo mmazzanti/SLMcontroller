@@ -15,7 +15,7 @@ from numba.typed import List
 from PIL import Image
 from io import BytesIO
 
-from flask import jsonify, send_file
+from flask import jsonify, send_file, abort
 
 
 class SpotOptimTab_ext(QWidget):
@@ -25,7 +25,8 @@ class SpotOptimTab_ext(QWidget):
     This code is meant to be controlled remotely from a separate acquisition system that will measure the intensity of the interference between probe and reference zones.
     The control is done via Flask.
     The following endpoints are available:
-        - /optimiser/nextStep : triggers the next step of the algorithm
+        - /optimiser/start : starts the algorithm (if already running, triggers a next step)
+        - /optimiser/nextStep : triggers the next step of the algorithm (once scaned till the end of the phase pattern, this will return phase = null)
         - /optimiser/refzone : returns the current reference zone
         - /optimiser/refzone/<refzone> : sets the reference zone to <refzone>
         - /optimiser/probzone : returns the current probe zone
@@ -412,16 +413,18 @@ class SpotOptimTab_ext(QWidget):
         Args:
             refzone (int/str): Reference zone to set. Flask will input this as a string.
         """
-        # Change ref zone in the GUI
-        self.zones_ref_combobox.setCurrentText(str(refzone))
-        # Set the new reference zone
-        self.ref_zone = int(refzone)
-        # Change it also in the algorithm
-        self.theOptimizer.setRefZone(int(refzone))
-        # Return the value of the new reference zone
-        # Used for Flask as a return code to double check everything went fine
-        return jsonify(RefZone = self.theOptimizer.getRefZone(),ProbZone = self.theOptimizer.getProbZone(),Phase = self.theOptimizer.getPhase())
-    
+        refzone = int(refzone)
+        if (refzone in self.ids_list) and not(refzone == self.ref_zone):
+            # Change ref zone in the GUI
+            self.zones_ref_combobox.setCurrentText(str(refzone))
+            # Set the new reference zone
+            self.ref_zone = int(refzone)
+            # Change it also in the algorithm
+            self.theOptimizer.refZoneID = int(refzone)
+            # Return the value of the new reference zone
+            # Used for Flask as a return code to double check everything went fine
+        return jsonify(RefZone = self.theOptimizer.refZoneID,ProbZone = self.theOptimizer.probZoneID,Phase = self.theOptimizer.phase)
+
     def getProbRefZone(self):
         """Returns the zones IDs and optimizer process state (running/not running) zone remotely
 
@@ -430,10 +433,10 @@ class SpotOptimTab_ext(QWidget):
         """
         # If the algorithm is running take the ref_zone from it (more updated)
         if self.theOptimizer.isThreadRunning():
-            return jsonify(RefZone = self.theOptimizer.getRefZone(),ProbZone = self.theOptimizer.getProbZone(),Phase = self.theOptimizer.getPhase(), Optimizer = self.theOptimizer.isThreadRunning())
+            return jsonify(RefZone = self.theOptimizer.refZoneID,ProbZone = self.theOptimizer.probZoneID,Phase = self.theOptimizer.phase, Optimizer = self.theOptimizer.isThreadRunning())
         # Otherwise use the one shown in the GUI
         else: 
-            return jsonify(RefZone = self.theOptimizer.getRefZone(),ProbZone = self.theOptimizer.getProbZone(),Phase = self.theOptimizer.getPhase(), Optimizer = self.theOptimizer.isThreadRunning())
+            return jsonify(RefZone = self.theOptimizer.refZoneID,ProbZone = self.theOptimizer.probZoneID,Phase = self.theOptimizer.phase, Optimizer = self.theOptimizer.isThreadRunning())
 
     def setProbZone(self,probzone):
         """Sets the probe zone remotely
@@ -443,15 +446,16 @@ class SpotOptimTab_ext(QWidget):
         Returns:
             json(Probe zone, Reference zone, Phase): Returns information on the probe zone, reference zone and current phase in json format for remote clients.
         """
-        self.zones_prob_combobox.setCurrentText(str(probzone))
-        # Set the new reference zone
-        self.prob_zone = int(probzone)
-        # Change it also in the algorithm
-        self.theOptimizer.setProbZone(int(probzone))
-        # Return the value of the new reference zone
-        # Used for Flask as a return code to double check everything went fine
-        return jsonify(ProbZone = self.theOptimizer.getProbZone(),RefZone = self.theOptimizer.getRefZone(),Phase = self.theOptimizer.getPhase())
-
+        probzone = int(probzone)
+        if (probzone in self.ids_list) and not(probzone == self.ref_zone):
+            self.zones_prob_combobox.setCurrentText(str(probzone))
+            # Set the new reference zone
+            self.prob_zone = int(probzone)
+            # Change it also in the algorithm
+            self.theOptimizer.probZoneID = int(probzone)
+            # Return the value of the new reference zone
+            # Used for Flask as a return code to double check everything went fine
+        return jsonify(RefZone = self.theOptimizer.refZoneID,ProbZone = self.theOptimizer.probZoneID,Phase = self.theOptimizer.phase)
 
     def setPhase(self,phase):
         """Sets the phase remotely
@@ -462,9 +466,10 @@ class SpotOptimTab_ext(QWidget):
         Returns:
             json(Probe zone, Reference zone, Phase): Returns information on the probe zone, reference zone and current phase in json format for remote clients.
         """
-
-        self.theOptimizer.setPhase(int(phase))
-        return jsonify(ProbZone = self.theOptimizer.getProbZone(),RefZone = self.theOptimizer.getRefZone(),Phase = self.theOptimizer.getPhase())
+        phase = float(phase)
+        if phase > 0 and phase < 255:
+            self.theOptimizer.phase = phase
+        return jsonify(RefZone = self.theOptimizer.refZoneID,ProbZone = self.theOptimizer.probZoneID,Phase = self.theOptimizer.phase)
 
     def setPhaseStep(self,phaseStep):
         """Sets the phase step remotely. The phase steps is the amount of phase used to increase the phase of the reference zone at each step of the algorithm.
@@ -475,8 +480,46 @@ class SpotOptimTab_ext(QWidget):
         Returns:
             json(Probe zone, Reference zone, Phase, PhaseStep): Returns information on the probe zone, reference zone, current phase and phase steps in json format for remote clients.
         """
-        self.theOptimizer.setPhaseStep(int(phaseStep))
-        return jsonify(ProbZone = self.theOptimizer.getProbZone(),RefZone = self.theOptimizer.getRefZone(),Phase = self.theOptimizer.getPhase() ,PhaseStep = self.theOptimizer.getPhaseStep())
+        phaseStep = float(phaseStep)
+        if phaseStep > 0 and phaseStep < 255:
+            self.theOptimizer.phaseStep = phaseStep
+        return jsonify(ProbZone = self.theOptimizer.probZoneID,RefZone = self.theOptimizer.refZoneID,Phase = self.theOptimizer.phase ,PhaseStep = self.theOptimizer.phaseStep)
+    
+    def checkAlgoReady(self):
+        if self.lmm_grating == 0 or self.lmm_interf_grating == 0:
+            return[500, 'Invalid gratings settings']
+        if self.ref_zone == self.prob_zone or self.prob_zone > np.max(self.ids_list) or self.prob_zone < np.min(self.ids_list) or self.ref_zone > np.max(self.ids_list) or self.ref_zone < np.min(self.ids_list):
+            return[500, 'Invalid probe/reference zone']
+        if not self.theOptimizer.isThreadReady():
+            return[500, 'Mesh not ready']
+        else:
+            return 0
+
+
+    def start_algo_rem(self):
+        """Starts the optimization algorithm remotely. If the algorithm is alredy running, triggers a next step.
+        Unfortunately not all OS allow to use the start_algo function (as that will require to open new GUI windows)
+        For this reason this is more or less a "Duplicate window" of the start_algo function.
+        """
+        if self.theOptimizer.isThreadRunning():
+            self.waitCond.wakeAll()
+            return jsonify(RefZone = self.theOptimizer.refZoneID,ProbZone = self.theOptimizer.probZoneID,Phase = self.theOptimizer.phase)
+        errors = self.checkAlgoReady()
+        if errors != 0:
+            abort(errors[0], errors[1])
+
+        self.theOptimizer.probZoneID = self.prob_zone
+        self.theOptimizer.refZoneID = self.ref_zone
+        # If the phase step was not set (e.g. first time running the algorithm) set it to 1/10 of the phase range
+        if self.theOptimizer.phaseStep == None:
+            self.theOptimizer.phaseStep = self.settings_manager.get_phase_correction()/10
+        # If the phase was not set (e.g. first time running the algorithm) set it to 0
+        if self.theOptimizer.phase == None:
+            self.theOptimizer.phase = 0
+
+        self.theOptimizer.activate(self.lmm_grating, self.angle_grating, self.lmm_interf_grating,self.angle_interf_grating)
+        self.theOptimizer.start()
+        return jsonify(RefZone = self.theOptimizer.refZoneID,ProbZone = self.theOptimizer.probZoneID,Phase = self.theOptimizer.phase)
     
     def getPhasePatternIMG(self):
         """Returns the phase pattern
@@ -502,8 +545,7 @@ class SpotOptimTab_ext(QWidget):
         Returns:
             json(IDs list): Returns information on the current IDs list in json format for remote clients.
         """
-
-        return jsonify(IDsList = self.theOptimizer.getIdsList())
+        return jsonify(IDsList = self.theOptimizer.ids_list)
 
     def triggerNextStep(self):
         """Triggers the next step of the algorithm
@@ -512,7 +554,7 @@ class SpotOptimTab_ext(QWidget):
             json(Phase) : Returns information on the current phase of the probe zone in json format for remote clients.
         """
         self.waitCond.wakeAll()
-        return jsonify(self.theOptimizer.getPhase())
+        return jsonify(RefZone = self.theOptimizer.refZoneID,ProbZone = self.theOptimizer.probZoneID,Phase = self.theOptimizer.phase)
 
     def update_grating_lmm_slide(self):
         """Updates the offset grating lmm in the slider when the user changes the spin value.
@@ -630,12 +672,10 @@ class SpotOptimTab_ext(QWidget):
         self.mesh = self.queue.get()
         self.ids_list = self.queue.get()
 
-        print(self.ids_list)
         self.populate_zone_selector()
         # Set mesh and ID list also in optimizer algorith
-        self.theOptimizer.setMesh(self.mesh)
-        self.theOptimizer.setIdsList(self.ids_list)
-        #print(self.ids_list)
+        self.theOptimizer.mesh = self.mesh
+        self.theOptimizer.ids_list = self.ids_list
 
 
     def start_algo(self):
@@ -643,57 +683,28 @@ class SpotOptimTab_ext(QWidget):
         """
         if self.theOptimizer.isThreadRunning():
             self.waitCond.wakeAll()
-            return
+            return 0
         
-        # Check that the grating parameter were initialized  
-        if self.lmm_grating == 0 or self.lmm_interf_grating == 0:
+        errors = self.checkAlgoReady()
+        if errors != 0:
             dlg = QMessageBox(self)
             dlg.setIcon(QMessageBox.Icon.Warning)
             dlg.setWindowTitle("ERROR!")
-            dlg.setText("Invalid grating settings!")
+            dlg.setText(errors[1])
             button = dlg.exec()
             if button == QMessageBox.StandardButton.Ok:
-                return
-        #Generate grating mesh, this will be used for splitting the 0th order from the interference zone
+                return 500
+        self.theOptimizer.probZoneID = self.prob_zone
+        self.theOptimizer.refZoneID = self.ref_zone
+        # TODO : For now hardcoded a step of ~25 (maxphase (usually ~255)/10), to be user-selectable
+        # Default to maxphase/10
+        self.theOptimizer.phaseStep = self.settings_manager.get_phase_correction()/10
 
-        if self.ref_zone == self.prob_zone or self.prob_zone > np.max(self.ids_list) or self.prob_zone < np.min(self.ids_list) or self.ref_zone > np.max(self.ids_list) or self.ref_zone < np.min(self.ids_list):
-            dlg = QMessageBox(self)
-            dlg.setIcon(QMessageBox.Icon.Warning)
-            dlg.setWindowTitle("ERROR!")
-            dlg.setText("Invalid probe or reference zones!")
-            button = dlg.exec()
-            if button == QMessageBox.StandardButton.Ok:
-                return
-
-
-        self.theOptimizer.setProbZone(self.prob_zone)
-        self.theOptimizer.setRefZone(self.ref_zone)
-        # TODO : For now hardcoded a step of 20, to be user-selectable
-        self.theOptimizer.setPhaseStep(self.settings_manager.get_phase_correction()/10)
-
-        # TODO: Reactivate this part once the thread will be automatized
-
-        # if self.theOptimizer.isThreadRunning():
-        #     dlg = QMessageBox(self)
-        #     dlg.setIcon(QMessageBox.Icon.Warning)
-        #     dlg.setWindowTitle("WARNING!")
-        #     dlg.setText("An optimization is already in process!")
-        #     button = dlg.exec()
-        #     if button == QMessageBox.StandardButton.Ok:
-        #         return
-
-        if not self.theOptimizer.isThreadReady():
-            dlg = QMessageBox(self)
-            dlg.setIcon(QMessageBox.Icon.Warning)
-            dlg.setWindowTitle("WARNING!")
-            dlg.setText("Mesh is not ready!")
-            button = dlg.exec()
-            if button == QMessageBox.StandardButton.Ok:
-                return
         # TODO : Let user choose a starting phase. This can be done only remotely ATM
-        self.theOptimizer.setPhase(0)
+        self.theOptimizer.phase = 0
         self.theOptimizer.activate(self.lmm_grating, self.angle_grating, self.lmm_interf_grating,self.angle_interf_grating)
         self.theOptimizer.start()
+        return 
 
 
 
@@ -708,15 +719,14 @@ class OptimizerAlgorithm(QThread):
         pattern (np.array): Phase pattern used to generate the grating.
         pattern_generator (:Pattern_generator:): Pattern generator object used to generate the grating.
         settings_manager (:SettingsManager:): Settings manager object used to get the wavelength, SLM resolution and SLM pixel pitch.
-        times (np.array): Times used to generate the grating.
-        mesh (np.array): Mesh used to generate the grating.
+        _mesh (np.array): Mesh used to generate the grating.
         SLM_x_res (int): SLM X resolution.
         SLM_y_res (int): SLM Y resolution.
-        ids_list (list): List of IDs used to define the zones in the mesh.
-        phaseStep (int): Phase step used to increment the phase of the reference zone at each step of the algorithm.
-        probZoneID (int): Probe zone ID.
-        refZoneID (int): Reference zone ID.
-        prevzones (list): List of the previous probe and reference zones.
+        _ids_list (list): List of IDs used to define the zones in the mesh.
+        _phaseStep (int): Phase step used to increment the phase of the reference zone at each step of the algorithm.
+        _probZoneID (int): Probe zone ID.
+        _refZoneID (int): Reference zone ID.
+        _prevzones (list): List of the previous probe and reference zones.
         hologram_manager (:HologramsManager:): Hologram manager object used to update the SLM window.
         _active (bool): Flag to indicate if the algorithm is running or not.
         waitCond (:QWaitCondition:): Wait condition used to control the second process.
@@ -730,21 +740,20 @@ class OptimizerAlgorithm(QThread):
             self.pattern = None
             self.pattern_generator = pattern_generator
             self.settings_manager = settings_manager
-            self.times = None
-            self.mesh = None
+            self._mesh = None
             self.SLM_x_res = None
             self.SLM_y_res = None
-            self.ids_list = None
-            self.phaseStep = None
-            self.probZoneID = None
-            self.refZoneID = None
-            self.prevzones = None
+            self._ids_list = None
+            self._phaseStep = None
+            self._probZoneID = None
+            self._refZoneID = None
+            self._prevzones = None
 
             self.hologram_manager = hologram_manager
             self._active = True
             self.isPhaseReady = False
             self.trigger = mutex
-            self.phase = 0
+            self._phase = 0
 
             self._active = False
             self.waitCond = waitCond
@@ -768,14 +777,15 @@ class OptimizerAlgorithm(QThread):
     def run(self):
         """Runs the optimization algorithm. The algorithm will wait for a waitCond signal before proceeding to the next step.
         """
-        if self.phase is None:
-           self.setPhase(0)
+        if self._phase is None:
+           self.phase = 0
         self.initPattern()
         self._active = True
         while self._active:
             self.next_step()
-            if self.phase > self.settings_manager.get_phase_correction() :
+            if self._phase > self.settings_manager.get_phase_correction() :
                 self._active = False
+                self._phase = None
                 break
             self.trigger.lock()
             self.waitCond.wait(self.trigger)
@@ -789,7 +799,7 @@ class OptimizerAlgorithm(QThread):
             Save the data (meshing zones, phases etc.) somewhere here (not sure if useful). Re-init important local variables
         """
         self._active=False
-        self.phase = None
+        self._phase = None
 
     def next_step(self):
         """Moves to the next step of the optimization algorithm
@@ -798,15 +808,15 @@ class OptimizerAlgorithm(QThread):
         """
         self.remeshing()
         # If the user changed the zones call the slower function to reload the gratings patterns on the previous zones
-        if not np.array_equal(self.prevzones,[self.refZoneID, self.probZoneID]):
-            self.pattern = load_pattern(self.mesh, self.grating_pattern,self.interf_grating_pattern,self.phase,self.SLM_x_res,self.SLM_y_res,self.refZoneID,self.probZoneID)
-        self.pattern = next_step_fast(self.SLM_x_res, self.SLM_y_res, self.mesh, self.interf_grating_pattern, self.probZoneID, self.pattern, self.phase)
-        print("Phase offset at this step: ", self.phase)
+        if not np.array_equal(self._prevzones,[self._refZoneID, self._probZoneID]):
+            self.pattern = load_pattern(self._mesh, self.grating_pattern,self.interf_grating_pattern,self._phase,self.SLM_x_res,self.SLM_y_res,self._refZoneID,self._probZoneID)
+        self.pattern = next_step_fast(self.SLM_x_res, self.SLM_y_res, self._mesh, self.interf_grating_pattern, self._probZoneID, self.pattern, self._phase)
+        print("Phase offset at this step: ", self._phase)
         
         # Increment phase for next step
-        self.phase = self.phase + self.phaseStep
+        self._phase = self._phase + self._phaseStep
         self.hologram_manager.renderAlgorithmPattern(self.pattern, True)
-        self.prevzones = [self.refZoneID, self.probZoneID]
+        self._prevzones = [self._refZoneID, self._probZoneID]
         
 
 
@@ -830,88 +840,109 @@ class OptimizerAlgorithm(QThread):
         self.grating_lmm = grating_lmm
         self.grating_angle = grating_angle
     
-    def setMesh(self, mesh):
+    @property
+    def mesh(self):
+        return self._mesh
+    
+    @mesh.setter
+    def mesh(self, mesh):
         """Sets the mesh used to separate the SLM in zones.
+        NOTE: This is a bit stupid as we do not clone the mesh here with copy/np.copy.
+        This is intended as we want to use the same mesh as the GUI tab object.
+        However, what's stupid is to have a private object that is a pointer to an object owned by an object of another class.
+        Anyways, this is how it is for now.
         """
-        self.mesh = mesh
+        self._mesh = mesh
 
     # This to be used only when forcing the algorithm to start at a previous phase
-    def setPhase(self, phase):
-        """Sets the phase of the reference zone.
-        """
-        self.phase = phase
-
-    def getPhase(self):
+    @property
+    def phase(self):
         """Returns the phase of the reference zone.
 
         Returns:
             float: Phase of the reference zone.
         """
-        return self.phase
+        return self._phase
 
-    def setPhaseStep(self, phaseStep):
-        """Sets the phase step used to increment the phase of the reference zone at each step of the algorithm.
-
-        Args:
-            phaseStep (float): Phase step to set.
+    @phase.setter
+    def phase(self, phase):
+        """Sets the phase of the reference zone.
         """
-        self.phaseStep = phaseStep
+        self._phase = phase
 
-    def getPhaseStep(self):
+    @property
+    def phaseStep(self):
         """Returns the phase step used to increment the phase of the reference zone at each step of the algorithm.
 
         Returns:
             float: Phase step.
         """
-        return self.phaseStep
-
-    def setProbZone(self,probZoneID):
-        """Sets the probe zone.
+        return self._phaseStep
+    
+    @phaseStep.setter
+    def phaseStep(self, phaseStep):
+        """Sets the phase step used to increment the phase of the reference zone at each step of the algorithm.
 
         Args:
-            probZoneID (int): Probe zone ID.
+            phaseStep (float): Phase step to set.
         """
-        self.probZoneID = probZoneID
-    
-    def getProbZone(self):
+        self._phaseStep = phaseStep
+
+    @property 
+    def probZoneID(self):
         """Returns the probe zone ID.
 
         Returns:
             int: Probe zone ID.
         """
-        return self.probZoneID
+        return self._probZoneID
 
-    def setRefZone(self,refZoneID):
-        """Sets the reference zone.
+    @probZoneID.setter
+    def probZoneID(self,probZoneID):
+        """Sets the probe zone.
 
         Args:
-            refZoneID (int): Reference zone ID.
+            probZoneID (int): Probe zone ID.
         """
-        self.refZoneID = refZoneID
+        self._probZoneID = probZoneID
     
-    def getRefZone(self):
+    @property
+    def refZoneID(self):
         """Returns the reference zone ID.
 
         Returns:
             int: Reference zone ID.
         """
-        return self.refZoneID
-
-    def setIdsList(self, ids_list):
-        """Sets the IDs list (list of available zones)
+        return self._refZoneID
+    
+    @refZoneID.setter
+    def refZoneID(self,refZoneID):
+        """Sets the reference zone.
 
         Args:
-            ids_list (list): List of available zones.
+            refZoneID (int): Reference zone ID.
         """
-        self.ids_list = ids_list
-
-    def getIdsList(self):
+        self._refZoneID = refZoneID
+    
+    @property
+    def ids_list(self):
         """Returns the IDs list (list of available zones)
 
         Returns:
             list: List of available zones.
         """
-        return self.ids_list
+        return self._ids_list
+    
+    @ids_list.setter
+    def ids_list(self, ids_list):
+        """Sets the IDs list (list of available zones). 
+        Here is intendend to don't use np.copy() as we want the optimizer to use the same ID list as the GUI.
+
+        Args:
+            ids_list (list): List of available zones.
+        """
+        self._ids_list = ids_list
+
     
     def getPhasePattern(self):
         """Returns the phase pattern.
@@ -927,7 +958,7 @@ class OptimizerAlgorithm(QThread):
         Returns:
             bool: True if the algorithm is ready to start.
         """
-        return self.mesh is not None or self.settings_manager is not None or self.ids_list is not None or self.probZoneID is not None or self.refZoneID is not None
+        return self._mesh is not None or self.settings_manager is not None or self._ids_list is not None or self._probZoneID is not None or self._refZoneID is not None
     
     def isThreadRunning(self):
         """Checks if the algorithm is running.
@@ -940,7 +971,7 @@ class OptimizerAlgorithm(QThread):
     def remeshing(self):
         """Checks if the grating parameters were changed and if so, regenerates the grating patterns.
         """
-        if not np.array_equal(self.grating_lastvals,np.array([self.settings_manager.get_wavelength(), self.settings_manager.get_pixel_pitch(), self.grating_lmm, self.grating_angle*np.pi, self.SLM_x_res, self.SLM_y_res])) and not np.array_equal(self.interf_grating_lastvals,np.array([self.settings_manager.get_wavelength(), self.settings_manager.get_pixel_pitch(), self.interf_grating_lmm, self.interf_grating_angle*np.pi, self.SLM_x_res, self.SLM_y_res])):
+        if not np.array_equal(self.grating_lastvals,np.array([self.settings_manager.get_wavelength(), self.settings_manager.get_pixel_pitch(), self.grating_lmm, self.grating_angle*np.pi, self.SLM_x_res, self.SLM_y_res])) or not np.array_equal(self.interf_grating_lastvals,np.array([self.settings_manager.get_wavelength(), self.settings_manager.get_pixel_pitch(), self.interf_grating_lmm, self.interf_grating_angle*np.pi, self.SLM_x_res, self.SLM_y_res])):
             print("remeshing")
             self.grating_pattern = self.pattern_generator.GenerateGrating(self.settings_manager.get_wavelength(), self.settings_manager.get_pixel_pitch(), self.grating_lmm, self.grating_angle*np.pi, self.SLM_x_res, self.SLM_y_res)
             self.interf_grating_pattern = self.pattern_generator.GenerateGrating(self.settings_manager.get_wavelength(), self.settings_manager.get_pixel_pitch(), self.interf_grating_lmm, self.interf_grating_angle*np.pi, self.SLM_x_res, self.SLM_y_res)
@@ -956,7 +987,7 @@ class OptimizerAlgorithm(QThread):
         self.SLM_y_res = self.settings_manager.get_Y_res()
         self.pattern = np.zeros((self.SLM_y_res,self.SLM_x_res))
         self.remeshing()
-        self.pattern = load_pattern(self.mesh, self.grating_pattern,self.interf_grating_pattern,self.phase,self.SLM_x_res,self.SLM_y_res,self.refZoneID,self.probZoneID)
+        self.pattern = load_pattern(self._mesh, self.grating_pattern,self.interf_grating_pattern,self._phase,self.SLM_x_res,self.SLM_y_res,self._refZoneID,self._probZoneID)
         print("... done")
 
 
@@ -981,8 +1012,6 @@ def next_step_fast(SIZEX, SIZEY, mesh, interf_grating, probZoneID, pattern, phas
     for i in range(0,SIZEY):
         for j in range(0,SIZEX):
             tmp = mesh[i,j]
-            # if tmp == self.refZoneID:
-            #     self.pattern[i,j] = self.interf_grating_pattern[i,j]
             if tmp == probZoneID:
                 pattern[i,j] = (interf_grating[i,j] + phase)%256
     return pattern

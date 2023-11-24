@@ -1,6 +1,7 @@
-# SLM controller
+SLM controller
+=======
 
-SLM_controller is a python based GUI software for controlling the phase pattern of an SLM (Spatial Light Modulator).
+SLM controller is a python based GUI software for controlling the phase pattern of an SLM (Spatial Light Modulator).
 The software takes care of rendering the hologram on top of any graphical interface of the operative system used. For now it has been tested on windows 10/11, ubuntu 22.04(previous release version) and MacOS.
 
 The software offers various types of static holograms that are normally used in the field of optical tweezers.
