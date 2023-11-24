@@ -551,7 +551,6 @@ def closeSecondProcess():
     """
     eventsDict['terminate'].set()
     eventsDict['generalEvent'].set()
-    eventsDict['showGUI'].set()
 
     
 

@@ -644,6 +644,7 @@ class SpotOptimTab_ext(QWidget):
         """Notifies the gmsh process to render the mesh in the GUI.
         """
         self.eventsDict['showGUI'].set()
+        self.eventsDict['generalEvent'].set()
         
     def close_mesh(self):
         """Notifies the gmsh process to close meshing visualization the GUI.
