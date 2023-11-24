@@ -19,7 +19,24 @@ In the settings windows it is possible to set the following parameters :
 * SLM resolution : This is the resolution (number of pixels) of the SLM. Beware that it can be different than the screen resolution seen by the operative system. Many SLMs use standard resolution values (eg. Full-HD) even if their effective number of pixels is different than (1920x1080).
 * SLM pixel pitch : The pixel size of the SLM
 * SLM phase correction : This is the correction value for a 2π phase modulation. The value is nomally provided by the manufacturing company. Typically 2π --> 255 but at different wavelengths this value can vary
-* Pattern window size : This should be the screen resolution used for the SLM (eg. Full-HD) not the number of pixels of the SLM (although the two might match). The unused (SLM resolution - window size) pixels will be rendered as black. 
+* Pattern window size : This should be the screen resolution used for the SLM (eg. Full-HD) not the number of pixels of the SLM (although the two might match). The unused (SLM resolution - window size) pixels will be rendered as black.
+* Network : IP and port used for remote control of the optimisation algorithm. The algorithm is based on [the following work](https://www.nature.com/articles/nphoton.2010.85). Remote control is handled using [Flask](https://flask.palletsprojects.com). The interface misuses the RESTful approach in order to simplify the code and improve usability (e.g. set methods are based on HTTP GET). The following endpoints are available:
+    - /optimiser/start : starts the algorithm (if already running, triggers a next step)
+    - /optimiser/nextStep : triggers the next step of the algorithm (once scaned till the end of the phase pattern, this will return phase = null)
+    - /optimiser/refzone : returns the current reference zone
+    - /optimiser/refzone/<refzone> : sets the reference zone to <refzone>
+    - /optimiser/probzone : returns the current probe zone
+    - /optimiser/probzone/<probzone> : sets the probe zone to <probzone>
+    - /optimiser/phase : returns the current phase
+    - /optimiser/phase/<phase> : sets the phase to <phase>
+    - /optimiser/phaseStep/<phaseStep> : sets the phase step to <phaseStep>
+    - /optimiser/IDsList : returns the list of IDs of the active optical elements
+    - /optimiser/phasePattern : returns the optimiser phase pattern (as image)
+    - /optimiser/phasePatternData : returns the optimiser phase pattern (as list)
+
+* Other endpoints are available globally
+    - /phasePattern : returns the phase pattern (as image) currently being rendered on the SLM
+
 
 <p align="center">
    <img src="Documentation/Img/settings.png" alt="Program settings"/>
