@@ -521,6 +521,11 @@ class SpotOptimTab_ext(QWidget):
         self.theOptimizer.start()
         return jsonify(RefZone = self.theOptimizer.refZoneID,ProbZone = self.theOptimizer.probZoneID,Phase = self.theOptimizer.phase)
     
+    def getPhasePattern(self):
+        if self.theOptimizer.getPhasePattern() is None:
+            return abort(404, "No pattern defined")
+        return jsonify(PhasePattern = self.theOptimizer.getPhasePattern().tolist())
+
     def getPhasePatternIMG(self):
         """Returns the phase pattern
 
@@ -529,7 +534,7 @@ class SpotOptimTab_ext(QWidget):
         """
 
         if self.theOptimizer.getPhasePattern() is None:
-            return None
+            return abort(404, "No pattern defined")
         img = Image.fromarray(self.theOptimizer.getPhasePattern().astype('uint8'))
         # create file-object in memory
         file_object = BytesIO()

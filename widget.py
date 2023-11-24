@@ -456,7 +456,8 @@ class First(QtWidgets.QMainWindow):
         app.add_endpoint('/optimiser/phaseStep/<float:phaseStep>', 'optimiser/phaseStep/<phaseStep>', tab.setPhaseStep, methods=['GET'])
 
         app.add_endpoint('/optimiser/IDsList', 'optimiser/IDsList', tab.getIdsList, methods=['GET'])
-        app.add_endpoint('/optimiser/phasePattern', 'optimiser/phasePattern', tab.getPhasePatternIMG,methods=['GET'])
+        app.add_endpoint('/optimiser/phasePattern', 'optimiser/phasePattern', tab.getPhasePatternIMG, methods=['GET'])
+        app.add_endpoint('/optimiser/phasePatternData', 'optimiser/phasePatternData', tab.getPhasePattern, methods=['GET'])
 
     def on_pushButton_clicked(self):
         """Updates the SLM window with the new phase pattern. Connected to the "Show Hologram/Update" button.
