@@ -10,7 +10,7 @@ docs/make.bat
 docs/_static/*
 
 
-Camera/
+
 tests/
 Data/
 dist/*
