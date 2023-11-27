@@ -13,7 +13,7 @@ from PyQt6.QtWidgets import QDoubleSpinBox, QGridLayout, QVBoxLayout, QWidget, Q
 from PyQt6.QtCore import Qt
 
 
-import src.utils as utils
+import utils as utils
 
 
 class LensTab(QWidget):

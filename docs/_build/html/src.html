@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>src package &#8212; SLM controller 1.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=4f649999" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=039e1c02" />
+    <script src="_static/documentation_options.js?v=292eb321"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="src-package">
+<h1>src package<a class="headerlink" href="#src-package" title="Link to this heading">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
+</section>
+<section id="src-flatnesscorrection-module">
+<h2>src.FlatnessCorrection module<a class="headerlink" href="#src-flatnesscorrection-module" title="Link to this heading">¶</a></h2>
+</section>
+<section id="src-fourierwavefrontoptim-module">
+<h2>src.FourierWavefrontOptim module<a class="headerlink" href="#src-fourierwavefrontoptim-module" title="Link to this heading">¶</a></h2>
+</section>
+<section id="src-grating-module">
+<h2>src.Grating module<a class="headerlink" href="#src-grating-module" title="Link to this heading">¶</a></h2>
+</section>
+<section id="src-lens-module">
+<h2>src.Lens module<a class="headerlink" href="#src-lens-module" title="Link to this heading">¶</a></h2>
+</section>
+<section id="module-src.Meshing_process">
+<span id="src-meshing-process-module"></span><h2>src.Meshing_process module<a class="headerlink" href="#module-src.Meshing_process" title="Link to this heading">¶</a></h2>
+<p>Meshing_process.py: Meshing process class. Used to handle gmesh GUI on OS that do not allow to run gmsh in a separate thread</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.Meshing_process.MeshingHandler">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.Meshing_process.</span></span><span class="sig-name descname"><span class="pre">MeshingHandler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eventsDict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conditionsDict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">queue</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">SLM_x_res</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">SLM_y_res</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">algorithm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/Meshing_process.html#MeshingHandler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.Meshing_process.MeshingHandler" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Process</span></code></p>
+<p>Meshing process class. Used to handle gmesh GUI on OS that do not allow to run gmsh in a separate thread.
+This takes care of initializing gmsh and generating the mesh according to the user parameters.
+Given a mesh it parses it in a np.array structure where each element has associated its meshID and returns it to the main thread.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Meshing_process.MeshingHandler.eventsDict">
+<span class="sig-name descname"><span class="pre">eventsDict</span></span><a class="headerlink" href="#src.Meshing_process.MeshingHandler.eventsDict" title="Link to this definition">¶</a></dt>
+<dd><p>Dictionary containing all the events used to communicate with the main thread.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Meshing_process.MeshingHandler.conditionsDict">
+<span class="sig-name descname"><span class="pre">conditionsDict</span></span><a class="headerlink" href="#src.Meshing_process.MeshingHandler.conditionsDict" title="Link to this definition">¶</a></dt>
+<dd><p>Dictionary containing all the conditions used to communicate with the main thread.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Meshing_process.MeshingHandler.queue">
+<span class="sig-name descname"><span class="pre">queue</span></span><a class="headerlink" href="#src.Meshing_process.MeshingHandler.queue" title="Link to this definition">¶</a></dt>
+<dd><p>Queue used to communicate with the main thread.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>multiprocessing.Queue</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Meshing_process.MeshingHandler.SLM_x_res">
+<span class="sig-name descname"><span class="pre">SLM_x_res</span></span><a class="headerlink" href="#src.Meshing_process.MeshingHandler.SLM_x_res" title="Link to this definition">¶</a></dt>
+<dd><p>SLM horizontal resolution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Meshing_process.MeshingHandler.SLM_y_res">
+<span class="sig-name descname"><span class="pre">SLM_y_res</span></span><a class="headerlink" href="#src.Meshing_process.MeshingHandler.SLM_y_res" title="Link to this definition">¶</a></dt>
+<dd><p>SLM vertical resolution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Meshing_process.MeshingHandler.algorithm">
+<span class="sig-name descname"><span class="pre">algorithm</span></span><a class="headerlink" href="#src.Meshing_process.MeshingHandler.algorithm" title="Link to this definition">¶</a></dt>
+<dd><p>Meshing algorithm to use.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Meshing_process.MeshingHandler.F">
+<span class="sig-name descname"><span class="pre">F</span></span><a class="headerlink" href="#src.Meshing_process.MeshingHandler.F" title="Link to this definition">¶</a></dt>
+<dd><p>Meshing parameter (equation for meshing, see gmsh guide).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Meshing_process.MeshingHandler.algorithms">
+<span class="sig-name descname"><span class="pre">algorithms</span></span><a class="headerlink" href="#src.Meshing_process.MeshingHandler.algorithms" title="Link to this definition">¶</a></dt>
+<dd><p>List of available meshing algorithms.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Meshing_process.MeshingHandler.algorithms_names">
+<span class="sig-name descname"><span class="pre">algorithms_names</span></span><a class="headerlink" href="#src.Meshing_process.MeshingHandler.algorithms_names" title="Link to this definition">¶</a></dt>
+<dd><p>List of available meshing algorithms names.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Meshing_process.MeshingHandler.isMeshed">
+<span class="sig-name descname"><span class="pre">isMeshed</span></span><a class="headerlink" href="#src.Meshing_process.MeshingHandler.isMeshed" title="Link to this definition">¶</a></dt>
+<dd><p>True if the meshing process was already done, False otherwise.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Meshing_process.MeshingHandler.wasINIT">
+<span class="sig-name descname"><span class="pre">wasINIT</span></span><a class="headerlink" href="#src.Meshing_process.MeshingHandler.wasINIT" title="Link to this definition">¶</a></dt>
+<dd><p>True if gmsh was already initialized, False otherwise.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Meshing_process.MeshingHandler.Enabled">
+<span class="sig-name descname"><span class="pre">Enabled</span></span><a class="headerlink" href="#src.Meshing_process.MeshingHandler.Enabled" title="Link to this definition">¶</a></dt>
+<dd><p>True if the process should keep running, False otherwise.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.Meshing_process.MeshingHandler.checkLoadedMeshSize">
+<span class="sig-name descname"><span class="pre">checkLoadedMeshSize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/Meshing_process.html#MeshingHandler.checkLoadedMeshSize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.Meshing_process.MeshingHandler.checkLoadedMeshSize" title="Link to this definition">¶</a></dt>
+<dd><p>Checks if the loaded mesh fits the SLM size.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.Meshing_process.MeshingHandler.checkUserMeshing">
+<span class="sig-name descname"><span class="pre">checkUserMeshing</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/Meshing_process.html#MeshingHandler.checkUserMeshing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.Meshing_process.MeshingHandler.checkUserMeshing" title="Link to this definition">¶</a></dt>
+<dd><p>Checks if the user requested a meshing operation (remesh, closeGUI etc.) and performs it.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.Meshing_process.MeshingHandler.getVariablesInQueue">
+<span class="sig-name descname"><span class="pre">getVariablesInQueue</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/Meshing_process.html#MeshingHandler.getVariablesInQueue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.Meshing_process.MeshingHandler.getVariablesInQueue" title="Link to this definition">¶</a></dt>
+<dd><p>Loads parameters from the queue (from the main thread).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.Meshing_process.MeshingHandler.init_GMESH">
+<span class="sig-name descname"><span class="pre">init_GMESH</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/Meshing_process.html#MeshingHandler.init_GMESH"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.Meshing_process.MeshingHandler.init_GMESH" title="Link to this definition">¶</a></dt>
+<dd><p>Initializes gmsh + creates basic geometry for the meshing.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.Meshing_process.MeshingHandler.loadMeshFromFile">
+<span class="sig-name descname"><span class="pre">loadMeshFromFile</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/Meshing_process.html#MeshingHandler.loadMeshFromFile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.Meshing_process.MeshingHandler.loadMeshFromFile" title="Link to this definition">¶</a></dt>
+<dd><p>Loads a mesh from a file.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.Meshing_process.MeshingHandler.parseMesh">
+<span class="sig-name descname"><span class="pre">parseMesh</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/Meshing_process.html#MeshingHandler.parseMesh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.Meshing_process.MeshingHandler.parseMesh" title="Link to this definition">¶</a></dt>
+<dd><p>Parses the mesh and returns it to the main thread.
+Converts from a gmsh to a numpy array where each element has associated its meshID.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.Meshing_process.MeshingHandler.reconstructMesh">
+<span class="sig-name descname"><span class="pre">reconstructMesh</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/Meshing_process.html#MeshingHandler.reconstructMesh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.Meshing_process.MeshingHandler.reconstructMesh" title="Link to this definition">¶</a></dt>
+<dd><p>Deletes anre reconstructs the mesh + geometry.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.Meshing_process.MeshingHandler.redomesh">
+<span class="sig-name descname"><span class="pre">redomesh</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/Meshing_process.html#MeshingHandler.redomesh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.Meshing_process.MeshingHandler.redomesh" title="Link to this definition">¶</a></dt>
+<dd><p>Redoes the meshing operation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.Meshing_process.MeshingHandler.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/Meshing_process.html#MeshingHandler.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.Meshing_process.MeshingHandler.run" title="Link to this definition">¶</a></dt>
+<dd><p>Main function of the MeshingHandler class.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.Meshing_process.MeshingHandler.saveMeshToFile">
+<span class="sig-name descname"><span class="pre">saveMeshToFile</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/Meshing_process.html#MeshingHandler.saveMeshToFile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.Meshing_process.MeshingHandler.saveMeshToFile" title="Link to this definition">¶</a></dt>
+<dd><p>Saves the mesh to a file.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.Meshing_process.MeshingHandler.showMeshGUI">
+<span class="sig-name descname"><span class="pre">showMeshGUI</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/Meshing_process.html#MeshingHandler.showMeshGUI"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.Meshing_process.MeshingHandler.showMeshGUI" title="Link to this definition">¶</a></dt>
+<dd><p>Shows the loading GUI. This is not necessary, but it allows the gmsh GUI to appear on top of the main GUI.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.Meshing_process.MeshingHandler.updatebar">
+<span class="sig-name descname"><span class="pre">updatebar</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/Meshing_process.html#MeshingHandler.updatebar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.Meshing_process.MeshingHandler.updatebar" title="Link to this definition">¶</a></dt>
+<dd><p>Updates the loading bar.
+The loading bar is extremely unnecessary. I had to add it as otherwise gmsh would not appear on top of the main GUI.
+This trick allows the gmsh GUI to appear on top of the main GUI and immediately visible to the user.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="src-opticalelement-module">
+<h2>src.OpticalElement module<a class="headerlink" href="#src-opticalelement-module" title="Link to this heading">¶</a></h2>
+</section>
+<section id="module-src.Phase_pattern">
+<span id="src-phase-pattern-module"></span><h2>src.Phase_pattern module<a class="headerlink" href="#module-src.Phase_pattern" title="Link to this heading">¶</a></h2>
+<p>Phase_pattern.py: Generates phase patterns for the SLM.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.Phase_pattern.Patter_generator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.Phase_pattern.</span></span><span class="sig-name descname"><span class="pre">Patter_generator</span></span><a class="reference internal" href="_modules/src/Phase_pattern.html#Patter_generator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.Phase_pattern.Patter_generator" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class for generating phases patterns.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Phase_pattern.Patter_generator.X">
+<span class="sig-name descname"><span class="pre">X</span></span><a class="headerlink" href="#src.Phase_pattern.Patter_generator.X" title="Link to this definition">¶</a></dt>
+<dd><p>X resolution of the pattern (SLM).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Phase_pattern.Patter_generator.Y">
+<span class="sig-name descname"><span class="pre">Y</span></span><a class="headerlink" href="#src.Phase_pattern.Patter_generator.Y" title="Link to this definition">¶</a></dt>
+<dd><p>Y resolution of the pattern (SLM).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.Phase_pattern.Patter_generator.GenerateGrating">
+<span class="sig-name descname"><span class="pre">GenerateGrating</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pixel_pitch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lmm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">res_X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">res_Y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/Phase_pattern.html#Patter_generator.GenerateGrating"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.Phase_pattern.Patter_generator.GenerateGrating" title="Link to this definition">¶</a></dt>
+<dd><p>Generates a grating pattern.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>wl</strong> (<em>float</em>) – Wavelength of the laser.</p></li>
+<li><p><strong>pixel_pitch</strong> (<em>float</em>) – Pixel pitch of the SLM.</p></li>
+<li><p><strong>lmm</strong> (<em>float</em>) – Lines per mm of the grating.</p></li>
+<li><p><strong>theta</strong> (<em>float</em>) – Angle of the grating.</p></li>
+<li><p><strong>res_X</strong> (<em>int</em>) – SLM X resolution.</p></li>
+<li><p><strong>res_Y</strong> (<em>int</em>) – SLM Y resolution.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Grating pattern.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.Phase_pattern.Patter_generator.GenerateLens">
+<span class="sig-name descname"><span class="pre">GenerateLens</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">focus</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pixel_pitch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">res_X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">res_Y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/Phase_pattern.html#Patter_generator.GenerateLens"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.Phase_pattern.Patter_generator.GenerateLens" title="Link to this definition">¶</a></dt>
+<dd><p>Generates a lens pattern.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>focus</strong> (<em>float</em>) – Focus of the lens.</p></li>
+<li><p><strong>wl</strong> (<em>float</em>) – Wavelength of the laser.</p></li>
+<li><p><strong>pixel_pitch</strong> (<em>float</em>) – Pixel pitch of the SLM.</p></li>
+<li><p><strong>res_X</strong> (<em>int</em>) – SLM X resolution.</p></li>
+<li><p><strong>res_Y</strong> (<em>int</em>) – SLM Y resolution.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Lens pattern.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.Phase_pattern.Patter_generator.MakeZernike">
+<span class="sig-name descname"><span class="pre">MakeZernike</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/Phase_pattern.html#Patter_generator.MakeZernike"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.Phase_pattern.Patter_generator.MakeZernike" title="Link to this definition">¶</a></dt>
+<dd><p>Generates a Zernike pattern.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.Phase_pattern.Patter_generator.empty_pattern">
+<span class="sig-name descname"><span class="pre">empty_pattern</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">res_X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">res_Y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/Phase_pattern.html#Patter_generator.empty_pattern"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.Phase_pattern.Patter_generator.empty_pattern" title="Link to this definition">¶</a></dt>
+<dd><p>Generates an empty pattern.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>res_X</strong> (<em>int</em>) – X resolution of the pattern (SLM).</p></li>
+<li><p><strong>res_Y</strong> (<em>int</em>) – Y resolution of the pattern (SLM).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Empty pattern.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.Phase_pattern.Patter_generator.generate_mesh">
+<span class="sig-name descname"><span class="pre">generate_mesh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">res_X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">res_Y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/Phase_pattern.html#Patter_generator.generate_mesh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.Phase_pattern.Patter_generator.generate_mesh" title="Link to this definition">¶</a></dt>
+<dd><p>Generates a meshgrid for the pattern.
+Used to speed up the pattern generation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>res_X</strong> (<em>int</em>) – X resolution of the pattern (SLM).</p></li>
+<li><p><strong>res_Y</strong> (<em>int</em>) – Y resolution of the pattern (SLM).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.Remote_control">
+<span id="src-remote-control-module"></span><h2>src.Remote_control module<a class="headerlink" href="#module-src.Remote_control" title="Link to this heading">¶</a></h2>
+<p>Remote_control.py: Generates a remote control for the SLM.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.Remote_control.NetworkManager">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.Remote_control.</span></span><span class="sig-name descname"><span class="pre">NetworkManager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">configs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/Remote_control.html#NetworkManager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.Remote_control.NetworkManager" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class used to manage the remote control of the SLM.
+Remote control is done through an HTTP server trying to be as RESTful as possible (but so far, miserably failing)
+Based on Flask.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Remote_control.NetworkManager.app">
+<span class="sig-name descname"><span class="pre">app</span></span><a class="headerlink" href="#src.Remote_control.NetworkManager.app" title="Link to this definition">¶</a></dt>
+<dd><p>Flask app used to manage the remote control.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flask</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.Remote_control.NetworkManager.add_endpoint">
+<span class="sig-name descname"><span class="pre">add_endpoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">endpoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endpoint_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">handler</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">methods</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['GET']</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/Remote_control.html#NetworkManager.add_endpoint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.Remote_control.NetworkManager.add_endpoint" title="Link to this definition">¶</a></dt>
+<dd><p>Adds an endpoint to the Flask app.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>endpoint</strong> (<em>str</em><em>, </em><em>optional</em>) – Endpoint to add. Defaults to None.</p></li>
+<li><p><strong>endpoint_name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of the endpoint. Defaults to None.</p></li>
+<li><p><strong>handler</strong> (<em>function</em><em>, </em><em>optional</em>) – Function to call when the endpoint is called. Defaults to None.</p></li>
+<li><p><strong>methods</strong> (<em>list</em><em>, </em><em>optional</em>) – Allowed methods for the endpoint. Defaults to [‘GET’].</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.Remote_control.NetworkManager.before_request">
+<span class="sig-name descname"><span class="pre">before_request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">address</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'127.0.0.1'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/Remote_control.html#NetworkManager.before_request"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.Remote_control.NetworkManager.before_request" title="Link to this definition">¶</a></dt>
+<dd><p>Decorator used to limit the access to the server to a specific IP address.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>address</strong> (<em>str</em><em>, </em><em>optional</em>) – Allowed IP address for connection. Defaults to ‘127.0.0.1’.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>If the IP address is not the allowed one.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>abort(403)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.Remote_control.NetworkManager.configs">
+<span class="sig-name descname"><span class="pre">configs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">configs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/Remote_control.html#NetworkManager.configs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.Remote_control.NetworkManager.configs" title="Link to this definition">¶</a></dt>
+<dd><p>Sets the configuration of the Flask app.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.Remote_control.NetworkManager.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/Remote_control.html#NetworkManager.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.Remote_control.NetworkManager.run" title="Link to this definition">¶</a></dt>
+<dd><p>Runs the Flask app.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.Remote_control.NetworkManager.send_image">
+<span class="sig-name descname"><span class="pre">send_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/Remote_control.html#NetworkManager.send_image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.Remote_control.NetworkManager.send_image" title="Link to this definition">¶</a></dt>
+<dd><p>Sends an image to the client. Used for remote check of the hologram.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>image</strong> (<em>image/PNG</em>) – Image to send.</p></li>
+<li><p><strong>name</strong> (<em>string</em>) – Filename of the image.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>HTTP response containing the image.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>send_file</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="src-slm-controller-module">
+<h2>src.SLM_controller module<a class="headerlink" href="#src-slm-controller-module" title="Link to this heading">¶</a></h2>
+</section>
+<section id="src-wavefrontoptim-module">
+<h2>src.WavefrontOptim module<a class="headerlink" href="#src-wavefrontoptim-module" title="Link to this heading">¶</a></h2>
+</section>
+<section id="module-src.settings">
+<span id="src-settings-module"></span><h2>src.settings module<a class="headerlink" href="#module-src.settings" title="Link to this heading">¶</a></h2>
+<p>settings.py: Generates a settings dialog to edit all the settings of the application.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.settings.IP4Validator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.settings.</span></span><span class="sig-name descname"><span class="pre">IP4Validator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/settings.html#IP4Validator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.settings.IP4Validator" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QValidator</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.settings.IP4Validator.validate">
+<span class="sig-name descname"><span class="pre">validate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/settings.html#IP4Validator.validate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.settings.IP4Validator.validate" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.settings.SettingsDialog">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.settings.</span></span><span class="sig-name descname"><span class="pre">SettingsDialog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">settings_manager</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/settings.html#SettingsDialog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.settings.SettingsDialog" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QDialog</span></code></p>
+<p>Create a settings dialog to edit all the settings of the application.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.settings.SettingsDialog.connect_signals_to_slots">
+<span class="sig-name descname"><span class="pre">connect_signals_to_slots</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/settings.html#SettingsDialog.connect_signals_to_slots"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.settings.SettingsDialog.connect_signals_to_slots" title="Link to this definition">¶</a></dt>
+<dd><p>Execute the proper action when a signal is emitted.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.settings.SettingsDialog.create_elements">
+<span class="sig-name descname"><span class="pre">create_elements</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/settings.html#SettingsDialog.create_elements"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.settings.SettingsDialog.create_elements" title="Link to this definition">¶</a></dt>
+<dd><p>Create groups of radio buttons as settings elements.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.settings.SettingsDialog.load_settings">
+<span class="sig-name descname"><span class="pre">load_settings</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/settings.html#SettingsDialog.load_settings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.settings.SettingsDialog.load_settings" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.settings.SettingsDialog.make_group">
+<span class="sig-name descname"><span class="pre">make_group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">group_name</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">widgets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/settings.html#SettingsDialog.make_group"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.settings.SettingsDialog.make_group" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.settings.SettingsDialog.save_settings">
+<span class="sig-name descname"><span class="pre">save_settings</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/settings.html#SettingsDialog.save_settings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.settings.SettingsDialog.save_settings" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.settings.SettingsDialog.set_attributes">
+<span class="sig-name descname"><span class="pre">set_attributes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/settings.html#SettingsDialog.set_attributes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.settings.SettingsDialog.set_attributes" title="Link to this definition">¶</a></dt>
+<dd><p>Set attributes to the settings dialog.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.settings.SettingsDialog.set_layout">
+<span class="sig-name descname"><span class="pre">set_layout</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/settings.html#SettingsDialog.set_layout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.settings.SettingsDialog.set_layout" title="Link to this definition">¶</a></dt>
+<dd><p>Set a layout for the settings elements.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.settings.SettingsManager">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.settings.</span></span><span class="sig-name descname"><span class="pre">SettingsManager</span></span><a class="reference internal" href="_modules/src/settings.html#SettingsManager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.settings.SettingsManager" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.settings.SettingsManager.get_IPclient">
+<span class="sig-name descname"><span class="pre">get_IPclient</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/settings.html#SettingsManager.get_IPclient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.settings.SettingsManager.get_IPclient" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.settings.SettingsManager.get_Portclient">
+<span class="sig-name descname"><span class="pre">get_Portclient</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/settings.html#SettingsManager.get_Portclient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.settings.SettingsManager.get_Portclient" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.settings.SettingsManager.get_SLM_window">
+<span class="sig-name descname"><span class="pre">get_SLM_window</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/settings.html#SettingsManager.get_SLM_window"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.settings.SettingsManager.get_SLM_window" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.settings.SettingsManager.get_X_res">
+<span class="sig-name descname"><span class="pre">get_X_res</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/settings.html#SettingsManager.get_X_res"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.settings.SettingsManager.get_X_res" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.settings.SettingsManager.get_X_win_size">
+<span class="sig-name descname"><span class="pre">get_X_win_size</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/settings.html#SettingsManager.get_X_win_size"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.settings.SettingsManager.get_X_win_size" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.settings.SettingsManager.get_Y_res">
+<span class="sig-name descname"><span class="pre">get_Y_res</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/settings.html#SettingsManager.get_Y_res"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.settings.SettingsManager.get_Y_res" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.settings.SettingsManager.get_Y_win_size">
+<span class="sig-name descname"><span class="pre">get_Y_win_size</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/settings.html#SettingsManager.get_Y_win_size"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.settings.SettingsManager.get_Y_win_size" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.settings.SettingsManager.get_phase_correction">
+<span class="sig-name descname"><span class="pre">get_phase_correction</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/settings.html#SettingsManager.get_phase_correction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.settings.SettingsManager.get_phase_correction" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.settings.SettingsManager.get_pixel_pitch">
+<span class="sig-name descname"><span class="pre">get_pixel_pitch</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/settings.html#SettingsManager.get_pixel_pitch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.settings.SettingsManager.get_pixel_pitch" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.settings.SettingsManager.get_wavelength">
+<span class="sig-name descname"><span class="pre">get_wavelength</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/settings.html#SettingsManager.get_wavelength"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.settings.SettingsManager.get_wavelength" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.settings.SettingsManager.load_to_widget">
+<span class="sig-name descname"><span class="pre">load_to_widget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">settings_widgets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/settings.html#SettingsManager.load_to_widget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.settings.SettingsManager.load_to_widget" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.settings.SettingsManager.save_from_widget">
+<span class="sig-name descname"><span class="pre">save_from_widget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">settings_widgets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/settings.html#SettingsManager.save_from_widget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.settings.SettingsManager.save_from_widget" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src.utils">
+<span id="src-utils-module"></span><h2>src.utils module<a class="headerlink" href="#module-src.utils" title="Link to this heading">¶</a></h2>
+<p>utils.py: Contains utility functions used by the other classes.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.utils.DoubleSlider">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.utils.</span></span><span class="sig-name descname"><span class="pre">DoubleSlider</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">decimals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utils.html#DoubleSlider"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utils.DoubleSlider" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QSlider</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.utils.DoubleSlider.doubleValueChanged">
+<span class="sig-name descname"><span class="pre">doubleValueChanged</span></span><a class="headerlink" href="#src.utils.DoubleSlider.doubleValueChanged" title="Link to this definition">¶</a></dt>
+<dd><p>int = …, arguments: Sequence = …) -&gt; PYQT_SIGNAL</p>
+<p>types is normally a sequence of individual types.  Each type is either a
+type object or a string that is the name of a C++ type.  Alternatively
+each type could itself be a sequence of types each describing a different
+overloaded signal.
+name is the optional C++ name of the signal.  If it is not specified then
+the name of the class attribute that is bound to the signal is used.
+revision is the optional revision of the signal that is exported to QML.
+If it is not specified then 0 is used.
+arguments is the optional sequence of the names of the signal’s arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pyqtSignal(<a href="#id1"><span class="problematic" id="id2">*</span></a>types, name</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str = …, revision</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.utils.DoubleSlider.emitDoubleValueChanged">
+<span class="sig-name descname"><span class="pre">emitDoubleValueChanged</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utils.html#DoubleSlider.emitDoubleValueChanged"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utils.DoubleSlider.emitDoubleValueChanged" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.utils.DoubleSlider.setMaximum">
+<span class="sig-name descname"><span class="pre">setMaximum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utils.html#DoubleSlider.setMaximum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utils.DoubleSlider.setMaximum" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.utils.DoubleSlider.setMinimum">
+<span class="sig-name descname"><span class="pre">setMinimum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utils.html#DoubleSlider.setMinimum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utils.DoubleSlider.setMinimum" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.utils.DoubleSlider.setSingleStep">
+<span class="sig-name descname"><span class="pre">setSingleStep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utils.html#DoubleSlider.setSingleStep"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utils.DoubleSlider.setSingleStep" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.utils.DoubleSlider.setValue">
+<span class="sig-name descname"><span class="pre">setValue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utils.html#DoubleSlider.setValue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utils.DoubleSlider.setValue" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.utils.DoubleSlider.singleStep">
+<span class="sig-name descname"><span class="pre">singleStep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/src/utils.html#DoubleSlider.singleStep"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utils.DoubleSlider.singleStep" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.utils.DoubleSlider.value">
+<span class="sig-name descname"><span class="pre">value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/src/utils.html#DoubleSlider.value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utils.DoubleSlider.value" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.utils.ImageWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.utils.</span></span><span class="sig-name descname"><span class="pre">ImageWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utils.html#ImageWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utils.ImageWidget" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QWidget</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.utils.ImageWidget.paintEvent">
+<span class="sig-name descname"><span class="pre">paintEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">QPaintEvent</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utils.html#ImageWidget.paintEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utils.ImageWidget.paintEvent" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.utils.ImageWidget.resizeEvent">
+<span class="sig-name descname"><span class="pre">resizeEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">QResizeEvent</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utils.html#ImageWidget.resizeEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utils.ImageWidget.resizeEvent" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.utils.ImageWidget.setImage">
+<span class="sig-name descname"><span class="pre">setImage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utils.html#ImageWidget.setImage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utils.ImageWidget.setImage" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.utils.MeshVisualizer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.utils.</span></span><span class="sig-name descname"><span class="pre">MeshVisualizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utils.html#MeshVisualizer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utils.MeshVisualizer" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QRunnable</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.utils.MeshVisualizer.highlight_zone">
+<span class="sig-name descname"><span class="pre">highlight_zone</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">probe_zone</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference_zone</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utils.html#MeshVisualizer.highlight_zone"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utils.MeshVisualizer.highlight_zone" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.utils.MeshVisualizer.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utils.html#MeshVisualizer.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utils.MeshVisualizer.run" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.utils.MeshVisualizer.stop">
+<span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utils.html#MeshVisualizer.stop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utils.MeshVisualizer.stop" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.utils.OpticalTabBar">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.utils.</span></span><span class="sig-name descname"><span class="pre">OpticalTabBar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utils.html#OpticalTabBar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utils.OpticalTabBar" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QTabBar</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="src.utils.OpticalTabBar.editTab">
+<span class="sig-name descname"><span class="pre">editTab</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utils.html#OpticalTabBar.editTab"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utils.OpticalTabBar.editTab" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.utils.OpticalTabBar.eventFilter">
+<span class="sig-name descname"><span class="pre">eventFilter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">QObject</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">QEvent</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/src/utils.html#OpticalTabBar.eventFilter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utils.OpticalTabBar.eventFilter" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.utils.OpticalTabBar.handleEditingFinished">
+<span class="sig-name descname"><span class="pre">handleEditingFinished</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utils.html#OpticalTabBar.handleEditingFinished"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utils.OpticalTabBar.handleEditingFinished" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="src.utils.OpticalTabBar.mouseDoubleClickEvent">
+<span class="sig-name descname"><span class="pre">mouseDoubleClickEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">QMouseEvent</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utils.html#OpticalTabBar.mouseDoubleClickEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#src.utils.OpticalTabBar.mouseDoubleClickEvent" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-src">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-src" title="Link to this heading">¶</a></h2>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">SLM controller</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, Matteo Mazzanti.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+      |
+      <a href="_sources/src.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

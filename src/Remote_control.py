@@ -9,11 +9,7 @@ __maintainer__ = "Matteo Mazzanti"
 
 # -*- coding: utf-8 -*-
 from flask import Flask, jsonify, abort, request, make_response, send_file
-import threading
-import numpy as np
-import time
-from PIL import Image
-from io import BytesIO
+
 
 host_name = "127.0.0.1"
 port = 50000

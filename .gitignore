@@ -3,7 +3,13 @@
 
 OLD/*
 Meshes/*
-docs/*
+
+docs/*.py
+docs/Makefile
+docs/make.bat
+docs/_static/*
+
+
 Camera/
 tests/
 Data/

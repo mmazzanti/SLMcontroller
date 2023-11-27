@@ -10,14 +10,11 @@ __maintainer__ = "Matteo Mazzanti"
 # -*- coding: utf-8 -*-
 
 from PyQt6.QtWidgets import QMessageBox, QLineEdit, QComboBox, QLabel, QSlider, QDoubleSpinBox,QGridLayout, QVBoxLayout, QGroupBox, QHBoxLayout, QWidget, QPushButton, QFileDialog
-from PyQt6.QtCore import Qt, QThread, QMutex, QWaitCondition, QThreadPool
-from PyQt6 import QtCore
+from PyQt6.QtCore import QThread, QMutex, QWaitCondition
 
-from multiprocessing import Process, Condition, Event , Queue
-import threading
 
-import src.utils as utils
-import gmsh
+
+import utils as utils
 import numpy as np
 
 from numba import jit

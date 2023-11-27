@@ -20,18 +20,18 @@ from PyQt6.QtGui import QPixmap, QImage, QAction, QScreen
 
 import numpy as np
 import sys
-import src.settings as settings
-import src.camera.camera as camera
-import src.Phase_pattern as Phase_pattern
-import src.OpticalElement as opticalElement
-import src.Lens as Lens
-import src.Grating as Grating
-import src.FourierWavefrontOptim as FourierWavefrontOptim
-import src.WavefrontOptim as WavefrontOptim
-import src.FlatnessCorrection as FlatnessCorrection
-import src.Meshing_process as Meshing_process
-import src.Remote_control as Remote_control
-import src.utils as utils
+import settings as settings
+import camera.camera as camera
+import Phase_pattern as Phase_pattern
+import OpticalElement as opticalElement
+import Lens as Lens
+import Grating as Grating
+import FourierWavefrontOptim as FourierWavefrontOptim
+import WavefrontOptim as WavefrontOptim
+import FlatnessCorrection as FlatnessCorrection
+import Meshing_process as Meshing_process
+import Remote_control as Remote_control
+import utils as utils
 
 from multiprocessing import RLock, Event, Queue, Process, Condition, freeze_support
 import threading

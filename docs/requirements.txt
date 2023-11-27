@@ -1,0 +1,12 @@
+cx_Freeze==6.15.10
+Flask==3.0.0
+gmsh==4.11.1
+matplotlib==3.7.1
+numba==0.58.1
+numpy==1.26.2
+opencv_python==4.7.0.72
+opencv_python_headless==4.8.0.76
+PyQt6==6.6.0
+PyQt6_sip==13.6.0
+scipy==1.11.4
+setuptools==68.2.2

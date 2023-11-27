@@ -10,22 +10,12 @@ __maintainer__ = "Matteo Mazzanti"
 # -*- coding: utf-8 -*-
 
 # This Python file uses the following encoding: utf-8
-from PyQt6.QtWidgets import QDialog, QDialogButtonBox, QDoubleSpinBox, QMessageBox, QLineEdit, QGridLayout, QGroupBox, QComboBox, QVBoxLayout, QHBoxLayout, QLabel, QWidget, QSlider, QCheckBox, QSpinBox , QPushButton
-from PyQt6.QtCore import Qt, pyqtSignal, QThread, QPoint
-from PyQt6.QtGui import QImage, QPainter
+from PyQt6.QtWidgets import QDialog, QDialogButtonBox, QGridLayout, QGroupBox, QComboBox, QVBoxLayout
 
 
-import numpy as np
-import gmsh
-import src.utils as utils
-import src.Lens as Lens
+import utils as utils
+import Lens as Lens
 
-
-#import src.Phase_pattern as Phase_pattern
-
-import cv2
-import os
-import threading
 
 class opticalElement(QDialog):
     """Generates a dialog used to load an optical element. 
