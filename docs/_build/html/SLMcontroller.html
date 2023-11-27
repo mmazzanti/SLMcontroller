@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SLMcontroller package &mdash; SLM controller 1.0.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=292eb321"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            SLM controller
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">SLMcontroller package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#slmcontroller-flatnesscorrection-module">SLMcontroller.FlatnessCorrection module</a></li>
+<li><a class="reference internal" href="#slmcontroller-fourierwavefrontoptim-module">SLMcontroller.FourierWavefrontOptim module</a></li>
+<li><a class="reference internal" href="#slmcontroller-grating-module">SLMcontroller.Grating module</a></li>
+<li><a class="reference internal" href="#slmcontroller-lens-module">SLMcontroller.Lens module</a></li>
+<li><a class="reference internal" href="#module-SLMcontroller.Meshing_process">SLMcontroller.Meshing_process module</a><ul>
+<li><a class="reference internal" href="#SLMcontroller.Meshing_process.MeshingHandler"><code class="docutils literal notranslate"><span class="pre">MeshingHandler</span></code></a><ul>
+<li><a class="reference internal" href="#SLMcontroller.Meshing_process.MeshingHandler.eventsDict"><code class="docutils literal notranslate"><span class="pre">MeshingHandler.eventsDict</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.Meshing_process.MeshingHandler.conditionsDict"><code class="docutils literal notranslate"><span class="pre">MeshingHandler.conditionsDict</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.Meshing_process.MeshingHandler.queue"><code class="docutils literal notranslate"><span class="pre">MeshingHandler.queue</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.Meshing_process.MeshingHandler.SLM_x_res"><code class="docutils literal notranslate"><span class="pre">MeshingHandler.SLM_x_res</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.Meshing_process.MeshingHandler.SLM_y_res"><code class="docutils literal notranslate"><span class="pre">MeshingHandler.SLM_y_res</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.Meshing_process.MeshingHandler.algorithm"><code class="docutils literal notranslate"><span class="pre">MeshingHandler.algorithm</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.Meshing_process.MeshingHandler.F"><code class="docutils literal notranslate"><span class="pre">MeshingHandler.F</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.Meshing_process.MeshingHandler.algorithms"><code class="docutils literal notranslate"><span class="pre">MeshingHandler.algorithms</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.Meshing_process.MeshingHandler.algorithms_names"><code class="docutils literal notranslate"><span class="pre">MeshingHandler.algorithms_names</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.Meshing_process.MeshingHandler.isMeshed"><code class="docutils literal notranslate"><span class="pre">MeshingHandler.isMeshed</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.Meshing_process.MeshingHandler.wasINIT"><code class="docutils literal notranslate"><span class="pre">MeshingHandler.wasINIT</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.Meshing_process.MeshingHandler.Enabled"><code class="docutils literal notranslate"><span class="pre">MeshingHandler.Enabled</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.Meshing_process.MeshingHandler.checkLoadedMeshSize"><code class="docutils literal notranslate"><span class="pre">MeshingHandler.checkLoadedMeshSize()</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.Meshing_process.MeshingHandler.checkUserMeshing"><code class="docutils literal notranslate"><span class="pre">MeshingHandler.checkUserMeshing()</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.Meshing_process.MeshingHandler.getVariablesInQueue"><code class="docutils literal notranslate"><span class="pre">MeshingHandler.getVariablesInQueue()</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.Meshing_process.MeshingHandler.init_GMESH"><code class="docutils literal notranslate"><span class="pre">MeshingHandler.init_GMESH()</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.Meshing_process.MeshingHandler.loadMeshFromFile"><code class="docutils literal notranslate"><span class="pre">MeshingHandler.loadMeshFromFile()</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.Meshing_process.MeshingHandler.parseMesh"><code class="docutils literal notranslate"><span class="pre">MeshingHandler.parseMesh()</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.Meshing_process.MeshingHandler.reconstructMesh"><code class="docutils literal notranslate"><span class="pre">MeshingHandler.reconstructMesh()</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.Meshing_process.MeshingHandler.redomesh"><code class="docutils literal notranslate"><span class="pre">MeshingHandler.redomesh()</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.Meshing_process.MeshingHandler.run"><code class="docutils literal notranslate"><span class="pre">MeshingHandler.run()</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.Meshing_process.MeshingHandler.saveMeshToFile"><code class="docutils literal notranslate"><span class="pre">MeshingHandler.saveMeshToFile()</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.Meshing_process.MeshingHandler.showMeshGUI"><code class="docutils literal notranslate"><span class="pre">MeshingHandler.showMeshGUI()</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.Meshing_process.MeshingHandler.updatebar"><code class="docutils literal notranslate"><span class="pre">MeshingHandler.updatebar()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#slmcontroller-opticalelement-module">SLMcontroller.OpticalElement module</a></li>
+<li><a class="reference internal" href="#module-SLMcontroller.Phase_pattern">SLMcontroller.Phase_pattern module</a><ul>
+<li><a class="reference internal" href="#SLMcontroller.Phase_pattern.Patter_generator"><code class="docutils literal notranslate"><span class="pre">Patter_generator</span></code></a><ul>
+<li><a class="reference internal" href="#SLMcontroller.Phase_pattern.Patter_generator.X"><code class="docutils literal notranslate"><span class="pre">Patter_generator.X</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.Phase_pattern.Patter_generator.Y"><code class="docutils literal notranslate"><span class="pre">Patter_generator.Y</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.Phase_pattern.Patter_generator.GenerateGrating"><code class="docutils literal notranslate"><span class="pre">Patter_generator.GenerateGrating()</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.Phase_pattern.Patter_generator.GenerateLens"><code class="docutils literal notranslate"><span class="pre">Patter_generator.GenerateLens()</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.Phase_pattern.Patter_generator.MakeZernike"><code class="docutils literal notranslate"><span class="pre">Patter_generator.MakeZernike()</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.Phase_pattern.Patter_generator.empty_pattern"><code class="docutils literal notranslate"><span class="pre">Patter_generator.empty_pattern()</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.Phase_pattern.Patter_generator.generate_mesh"><code class="docutils literal notranslate"><span class="pre">Patter_generator.generate_mesh()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-SLMcontroller.Remote_control">SLMcontroller.Remote_control module</a><ul>
+<li><a class="reference internal" href="#SLMcontroller.Remote_control.NetworkManager"><code class="docutils literal notranslate"><span class="pre">NetworkManager</span></code></a><ul>
+<li><a class="reference internal" href="#SLMcontroller.Remote_control.NetworkManager.app"><code class="docutils literal notranslate"><span class="pre">NetworkManager.app</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.Remote_control.NetworkManager.add_endpoint"><code class="docutils literal notranslate"><span class="pre">NetworkManager.add_endpoint()</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.Remote_control.NetworkManager.before_request"><code class="docutils literal notranslate"><span class="pre">NetworkManager.before_request()</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.Remote_control.NetworkManager.configs"><code class="docutils literal notranslate"><span class="pre">NetworkManager.configs()</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.Remote_control.NetworkManager.run"><code class="docutils literal notranslate"><span class="pre">NetworkManager.run()</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.Remote_control.NetworkManager.send_image"><code class="docutils literal notranslate"><span class="pre">NetworkManager.send_image()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#slmcontroller-slm-controller-module">SLMcontroller.SLM_controller module</a></li>
+<li><a class="reference internal" href="#slmcontroller-wavefrontoptim-module">SLMcontroller.WavefrontOptim module</a></li>
+<li><a class="reference internal" href="#module-SLMcontroller.settings">SLMcontroller.settings module</a><ul>
+<li><a class="reference internal" href="#SLMcontroller.settings.IP4Validator"><code class="docutils literal notranslate"><span class="pre">IP4Validator</span></code></a><ul>
+<li><a class="reference internal" href="#SLMcontroller.settings.IP4Validator.validate"><code class="docutils literal notranslate"><span class="pre">IP4Validator.validate()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#SLMcontroller.settings.SettingsDialog"><code class="docutils literal notranslate"><span class="pre">SettingsDialog</span></code></a><ul>
+<li><a class="reference internal" href="#SLMcontroller.settings.SettingsDialog.connect_signals_to_slots"><code class="docutils literal notranslate"><span class="pre">SettingsDialog.connect_signals_to_slots()</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.settings.SettingsDialog.create_elements"><code class="docutils literal notranslate"><span class="pre">SettingsDialog.create_elements()</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.settings.SettingsDialog.load_settings"><code class="docutils literal notranslate"><span class="pre">SettingsDialog.load_settings()</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.settings.SettingsDialog.make_group"><code class="docutils literal notranslate"><span class="pre">SettingsDialog.make_group()</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.settings.SettingsDialog.save_settings"><code class="docutils literal notranslate"><span class="pre">SettingsDialog.save_settings()</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.settings.SettingsDialog.set_attributes"><code class="docutils literal notranslate"><span class="pre">SettingsDialog.set_attributes()</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.settings.SettingsDialog.set_layout"><code class="docutils literal notranslate"><span class="pre">SettingsDialog.set_layout()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#SLMcontroller.settings.SettingsManager"><code class="docutils literal notranslate"><span class="pre">SettingsManager</span></code></a><ul>
+<li><a class="reference internal" href="#SLMcontroller.settings.SettingsManager.get_IPclient"><code class="docutils literal notranslate"><span class="pre">SettingsManager.get_IPclient()</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.settings.SettingsManager.get_Portclient"><code class="docutils literal notranslate"><span class="pre">SettingsManager.get_Portclient()</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.settings.SettingsManager.get_SLM_window"><code class="docutils literal notranslate"><span class="pre">SettingsManager.get_SLM_window()</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.settings.SettingsManager.get_X_res"><code class="docutils literal notranslate"><span class="pre">SettingsManager.get_X_res()</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.settings.SettingsManager.get_X_win_size"><code class="docutils literal notranslate"><span class="pre">SettingsManager.get_X_win_size()</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.settings.SettingsManager.get_Y_res"><code class="docutils literal notranslate"><span class="pre">SettingsManager.get_Y_res()</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.settings.SettingsManager.get_Y_win_size"><code class="docutils literal notranslate"><span class="pre">SettingsManager.get_Y_win_size()</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.settings.SettingsManager.get_phase_correction"><code class="docutils literal notranslate"><span class="pre">SettingsManager.get_phase_correction()</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.settings.SettingsManager.get_pixel_pitch"><code class="docutils literal notranslate"><span class="pre">SettingsManager.get_pixel_pitch()</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.settings.SettingsManager.get_wavelength"><code class="docutils literal notranslate"><span class="pre">SettingsManager.get_wavelength()</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.settings.SettingsManager.load_to_widget"><code class="docutils literal notranslate"><span class="pre">SettingsManager.load_to_widget()</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.settings.SettingsManager.save_from_widget"><code class="docutils literal notranslate"><span class="pre">SettingsManager.save_from_widget()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-SLMcontroller.utils">SLMcontroller.utils module</a><ul>
+<li><a class="reference internal" href="#SLMcontroller.utils.DoubleSlider"><code class="docutils literal notranslate"><span class="pre">DoubleSlider</span></code></a><ul>
+<li><a class="reference internal" href="#SLMcontroller.utils.DoubleSlider.doubleValueChanged"><code class="docutils literal notranslate"><span class="pre">DoubleSlider.doubleValueChanged</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.utils.DoubleSlider.emitDoubleValueChanged"><code class="docutils literal notranslate"><span class="pre">DoubleSlider.emitDoubleValueChanged()</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.utils.DoubleSlider.setMaximum"><code class="docutils literal notranslate"><span class="pre">DoubleSlider.setMaximum()</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.utils.DoubleSlider.setMinimum"><code class="docutils literal notranslate"><span class="pre">DoubleSlider.setMinimum()</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.utils.DoubleSlider.setSingleStep"><code class="docutils literal notranslate"><span class="pre">DoubleSlider.setSingleStep()</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.utils.DoubleSlider.setValue"><code class="docutils literal notranslate"><span class="pre">DoubleSlider.setValue()</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.utils.DoubleSlider.singleStep"><code class="docutils literal notranslate"><span class="pre">DoubleSlider.singleStep()</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.utils.DoubleSlider.value"><code class="docutils literal notranslate"><span class="pre">DoubleSlider.value()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#SLMcontroller.utils.ImageWidget"><code class="docutils literal notranslate"><span class="pre">ImageWidget</span></code></a><ul>
+<li><a class="reference internal" href="#SLMcontroller.utils.ImageWidget.paintEvent"><code class="docutils literal notranslate"><span class="pre">ImageWidget.paintEvent()</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.utils.ImageWidget.resizeEvent"><code class="docutils literal notranslate"><span class="pre">ImageWidget.resizeEvent()</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.utils.ImageWidget.setImage"><code class="docutils literal notranslate"><span class="pre">ImageWidget.setImage()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#SLMcontroller.utils.MeshVisualizer"><code class="docutils literal notranslate"><span class="pre">MeshVisualizer</span></code></a><ul>
+<li><a class="reference internal" href="#SLMcontroller.utils.MeshVisualizer.highlight_zone"><code class="docutils literal notranslate"><span class="pre">MeshVisualizer.highlight_zone()</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.utils.MeshVisualizer.run"><code class="docutils literal notranslate"><span class="pre">MeshVisualizer.run()</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.utils.MeshVisualizer.stop"><code class="docutils literal notranslate"><span class="pre">MeshVisualizer.stop()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#SLMcontroller.utils.OpticalTabBar"><code class="docutils literal notranslate"><span class="pre">OpticalTabBar</span></code></a><ul>
+<li><a class="reference internal" href="#SLMcontroller.utils.OpticalTabBar.editTab"><code class="docutils literal notranslate"><span class="pre">OpticalTabBar.editTab()</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.utils.OpticalTabBar.eventFilter"><code class="docutils literal notranslate"><span class="pre">OpticalTabBar.eventFilter()</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.utils.OpticalTabBar.handleEditingFinished"><code class="docutils literal notranslate"><span class="pre">OpticalTabBar.handleEditingFinished()</span></code></a></li>
+<li><a class="reference internal" href="#SLMcontroller.utils.OpticalTabBar.mouseDoubleClickEvent"><code class="docutils literal notranslate"><span class="pre">OpticalTabBar.mouseDoubleClickEvent()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-SLMcontroller">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">SLM controller</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">SLMcontroller package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/SLMcontroller.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="slmcontroller-package">
+<h1>SLMcontroller package<a class="headerlink" href="#slmcontroller-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="slmcontroller-flatnesscorrection-module">
+<h2>SLMcontroller.FlatnessCorrection module<a class="headerlink" href="#slmcontroller-flatnesscorrection-module" title="Link to this heading"></a></h2>
+</section>
+<section id="slmcontroller-fourierwavefrontoptim-module">
+<h2>SLMcontroller.FourierWavefrontOptim module<a class="headerlink" href="#slmcontroller-fourierwavefrontoptim-module" title="Link to this heading"></a></h2>
+</section>
+<section id="slmcontroller-grating-module">
+<h2>SLMcontroller.Grating module<a class="headerlink" href="#slmcontroller-grating-module" title="Link to this heading"></a></h2>
+</section>
+<section id="slmcontroller-lens-module">
+<h2>SLMcontroller.Lens module<a class="headerlink" href="#slmcontroller-lens-module" title="Link to this heading"></a></h2>
+</section>
+<section id="module-SLMcontroller.Meshing_process">
+<span id="slmcontroller-meshing-process-module"></span><h2>SLMcontroller.Meshing_process module<a class="headerlink" href="#module-SLMcontroller.Meshing_process" title="Link to this heading"></a></h2>
+<p>Meshing_process.py: Meshing process class. Used to handle gmesh GUI on OS that do not allow to run gmsh in a separate thread</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="SLMcontroller.Meshing_process.MeshingHandler">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">SLMcontroller.Meshing_process.</span></span><span class="sig-name descname"><span class="pre">MeshingHandler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eventsDict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conditionsDict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">queue</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">SLM_x_res</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">SLM_y_res</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">algorithm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/Meshing_process.html#MeshingHandler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.Meshing_process.MeshingHandler" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Process</span></code></p>
+<p>Meshing process class. Used to handle gmesh GUI on OS that do not allow to run gmsh in a separate thread.
+This takes care of initializing gmsh and generating the mesh according to the user parameters.
+Given a mesh it parses it in a np.array structure where each element has associated its meshID and returns it to the main thread.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SLMcontroller.Meshing_process.MeshingHandler.eventsDict">
+<span class="sig-name descname"><span class="pre">eventsDict</span></span><a class="headerlink" href="#SLMcontroller.Meshing_process.MeshingHandler.eventsDict" title="Link to this definition"></a></dt>
+<dd><p>Dictionary containing all the events used to communicate with the main thread.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SLMcontroller.Meshing_process.MeshingHandler.conditionsDict">
+<span class="sig-name descname"><span class="pre">conditionsDict</span></span><a class="headerlink" href="#SLMcontroller.Meshing_process.MeshingHandler.conditionsDict" title="Link to this definition"></a></dt>
+<dd><p>Dictionary containing all the conditions used to communicate with the main thread.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SLMcontroller.Meshing_process.MeshingHandler.queue">
+<span class="sig-name descname"><span class="pre">queue</span></span><a class="headerlink" href="#SLMcontroller.Meshing_process.MeshingHandler.queue" title="Link to this definition"></a></dt>
+<dd><p>Queue used to communicate with the main thread.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>multiprocessing.Queue</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SLMcontroller.Meshing_process.MeshingHandler.SLM_x_res">
+<span class="sig-name descname"><span class="pre">SLM_x_res</span></span><a class="headerlink" href="#SLMcontroller.Meshing_process.MeshingHandler.SLM_x_res" title="Link to this definition"></a></dt>
+<dd><p>SLM horizontal resolution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SLMcontroller.Meshing_process.MeshingHandler.SLM_y_res">
+<span class="sig-name descname"><span class="pre">SLM_y_res</span></span><a class="headerlink" href="#SLMcontroller.Meshing_process.MeshingHandler.SLM_y_res" title="Link to this definition"></a></dt>
+<dd><p>SLM vertical resolution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SLMcontroller.Meshing_process.MeshingHandler.algorithm">
+<span class="sig-name descname"><span class="pre">algorithm</span></span><a class="headerlink" href="#SLMcontroller.Meshing_process.MeshingHandler.algorithm" title="Link to this definition"></a></dt>
+<dd><p>Meshing algorithm to use.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SLMcontroller.Meshing_process.MeshingHandler.F">
+<span class="sig-name descname"><span class="pre">F</span></span><a class="headerlink" href="#SLMcontroller.Meshing_process.MeshingHandler.F" title="Link to this definition"></a></dt>
+<dd><p>Meshing parameter (equation for meshing, see gmsh guide).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SLMcontroller.Meshing_process.MeshingHandler.algorithms">
+<span class="sig-name descname"><span class="pre">algorithms</span></span><a class="headerlink" href="#SLMcontroller.Meshing_process.MeshingHandler.algorithms" title="Link to this definition"></a></dt>
+<dd><p>List of available meshing algorithms.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SLMcontroller.Meshing_process.MeshingHandler.algorithms_names">
+<span class="sig-name descname"><span class="pre">algorithms_names</span></span><a class="headerlink" href="#SLMcontroller.Meshing_process.MeshingHandler.algorithms_names" title="Link to this definition"></a></dt>
+<dd><p>List of available meshing algorithms names.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SLMcontroller.Meshing_process.MeshingHandler.isMeshed">
+<span class="sig-name descname"><span class="pre">isMeshed</span></span><a class="headerlink" href="#SLMcontroller.Meshing_process.MeshingHandler.isMeshed" title="Link to this definition"></a></dt>
+<dd><p>True if the meshing process was already done, False otherwise.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SLMcontroller.Meshing_process.MeshingHandler.wasINIT">
+<span class="sig-name descname"><span class="pre">wasINIT</span></span><a class="headerlink" href="#SLMcontroller.Meshing_process.MeshingHandler.wasINIT" title="Link to this definition"></a></dt>
+<dd><p>True if gmsh was already initialized, False otherwise.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SLMcontroller.Meshing_process.MeshingHandler.Enabled">
+<span class="sig-name descname"><span class="pre">Enabled</span></span><a class="headerlink" href="#SLMcontroller.Meshing_process.MeshingHandler.Enabled" title="Link to this definition"></a></dt>
+<dd><p>True if the process should keep running, False otherwise.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.Meshing_process.MeshingHandler.checkLoadedMeshSize">
+<span class="sig-name descname"><span class="pre">checkLoadedMeshSize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/Meshing_process.html#MeshingHandler.checkLoadedMeshSize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.Meshing_process.MeshingHandler.checkLoadedMeshSize" title="Link to this definition"></a></dt>
+<dd><p>Checks if the loaded mesh fits the SLM size.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.Meshing_process.MeshingHandler.checkUserMeshing">
+<span class="sig-name descname"><span class="pre">checkUserMeshing</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/Meshing_process.html#MeshingHandler.checkUserMeshing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.Meshing_process.MeshingHandler.checkUserMeshing" title="Link to this definition"></a></dt>
+<dd><p>Checks if the user requested a meshing operation (remesh, closeGUI etc.) and performs it.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.Meshing_process.MeshingHandler.getVariablesInQueue">
+<span class="sig-name descname"><span class="pre">getVariablesInQueue</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/Meshing_process.html#MeshingHandler.getVariablesInQueue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.Meshing_process.MeshingHandler.getVariablesInQueue" title="Link to this definition"></a></dt>
+<dd><p>Loads parameters from the queue (from the main thread).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.Meshing_process.MeshingHandler.init_GMESH">
+<span class="sig-name descname"><span class="pre">init_GMESH</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/Meshing_process.html#MeshingHandler.init_GMESH"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.Meshing_process.MeshingHandler.init_GMESH" title="Link to this definition"></a></dt>
+<dd><p>Initializes gmsh + creates basic geometry for the meshing.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.Meshing_process.MeshingHandler.loadMeshFromFile">
+<span class="sig-name descname"><span class="pre">loadMeshFromFile</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/Meshing_process.html#MeshingHandler.loadMeshFromFile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.Meshing_process.MeshingHandler.loadMeshFromFile" title="Link to this definition"></a></dt>
+<dd><p>Loads a mesh from a file.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.Meshing_process.MeshingHandler.parseMesh">
+<span class="sig-name descname"><span class="pre">parseMesh</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/Meshing_process.html#MeshingHandler.parseMesh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.Meshing_process.MeshingHandler.parseMesh" title="Link to this definition"></a></dt>
+<dd><p>Parses the mesh and returns it to the main thread.
+Converts from a gmsh to a numpy array where each element has associated its meshID.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.Meshing_process.MeshingHandler.reconstructMesh">
+<span class="sig-name descname"><span class="pre">reconstructMesh</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/Meshing_process.html#MeshingHandler.reconstructMesh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.Meshing_process.MeshingHandler.reconstructMesh" title="Link to this definition"></a></dt>
+<dd><p>Deletes anre reconstructs the mesh + geometry.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.Meshing_process.MeshingHandler.redomesh">
+<span class="sig-name descname"><span class="pre">redomesh</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/Meshing_process.html#MeshingHandler.redomesh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.Meshing_process.MeshingHandler.redomesh" title="Link to this definition"></a></dt>
+<dd><p>Redoes the meshing operation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.Meshing_process.MeshingHandler.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/Meshing_process.html#MeshingHandler.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.Meshing_process.MeshingHandler.run" title="Link to this definition"></a></dt>
+<dd><p>Main function of the MeshingHandler class.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.Meshing_process.MeshingHandler.saveMeshToFile">
+<span class="sig-name descname"><span class="pre">saveMeshToFile</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/Meshing_process.html#MeshingHandler.saveMeshToFile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.Meshing_process.MeshingHandler.saveMeshToFile" title="Link to this definition"></a></dt>
+<dd><p>Saves the mesh to a file.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.Meshing_process.MeshingHandler.showMeshGUI">
+<span class="sig-name descname"><span class="pre">showMeshGUI</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/Meshing_process.html#MeshingHandler.showMeshGUI"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.Meshing_process.MeshingHandler.showMeshGUI" title="Link to this definition"></a></dt>
+<dd><p>Shows the loading GUI. This is not necessary, but it allows the gmsh GUI to appear on top of the main GUI.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.Meshing_process.MeshingHandler.updatebar">
+<span class="sig-name descname"><span class="pre">updatebar</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/Meshing_process.html#MeshingHandler.updatebar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.Meshing_process.MeshingHandler.updatebar" title="Link to this definition"></a></dt>
+<dd><p>Updates the loading bar.
+The loading bar is extremely unnecessary. I had to add it as otherwise gmsh would not appear on top of the main GUI.
+This trick allows the gmsh GUI to appear on top of the main GUI and immediately visible to the user.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="slmcontroller-opticalelement-module">
+<h2>SLMcontroller.OpticalElement module<a class="headerlink" href="#slmcontroller-opticalelement-module" title="Link to this heading"></a></h2>
+</section>
+<section id="module-SLMcontroller.Phase_pattern">
+<span id="slmcontroller-phase-pattern-module"></span><h2>SLMcontroller.Phase_pattern module<a class="headerlink" href="#module-SLMcontroller.Phase_pattern" title="Link to this heading"></a></h2>
+<p>Phase_pattern.py: Generates phase patterns for the SLM.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="SLMcontroller.Phase_pattern.Patter_generator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">SLMcontroller.Phase_pattern.</span></span><span class="sig-name descname"><span class="pre">Patter_generator</span></span><a class="reference internal" href="_modules/SLMcontroller/Phase_pattern.html#Patter_generator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.Phase_pattern.Patter_generator" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class for generating phases patterns.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SLMcontroller.Phase_pattern.Patter_generator.X">
+<span class="sig-name descname"><span class="pre">X</span></span><a class="headerlink" href="#SLMcontroller.Phase_pattern.Patter_generator.X" title="Link to this definition"></a></dt>
+<dd><p>X resolution of the pattern (SLM).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SLMcontroller.Phase_pattern.Patter_generator.Y">
+<span class="sig-name descname"><span class="pre">Y</span></span><a class="headerlink" href="#SLMcontroller.Phase_pattern.Patter_generator.Y" title="Link to this definition"></a></dt>
+<dd><p>Y resolution of the pattern (SLM).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.Phase_pattern.Patter_generator.GenerateGrating">
+<span class="sig-name descname"><span class="pre">GenerateGrating</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pixel_pitch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lmm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">res_X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">res_Y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/Phase_pattern.html#Patter_generator.GenerateGrating"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.Phase_pattern.Patter_generator.GenerateGrating" title="Link to this definition"></a></dt>
+<dd><p>Generates a grating pattern.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>wl</strong> (<em>float</em>) – Wavelength of the laser.</p></li>
+<li><p><strong>pixel_pitch</strong> (<em>float</em>) – Pixel pitch of the SLM.</p></li>
+<li><p><strong>lmm</strong> (<em>float</em>) – Lines per mm of the grating.</p></li>
+<li><p><strong>theta</strong> (<em>float</em>) – Angle of the grating.</p></li>
+<li><p><strong>res_X</strong> (<em>int</em>) – SLM X resolution.</p></li>
+<li><p><strong>res_Y</strong> (<em>int</em>) – SLM Y resolution.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Grating pattern.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.Phase_pattern.Patter_generator.GenerateLens">
+<span class="sig-name descname"><span class="pre">GenerateLens</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">focus</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pixel_pitch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">res_X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">res_Y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/Phase_pattern.html#Patter_generator.GenerateLens"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.Phase_pattern.Patter_generator.GenerateLens" title="Link to this definition"></a></dt>
+<dd><p>Generates a lens pattern.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>focus</strong> (<em>float</em>) – Focus of the lens.</p></li>
+<li><p><strong>wl</strong> (<em>float</em>) – Wavelength of the laser.</p></li>
+<li><p><strong>pixel_pitch</strong> (<em>float</em>) – Pixel pitch of the SLM.</p></li>
+<li><p><strong>res_X</strong> (<em>int</em>) – SLM X resolution.</p></li>
+<li><p><strong>res_Y</strong> (<em>int</em>) – SLM Y resolution.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Lens pattern.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.Phase_pattern.Patter_generator.MakeZernike">
+<span class="sig-name descname"><span class="pre">MakeZernike</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/Phase_pattern.html#Patter_generator.MakeZernike"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.Phase_pattern.Patter_generator.MakeZernike" title="Link to this definition"></a></dt>
+<dd><p>Generates a Zernike pattern.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.Phase_pattern.Patter_generator.empty_pattern">
+<span class="sig-name descname"><span class="pre">empty_pattern</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">res_X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">res_Y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/Phase_pattern.html#Patter_generator.empty_pattern"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.Phase_pattern.Patter_generator.empty_pattern" title="Link to this definition"></a></dt>
+<dd><p>Generates an empty pattern.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>res_X</strong> (<em>int</em>) – X resolution of the pattern (SLM).</p></li>
+<li><p><strong>res_Y</strong> (<em>int</em>) – Y resolution of the pattern (SLM).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Empty pattern.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.Phase_pattern.Patter_generator.generate_mesh">
+<span class="sig-name descname"><span class="pre">generate_mesh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">res_X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">res_Y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/Phase_pattern.html#Patter_generator.generate_mesh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.Phase_pattern.Patter_generator.generate_mesh" title="Link to this definition"></a></dt>
+<dd><p>Generates a meshgrid for the pattern.
+Used to speed up the pattern generation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>res_X</strong> (<em>int</em>) – X resolution of the pattern (SLM).</p></li>
+<li><p><strong>res_Y</strong> (<em>int</em>) – Y resolution of the pattern (SLM).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-SLMcontroller.Remote_control">
+<span id="slmcontroller-remote-control-module"></span><h2>SLMcontroller.Remote_control module<a class="headerlink" href="#module-SLMcontroller.Remote_control" title="Link to this heading"></a></h2>
+<p>Remote_control.py: Generates a remote control for the SLM.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="SLMcontroller.Remote_control.NetworkManager">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">SLMcontroller.Remote_control.</span></span><span class="sig-name descname"><span class="pre">NetworkManager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">configs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/Remote_control.html#NetworkManager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.Remote_control.NetworkManager" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class used to manage the remote control of the SLM.
+Remote control is done through an HTTP server trying to be as RESTful as possible (but so far, miserably failing)
+Based on Flask.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SLMcontroller.Remote_control.NetworkManager.app">
+<span class="sig-name descname"><span class="pre">app</span></span><a class="headerlink" href="#SLMcontroller.Remote_control.NetworkManager.app" title="Link to this definition"></a></dt>
+<dd><p>Flask app used to manage the remote control.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flask</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.Remote_control.NetworkManager.add_endpoint">
+<span class="sig-name descname"><span class="pre">add_endpoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">endpoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endpoint_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">handler</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">methods</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['GET']</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/Remote_control.html#NetworkManager.add_endpoint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.Remote_control.NetworkManager.add_endpoint" title="Link to this definition"></a></dt>
+<dd><p>Adds an endpoint to the Flask app.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>endpoint</strong> (<em>str</em><em>, </em><em>optional</em>) – Endpoint to add. Defaults to None.</p></li>
+<li><p><strong>endpoint_name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of the endpoint. Defaults to None.</p></li>
+<li><p><strong>handler</strong> (<em>function</em><em>, </em><em>optional</em>) – Function to call when the endpoint is called. Defaults to None.</p></li>
+<li><p><strong>methods</strong> (<em>list</em><em>, </em><em>optional</em>) – Allowed methods for the endpoint. Defaults to [‘GET’].</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.Remote_control.NetworkManager.before_request">
+<span class="sig-name descname"><span class="pre">before_request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">address</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'127.0.0.1'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/Remote_control.html#NetworkManager.before_request"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.Remote_control.NetworkManager.before_request" title="Link to this definition"></a></dt>
+<dd><p>Decorator used to limit the access to the server to a specific IP address.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>address</strong> (<em>str</em><em>, </em><em>optional</em>) – Allowed IP address for connection. Defaults to ‘127.0.0.1’.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>If the IP address is not the allowed one.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>abort(403)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.Remote_control.NetworkManager.configs">
+<span class="sig-name descname"><span class="pre">configs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">configs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/Remote_control.html#NetworkManager.configs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.Remote_control.NetworkManager.configs" title="Link to this definition"></a></dt>
+<dd><p>Sets the configuration of the Flask app.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.Remote_control.NetworkManager.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/Remote_control.html#NetworkManager.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.Remote_control.NetworkManager.run" title="Link to this definition"></a></dt>
+<dd><p>Runs the Flask app.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.Remote_control.NetworkManager.send_image">
+<span class="sig-name descname"><span class="pre">send_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/Remote_control.html#NetworkManager.send_image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.Remote_control.NetworkManager.send_image" title="Link to this definition"></a></dt>
+<dd><p>Sends an image to the client. Used for remote check of the hologram.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>image</strong> (<em>image/PNG</em>) – Image to send.</p></li>
+<li><p><strong>name</strong> (<em>string</em>) – Filename of the image.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>HTTP response containing the image.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>send_file</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="slmcontroller-slm-controller-module">
+<h2>SLMcontroller.SLM_controller module<a class="headerlink" href="#slmcontroller-slm-controller-module" title="Link to this heading"></a></h2>
+</section>
+<section id="slmcontroller-wavefrontoptim-module">
+<h2>SLMcontroller.WavefrontOptim module<a class="headerlink" href="#slmcontroller-wavefrontoptim-module" title="Link to this heading"></a></h2>
+</section>
+<section id="module-SLMcontroller.settings">
+<span id="slmcontroller-settings-module"></span><h2>SLMcontroller.settings module<a class="headerlink" href="#module-SLMcontroller.settings" title="Link to this heading"></a></h2>
+<p>settings.py: Generates a settings dialog to edit all the settings of the application.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="SLMcontroller.settings.IP4Validator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">SLMcontroller.settings.</span></span><span class="sig-name descname"><span class="pre">IP4Validator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/settings.html#IP4Validator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.settings.IP4Validator" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QValidator</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.settings.IP4Validator.validate">
+<span class="sig-name descname"><span class="pre">validate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/settings.html#IP4Validator.validate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.settings.IP4Validator.validate" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="SLMcontroller.settings.SettingsDialog">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">SLMcontroller.settings.</span></span><span class="sig-name descname"><span class="pre">SettingsDialog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">settings_manager</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/settings.html#SettingsDialog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.settings.SettingsDialog" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QDialog</span></code></p>
+<p>Create a settings dialog to edit all the settings of the application.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.settings.SettingsDialog.connect_signals_to_slots">
+<span class="sig-name descname"><span class="pre">connect_signals_to_slots</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/settings.html#SettingsDialog.connect_signals_to_slots"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.settings.SettingsDialog.connect_signals_to_slots" title="Link to this definition"></a></dt>
+<dd><p>Execute the proper action when a signal is emitted.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.settings.SettingsDialog.create_elements">
+<span class="sig-name descname"><span class="pre">create_elements</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/settings.html#SettingsDialog.create_elements"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.settings.SettingsDialog.create_elements" title="Link to this definition"></a></dt>
+<dd><p>Create groups of radio buttons as settings elements.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.settings.SettingsDialog.load_settings">
+<span class="sig-name descname"><span class="pre">load_settings</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/settings.html#SettingsDialog.load_settings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.settings.SettingsDialog.load_settings" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.settings.SettingsDialog.make_group">
+<span class="sig-name descname"><span class="pre">make_group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">group_name</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">widgets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/settings.html#SettingsDialog.make_group"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.settings.SettingsDialog.make_group" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.settings.SettingsDialog.save_settings">
+<span class="sig-name descname"><span class="pre">save_settings</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/settings.html#SettingsDialog.save_settings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.settings.SettingsDialog.save_settings" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.settings.SettingsDialog.set_attributes">
+<span class="sig-name descname"><span class="pre">set_attributes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/settings.html#SettingsDialog.set_attributes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.settings.SettingsDialog.set_attributes" title="Link to this definition"></a></dt>
+<dd><p>Set attributes to the settings dialog.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.settings.SettingsDialog.set_layout">
+<span class="sig-name descname"><span class="pre">set_layout</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/settings.html#SettingsDialog.set_layout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.settings.SettingsDialog.set_layout" title="Link to this definition"></a></dt>
+<dd><p>Set a layout for the settings elements.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="SLMcontroller.settings.SettingsManager">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">SLMcontroller.settings.</span></span><span class="sig-name descname"><span class="pre">SettingsManager</span></span><a class="reference internal" href="_modules/SLMcontroller/settings.html#SettingsManager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.settings.SettingsManager" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.settings.SettingsManager.get_IPclient">
+<span class="sig-name descname"><span class="pre">get_IPclient</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/settings.html#SettingsManager.get_IPclient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.settings.SettingsManager.get_IPclient" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.settings.SettingsManager.get_Portclient">
+<span class="sig-name descname"><span class="pre">get_Portclient</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/settings.html#SettingsManager.get_Portclient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.settings.SettingsManager.get_Portclient" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.settings.SettingsManager.get_SLM_window">
+<span class="sig-name descname"><span class="pre">get_SLM_window</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/settings.html#SettingsManager.get_SLM_window"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.settings.SettingsManager.get_SLM_window" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.settings.SettingsManager.get_X_res">
+<span class="sig-name descname"><span class="pre">get_X_res</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/settings.html#SettingsManager.get_X_res"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.settings.SettingsManager.get_X_res" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.settings.SettingsManager.get_X_win_size">
+<span class="sig-name descname"><span class="pre">get_X_win_size</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/settings.html#SettingsManager.get_X_win_size"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.settings.SettingsManager.get_X_win_size" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.settings.SettingsManager.get_Y_res">
+<span class="sig-name descname"><span class="pre">get_Y_res</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/settings.html#SettingsManager.get_Y_res"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.settings.SettingsManager.get_Y_res" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.settings.SettingsManager.get_Y_win_size">
+<span class="sig-name descname"><span class="pre">get_Y_win_size</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/settings.html#SettingsManager.get_Y_win_size"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.settings.SettingsManager.get_Y_win_size" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.settings.SettingsManager.get_phase_correction">
+<span class="sig-name descname"><span class="pre">get_phase_correction</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/settings.html#SettingsManager.get_phase_correction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.settings.SettingsManager.get_phase_correction" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.settings.SettingsManager.get_pixel_pitch">
+<span class="sig-name descname"><span class="pre">get_pixel_pitch</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/settings.html#SettingsManager.get_pixel_pitch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.settings.SettingsManager.get_pixel_pitch" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.settings.SettingsManager.get_wavelength">
+<span class="sig-name descname"><span class="pre">get_wavelength</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/settings.html#SettingsManager.get_wavelength"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.settings.SettingsManager.get_wavelength" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.settings.SettingsManager.load_to_widget">
+<span class="sig-name descname"><span class="pre">load_to_widget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">settings_widgets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/settings.html#SettingsManager.load_to_widget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.settings.SettingsManager.load_to_widget" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.settings.SettingsManager.save_from_widget">
+<span class="sig-name descname"><span class="pre">save_from_widget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">settings_widgets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/settings.html#SettingsManager.save_from_widget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.settings.SettingsManager.save_from_widget" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-SLMcontroller.utils">
+<span id="slmcontroller-utils-module"></span><h2>SLMcontroller.utils module<a class="headerlink" href="#module-SLMcontroller.utils" title="Link to this heading"></a></h2>
+<p>utils.py: Contains utility functions used by the other classes.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="SLMcontroller.utils.DoubleSlider">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">SLMcontroller.utils.</span></span><span class="sig-name descname"><span class="pre">DoubleSlider</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">decimals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/utils.html#DoubleSlider"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.utils.DoubleSlider" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QSlider</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SLMcontroller.utils.DoubleSlider.doubleValueChanged">
+<span class="sig-name descname"><span class="pre">doubleValueChanged</span></span><a class="headerlink" href="#SLMcontroller.utils.DoubleSlider.doubleValueChanged" title="Link to this definition"></a></dt>
+<dd><p>int = …, arguments: Sequence = …) -&gt; PYQT_SIGNAL</p>
+<p>types is normally a sequence of individual types.  Each type is either a
+type object or a string that is the name of a C++ type.  Alternatively
+each type could itself be a sequence of types each describing a different
+overloaded signal.
+name is the optional C++ name of the signal.  If it is not specified then
+the name of the class attribute that is bound to the signal is used.
+revision is the optional revision of the signal that is exported to QML.
+If it is not specified then 0 is used.
+arguments is the optional sequence of the names of the signal’s arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pyqtSignal(<a href="#id1"><span class="problematic" id="id2">*</span></a>types, name</p>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str = …, revision</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.utils.DoubleSlider.emitDoubleValueChanged">
+<span class="sig-name descname"><span class="pre">emitDoubleValueChanged</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/utils.html#DoubleSlider.emitDoubleValueChanged"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.utils.DoubleSlider.emitDoubleValueChanged" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.utils.DoubleSlider.setMaximum">
+<span class="sig-name descname"><span class="pre">setMaximum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/utils.html#DoubleSlider.setMaximum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.utils.DoubleSlider.setMaximum" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.utils.DoubleSlider.setMinimum">
+<span class="sig-name descname"><span class="pre">setMinimum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/utils.html#DoubleSlider.setMinimum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.utils.DoubleSlider.setMinimum" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.utils.DoubleSlider.setSingleStep">
+<span class="sig-name descname"><span class="pre">setSingleStep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/utils.html#DoubleSlider.setSingleStep"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.utils.DoubleSlider.setSingleStep" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.utils.DoubleSlider.setValue">
+<span class="sig-name descname"><span class="pre">setValue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/utils.html#DoubleSlider.setValue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.utils.DoubleSlider.setValue" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.utils.DoubleSlider.singleStep">
+<span class="sig-name descname"><span class="pre">singleStep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/SLMcontroller/utils.html#DoubleSlider.singleStep"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.utils.DoubleSlider.singleStep" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.utils.DoubleSlider.value">
+<span class="sig-name descname"><span class="pre">value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/SLMcontroller/utils.html#DoubleSlider.value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.utils.DoubleSlider.value" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="SLMcontroller.utils.ImageWidget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">SLMcontroller.utils.</span></span><span class="sig-name descname"><span class="pre">ImageWidget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/utils.html#ImageWidget"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.utils.ImageWidget" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QWidget</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.utils.ImageWidget.paintEvent">
+<span class="sig-name descname"><span class="pre">paintEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">QPaintEvent</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/utils.html#ImageWidget.paintEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.utils.ImageWidget.paintEvent" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.utils.ImageWidget.resizeEvent">
+<span class="sig-name descname"><span class="pre">resizeEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">QResizeEvent</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/utils.html#ImageWidget.resizeEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.utils.ImageWidget.resizeEvent" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.utils.ImageWidget.setImage">
+<span class="sig-name descname"><span class="pre">setImage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/utils.html#ImageWidget.setImage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.utils.ImageWidget.setImage" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="SLMcontroller.utils.MeshVisualizer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">SLMcontroller.utils.</span></span><span class="sig-name descname"><span class="pre">MeshVisualizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/utils.html#MeshVisualizer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.utils.MeshVisualizer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QRunnable</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.utils.MeshVisualizer.highlight_zone">
+<span class="sig-name descname"><span class="pre">highlight_zone</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">probe_zone</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference_zone</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/utils.html#MeshVisualizer.highlight_zone"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.utils.MeshVisualizer.highlight_zone" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.utils.MeshVisualizer.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/utils.html#MeshVisualizer.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.utils.MeshVisualizer.run" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.utils.MeshVisualizer.stop">
+<span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/utils.html#MeshVisualizer.stop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.utils.MeshVisualizer.stop" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="SLMcontroller.utils.OpticalTabBar">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">SLMcontroller.utils.</span></span><span class="sig-name descname"><span class="pre">OpticalTabBar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/utils.html#OpticalTabBar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.utils.OpticalTabBar" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QTabBar</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.utils.OpticalTabBar.editTab">
+<span class="sig-name descname"><span class="pre">editTab</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/utils.html#OpticalTabBar.editTab"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.utils.OpticalTabBar.editTab" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.utils.OpticalTabBar.eventFilter">
+<span class="sig-name descname"><span class="pre">eventFilter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">QObject</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">QEvent</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/SLMcontroller/utils.html#OpticalTabBar.eventFilter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.utils.OpticalTabBar.eventFilter" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.utils.OpticalTabBar.handleEditingFinished">
+<span class="sig-name descname"><span class="pre">handleEditingFinished</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/utils.html#OpticalTabBar.handleEditingFinished"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.utils.OpticalTabBar.handleEditingFinished" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.utils.OpticalTabBar.mouseDoubleClickEvent">
+<span class="sig-name descname"><span class="pre">mouseDoubleClickEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">QMouseEvent</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/utils.html#OpticalTabBar.mouseDoubleClickEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.utils.OpticalTabBar.mouseDoubleClickEvent" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-SLMcontroller">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-SLMcontroller" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Matteo Mazzanti.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

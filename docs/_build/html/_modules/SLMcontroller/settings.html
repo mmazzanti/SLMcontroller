@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SLMcontroller.settings &mdash; SLM controller 1.0.1 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=292eb321"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            SLM controller
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SLM controller</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">SLMcontroller.settings</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for SLMcontroller.settings</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="sd">&quot;&quot;&quot;settings.py: Generates a settings dialog to edit all the settings of the application.&quot;&quot;&quot;</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Matteo Mazzanti&quot;</span>
+<span class="n">__copyright__</span> <span class="o">=</span> <span class="s2">&quot;Copyright 2022, Matteo Mazzanti&quot;</span>
+<span class="n">__license__</span> <span class="o">=</span> <span class="s2">&quot;GNU GPL v3&quot;</span>
+<span class="n">__maintainer__</span> <span class="o">=</span> <span class="s2">&quot;Matteo Mazzanti&quot;</span>
+
+<span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">from</span> <span class="nn">PyQt6.QtCore</span> <span class="kn">import</span> <span class="n">QSettings</span><span class="p">,</span> <span class="n">QRegularExpression</span>
+<span class="kn">from</span> <span class="nn">PyQt6.QtWidgets</span> <span class="kn">import</span> <span class="n">QDialog</span><span class="p">,</span> <span class="n">QDialogButtonBox</span><span class="p">,</span> <span class="n">QGridLayout</span><span class="p">,</span> <span class="n">QGroupBox</span><span class="p">,</span> <span class="n">QDoubleSpinBox</span><span class="p">,</span> <span class="n">QRadioButton</span><span class="p">,</span> <span class="n">QVBoxLayout</span><span class="p">,</span> <span class="n">QSpinBox</span><span class="p">,</span><span class="n">QLineEdit</span>
+<span class="kn">from</span> <span class="nn">PyQt6.QtGui</span> <span class="kn">import</span> <span class="n">QValidator</span><span class="p">,</span> <span class="n">QRegularExpressionValidator</span>
+
+
+<div class="viewcode-block" id="SettingsManager">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.settings.SettingsManager">[docs]</a>
+<span class="k">class</span> <span class="nc">SettingsManager</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># SLM settings document (contains resolution, name etc.)</span>
+        <span class="c1">#self.settings = QSettings(&quot;SLM_pattern.ini&quot;, QSettings.Format.IniFormat)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">QSettings</span><span class="p">(</span><span class="s2">&quot;SLM settings2&quot;</span><span class="p">,</span> <span class="s2">&quot;settings&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">widget_mappers</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;QCheckBox&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;checkState&#39;</span><span class="p">,</span> <span class="s1">&#39;setCheckState&#39;</span><span class="p">,</span><span class="nb">bool</span><span class="p">),</span>
+                <span class="s1">&#39;QLineEdit&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;text&#39;</span><span class="p">,</span> <span class="s1">&#39;setText&#39;</span><span class="p">,</span><span class="nb">str</span><span class="p">),</span>
+                <span class="s1">&#39;QSpinBox&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;value&#39;</span><span class="p">,</span> <span class="s1">&#39;setValue&#39;</span><span class="p">,</span><span class="nb">int</span><span class="p">),</span>
+                <span class="s1">&#39;QSpinBox&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;value&#39;</span><span class="p">,</span> <span class="s1">&#39;setValue&#39;</span><span class="p">,</span><span class="nb">int</span><span class="p">),</span>
+                <span class="s1">&#39;QDoubleSpinBox&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;value&#39;</span><span class="p">,</span> <span class="s1">&#39;setValue&#39;</span><span class="p">,</span><span class="nb">float</span><span class="p">),</span>
+                <span class="s1">&#39;QRadioButton&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;isChecked&#39;</span><span class="p">,</span> <span class="s1">&#39;setChecked&#39;</span><span class="p">,</span><span class="nb">int</span><span class="p">),</span>
+            <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;SLM_size_X&#39;</span> <span class="p">:</span> <span class="mi">800</span><span class="p">,</span>
+                         <span class="s1">&#39;SLM_size_Y&#39;</span> <span class="p">:</span> <span class="mi">600</span><span class="p">,</span>
+                         <span class="s1">&#39;pattern_window_size_X&#39;</span> <span class="p">:</span> <span class="mi">800</span><span class="p">,</span>
+                         <span class="s1">&#39;pattern_window_size_Y&#39;</span> <span class="p">:</span> <span class="mi">600</span><span class="p">,</span>
+                         <span class="s1">&#39;Laser wavelength&#39;</span><span class="p">:</span><span class="mi">800</span><span class="p">,</span>
+                         <span class="s1">&#39;SLM_window&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                         <span class="s1">&#39;Phase_correction&#39;</span> <span class="p">:</span> <span class="mi">255</span><span class="p">,</span>
+                         <span class="c1">#&#39;IPserver&#39; : &#39;127.0.0.1&#39;,</span>
+                         <span class="s1">&#39;IPclient&#39;</span> <span class="p">:</span> <span class="s1">&#39;0.0.0.0&#39;</span><span class="p">,</span>
+                         <span class="s1">&#39;Portclient&#39;</span> <span class="p">:</span> <span class="s1">&#39;5000&#39;</span>
+                         <span class="c1">#&#39;Strict&#39; : 0</span>
+        <span class="p">}</span>
+
+<div class="viewcode-block" id="SettingsManager.save_from_widget">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.settings.SettingsManager.save_from_widget">[docs]</a>
+    <span class="k">def</span> <span class="nf">save_from_widget</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">settings_widgets</span><span class="p">):</span>
+        <span class="c1"># Save settings from values in the widgets</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">widget</span> <span class="ow">in</span> <span class="n">settings_widgets</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="c1"># Load name of that widget class (eg. QCheckBox)</span>
+                    <span class="bp">cls</span> <span class="o">=</span> <span class="n">widget</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
+                    <span class="c1"># Get getter and setter methods, they&#39;re defined in our widget_mapper dictionary</span>
+                    <span class="n">getter</span><span class="p">,</span> <span class="n">setter</span><span class="p">,</span> <span class="nb">type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">widget_mappers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
+                    <span class="k">if</span> <span class="n">getter</span><span class="p">:</span>
+                        <span class="c1"># Return the widget module getter</span>
+                        <span class="n">fn</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">widget</span><span class="p">,</span> <span class="n">getter</span><span class="p">)</span>
+                        <span class="n">value</span> <span class="o">=</span> <span class="n">fn</span><span class="p">()</span>
+                        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="c1"># Set the settings.</span></div>
+
+
+
+<div class="viewcode-block" id="SettingsManager.load_to_widget">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.settings.SettingsManager.load_to_widget">[docs]</a>
+    <span class="k">def</span> <span class="nf">load_to_widget</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">settings_widgets</span><span class="p">):</span>
+        <span class="c1"># Load settings to widget</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">widget</span> <span class="ow">in</span> <span class="n">settings_widgets</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="bp">cls</span> <span class="o">=</span> <span class="n">widget</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
+            <span class="n">getter</span><span class="p">,</span> <span class="n">setter</span><span class="p">,</span> <span class="nb">type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">widget_mappers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">setter</span> <span class="ow">and</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">fn</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">widget</span><span class="p">,</span> <span class="n">setter</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">type</span><span class="p">):</span>
+                    <span class="n">fn</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>  <span class="c1"># Set the widget.</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">fn</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">))</span></div>
+
+
+    <span class="c1"># Returns resolution of that SLM from settings</span>
+    <span class="c1"># TODO : Make it dependent on the SLM name</span>
+<div class="viewcode-block" id="SettingsManager.get_X_res">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.settings.SettingsManager.get_X_res">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_X_res</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">&quot;SLM_size_X&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">&quot;SLM_size_X&quot;</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">defaults</span><span class="p">[</span><span class="s1">&#39;SLM_size_X&#39;</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="SettingsManager.get_Y_res">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.settings.SettingsManager.get_Y_res">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_Y_res</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">&quot;SLM_size_Y&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">&quot;SLM_size_Y&quot;</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">defaults</span><span class="p">[</span><span class="s1">&#39;SLM_size_Y&#39;</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="SettingsManager.get_wavelength">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.settings.SettingsManager.get_wavelength">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_wavelength</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">&quot;Laser wavelength&quot;</span><span class="p">))</span></div>
+
+
+    <span class="c1"># Returns size of the pattern window</span>
+    <span class="c1"># WARNING! This might be different than the SLM resolution!</span>
+    <span class="c1"># TODO : Make it dependent on the SLM name</span>
+<div class="viewcode-block" id="SettingsManager.get_X_win_size">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.settings.SettingsManager.get_X_win_size">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_X_win_size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">&quot;pattern_window_size_X&quot;</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="SettingsManager.get_Y_win_size">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.settings.SettingsManager.get_Y_win_size">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_Y_win_size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">&quot;pattern_window_size_Y&quot;</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="SettingsManager.get_phase_correction">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.settings.SettingsManager.get_phase_correction">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_phase_correction</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">&quot;Phase_correction&quot;</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="SettingsManager.get_pixel_pitch">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.settings.SettingsManager.get_pixel_pitch">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_pixel_pitch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">&quot;SLM_pixel_pitch&quot;</span><span class="p">))</span></div>
+
+    
+<div class="viewcode-block" id="SettingsManager.get_IPclient">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.settings.SettingsManager.get_IPclient">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_IPclient</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">&quot;IPclient&quot;</span><span class="p">))</span></div>
+
+    
+<div class="viewcode-block" id="SettingsManager.get_Portclient">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.settings.SettingsManager.get_Portclient">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_Portclient</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">&quot;Portclient&quot;</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="SettingsManager.get_SLM_window">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.settings.SettingsManager.get_SLM_window">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_SLM_window</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">&quot;SLM_window&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">&quot;SLM_window&quot;</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">defaults</span><span class="p">[</span><span class="s2">&quot;SLM_window&quot;</span><span class="p">])</span></div>
+</div>
+
+
+<div class="viewcode-block" id="SettingsDialog">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.settings.SettingsDialog">[docs]</a>
+<span class="k">class</span> <span class="nc">SettingsDialog</span><span class="p">(</span><span class="n">QDialog</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a settings dialog to edit all the settings of the application.&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">settings_manager</span><span class="p">,</span> <span class="n">parent</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="c1"># Get settings manager from main class</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings_manager</span> <span class="o">=</span> <span class="n">settings_manager</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_attributes</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_elements</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_layout</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">load_settings</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">connect_signals_to_slots</span><span class="p">()</span>
+
+<div class="viewcode-block" id="SettingsDialog.set_attributes">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.settings.SettingsDialog.set_attributes">[docs]</a>
+    <span class="k">def</span> <span class="nf">set_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set attributes to the settings dialog.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s2">&quot;SLM Settings&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SettingsDialog.create_elements">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.settings.SettingsDialog.create_elements">[docs]</a>
+    <span class="k">def</span> <span class="nf">create_elements</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create groups of radio buttons as settings elements.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SLM_name</span> <span class="o">=</span> <span class="n">QLineEdit</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SLM_window</span> <span class="o">=</span> <span class="n">QSpinBox</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s2">&quot;Monitor to which the SLM is connected&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SLM_window</span><span class="o">.</span><span class="n">setMinimum</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SLM_window</span><span class="o">.</span><span class="n">setMaximum</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span> <span class="o">=</span> <span class="n">QSpinBox</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s2">&quot;Laser wavelength&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span><span class="o">.</span><span class="n">setSuffix</span><span class="p">(</span><span class="s1">&#39;  nm&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span><span class="o">.</span><span class="n">setMaximum</span><span class="p">(</span><span class="mi">2000</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span><span class="o">.</span><span class="n">setMinimum</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">correction</span> <span class="o">=</span> <span class="n">QSpinBox</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s2">&quot;Phase correction&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">correction</span><span class="o">.</span><span class="n">setMaximum</span><span class="p">(</span><span class="mi">255</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">correction</span><span class="o">.</span><span class="n">setMinimum</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">SLM_res_X</span> <span class="o">=</span> <span class="n">QSpinBox</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s2">&quot;X resolution of SLM&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SLM_res_X</span><span class="o">.</span><span class="n">setMaximum</span><span class="p">(</span><span class="mi">10000</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SLM_res_X</span><span class="o">.</span><span class="n">setSuffix</span><span class="p">(</span><span class="s1">&#39; px&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SLM_res_Y</span> <span class="o">=</span> <span class="n">QSpinBox</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s2">&quot;Y resolution of SLM&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SLM_res_Y</span><span class="o">.</span><span class="n">setMaximum</span><span class="p">(</span><span class="mi">10000</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SLM_res_Y</span><span class="o">.</span><span class="n">setSuffix</span><span class="p">(</span><span class="s1">&#39; px&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">SLM_winsize_X</span> <span class="o">=</span> <span class="n">QSpinBox</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s2">&quot;Pattern window size X&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SLM_winsize_X</span><span class="o">.</span><span class="n">setSuffix</span><span class="p">(</span><span class="s1">&#39; px&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SLM_winsize_X</span><span class="o">.</span><span class="n">setMaximum</span><span class="p">(</span><span class="mi">10000</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SLM_winsize_Y</span> <span class="o">=</span> <span class="n">QSpinBox</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s2">&quot;Pattern window size Y&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SLM_winsize_Y</span><span class="o">.</span><span class="n">setSuffix</span><span class="p">(</span><span class="s1">&#39; px&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SLM_winsize_Y</span><span class="o">.</span><span class="n">setMaximum</span><span class="p">(</span><span class="mi">10000</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">pixel_pitch</span> <span class="o">=</span> <span class="n">QDoubleSpinBox</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s2">&quot;SLM pixel pitch&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pixel_pitch</span><span class="o">.</span><span class="n">setSuffix</span><span class="p">(</span><span class="s1">&#39;  μm&#39;</span><span class="p">)</span>
+
+        <span class="c1">#self.IPserver = QLineEdit(text = &quot;0.0.0.0&quot;)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">IPclient</span> <span class="o">=</span> <span class="n">QLineEdit</span><span class="p">(</span><span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;0.0.0.0&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Portclient</span> <span class="o">=</span> <span class="n">QLineEdit</span><span class="p">(</span><span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;5000&quot;</span><span class="p">)</span>
+
+        <span class="n">Octet</span> <span class="o">=</span> <span class="s2">&quot;(?:[0-1]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5])&quot;</span>
+
+        <span class="c1">#self.IPserver.setValidator(QRegularExpressionValidator(QRegularExpression(&quot;^&quot; + Octet + &quot;\.&quot; + Octet + &quot;\.&quot; + Octet + &quot;\.&quot; + Octet + &quot;$&quot;),self.IPserver))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">IPclient</span><span class="o">.</span><span class="n">setValidator</span><span class="p">(</span><span class="n">QRegularExpressionValidator</span><span class="p">(</span><span class="n">QRegularExpression</span><span class="p">(</span><span class="s2">&quot;^&quot;</span> <span class="o">+</span> <span class="n">Octet</span> <span class="o">+</span> <span class="s2">&quot;\.&quot;</span> <span class="o">+</span> <span class="n">Octet</span> <span class="o">+</span> <span class="s2">&quot;\.&quot;</span> <span class="o">+</span> <span class="n">Octet</span> <span class="o">+</span> <span class="s2">&quot;\.&quot;</span> <span class="o">+</span> <span class="n">Octet</span> <span class="o">+</span> <span class="s2">&quot;$&quot;</span><span class="p">),</span><span class="bp">self</span><span class="o">.</span><span class="n">IPclient</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Portclient</span><span class="o">.</span><span class="n">setValidator</span><span class="p">(</span><span class="n">QRegularExpressionValidator</span><span class="p">(</span><span class="n">QRegularExpression</span><span class="p">(</span><span class="s2">&quot;^[0-9]{1,5}$&quot;</span><span class="p">),</span><span class="bp">self</span><span class="o">.</span><span class="n">Portclient</span><span class="p">))</span>
+        <span class="c1">#self.Strict = QRadioButton(text = &quot;Strict mode&quot;)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings_widgets</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s1">&#39;SLM_name&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">SLM_name</span><span class="p">,</span>
+                    <span class="s1">&#39;SLM_window&#39;</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">SLM_window</span><span class="p">,</span>
+                    <span class="s1">&#39;Laser wavelength&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span><span class="p">,</span>
+                    <span class="s1">&#39;Phase_correction&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">correction</span><span class="p">,</span>
+                    <span class="s1">&#39;SLM_size_X&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">SLM_res_X</span><span class="p">,</span>
+                    <span class="s1">&#39;SLM_size_Y&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">SLM_res_Y</span><span class="p">,</span>
+                    <span class="s1">&#39;pattern_window_size_X&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">SLM_winsize_X</span><span class="p">,</span>
+                    <span class="s1">&#39;pattern_window_size_Y&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">SLM_winsize_Y</span><span class="p">,</span>
+                    <span class="s1">&#39;SLM_pixel_pitch&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">pixel_pitch</span><span class="p">,</span>
+                    <span class="c1">#&#39;IPserver&#39;: self.IPserver,</span>
+                    <span class="s1">&#39;IPclient&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">IPclient</span><span class="p">,</span>
+                    <span class="s1">&#39;Portclient&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">Portclient</span>
+                    <span class="c1">#&#39;Strict&#39; : self.Strict</span>
+                <span class="p">}</span></div>
+
+        <span class="c1">#self.settings_manager = SettingsManager()</span>
+<div class="viewcode-block" id="SettingsDialog.make_group">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.settings.SettingsDialog.make_group">[docs]</a>
+    <span class="k">def</span> <span class="nf">make_group</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group_name</span><span class="p">,</span> <span class="o">*</span><span class="n">widgets</span><span class="p">):</span>
+        <span class="n">groupBox</span> <span class="o">=</span> <span class="n">QGroupBox</span><span class="p">(</span><span class="n">group_name</span><span class="p">)</span>
+        <span class="n">vbox</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">widget</span> <span class="ow">in</span> <span class="n">widgets</span><span class="p">:</span>
+            <span class="n">vbox</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">widget</span><span class="p">)</span>
+        <span class="n">groupBox</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">vbox</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">groupBox</span></div>
+
+
+<div class="viewcode-block" id="SettingsDialog.set_layout">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.settings.SettingsDialog.set_layout">[docs]</a>
+    <span class="k">def</span> <span class="nf">set_layout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set a layout for the settings elements.&quot;&quot;&quot;</span>
+        <span class="n">grid</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">()</span>
+
+        <span class="c1">#Settings layout</span>
+        <span class="n">slayout</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">()</span>
+        <span class="n">slayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">make_group</span><span class="p">(</span><span class="s2">&quot;SLM ID&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">SLM_name</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">SLM_window</span><span class="p">))</span>
+        <span class="n">slayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">make_group</span><span class="p">(</span><span class="s2">&quot;Laser parameters&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span><span class="p">))</span>
+        <span class="n">slayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">make_group</span><span class="p">(</span><span class="s2">&quot;SLM resolution&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">SLM_res_X</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">SLM_res_Y</span><span class="p">))</span>
+        <span class="n">slayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">make_group</span><span class="p">(</span><span class="s2">&quot;SLM pixel pitch&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pixel_pitch</span><span class="p">))</span>
+        <span class="n">slayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">make_group</span><span class="p">(</span><span class="s2">&quot;SLM phase correction&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">correction</span><span class="p">))</span>
+        <span class="n">slayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">make_group</span><span class="p">(</span><span class="s2">&quot;Pattern window size&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">SLM_winsize_X</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">SLM_winsize_Y</span><span class="p">))</span>
+        <span class="n">slayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">make_group</span><span class="p">(</span><span class="s2">&quot;Network&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">IPclient</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">Portclient</span><span class="p">))</span>
+
+        <span class="c1">#Ok/cancel settings buttons</span>
+        <span class="n">_buttons</span> <span class="o">=</span> <span class="n">QDialogButtonBox</span><span class="o">.</span><span class="n">StandardButton</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">button_box</span> <span class="o">=</span> <span class="n">QDialogButtonBox</span><span class="p">(</span><span class="n">_buttons</span><span class="o">.</span><span class="n">Ok</span> <span class="o">|</span> <span class="n">_buttons</span><span class="o">.</span><span class="n">Cancel</span><span class="p">)</span>
+
+        <span class="n">slayout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">button_box</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">slayout</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SettingsDialog.connect_signals_to_slots">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.settings.SettingsDialog.connect_signals_to_slots">[docs]</a>
+    <span class="k">def</span> <span class="nf">connect_signals_to_slots</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Execute the proper action when a signal is emitted.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">button_box</span><span class="o">.</span><span class="n">accepted</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">accept</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">button_box</span><span class="o">.</span><span class="n">rejected</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reject</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">accepted</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">save_settings</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SettingsDialog.save_settings">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.settings.SettingsDialog.save_settings">[docs]</a>
+    <span class="k">def</span> <span class="nf">save_settings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings_manager</span><span class="o">.</span><span class="n">save_from_widget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings_widgets</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SettingsDialog.load_settings">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.settings.SettingsDialog.load_settings">[docs]</a>
+    <span class="k">def</span> <span class="nf">load_settings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings_manager</span><span class="o">.</span><span class="n">load_to_widget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings_widgets</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="IP4Validator">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.settings.IP4Validator">[docs]</a>
+<span class="k">class</span> <span class="nc">IP4Validator</span><span class="p">(</span><span class="n">QValidator</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">IP4Validator</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+
+<div class="viewcode-block" id="IP4Validator.validate">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.settings.IP4Validator.validate">[docs]</a>
+    <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">address</span><span class="p">,</span> <span class="n">pos</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Validating&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">address</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">QValidator</span><span class="o">.</span><span class="n">State</span><span class="o">.</span><span class="n">Acceptable</span><span class="p">,</span> <span class="n">pos</span>
+        <span class="n">octets</span> <span class="o">=</span> <span class="n">address</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">octets</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">size</span> <span class="o">&gt;</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">QValidator</span><span class="o">.</span><span class="n">State</span><span class="o">.</span><span class="n">Invalid</span><span class="p">,</span> <span class="n">pos</span>
+        <span class="n">emptyOctet</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">for</span> <span class="n">octet</span> <span class="ow">in</span> <span class="n">octets</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">octet</span> <span class="ow">or</span> <span class="n">octet</span> <span class="o">==</span> <span class="s2">&quot;___&quot;</span> <span class="ow">or</span> <span class="n">octet</span> <span class="o">==</span> <span class="s2">&quot;   &quot;</span><span class="p">:</span> <span class="c1"># check for mask symbols</span>
+                <span class="n">emptyOctet</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">continue</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">octet</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39; _&#39;</span><span class="p">))</span> <span class="c1"># strip mask symbols</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">QValidator</span><span class="o">.</span><span class="n">State</span><span class="o">.</span><span class="n">Intermediate</span><span class="p">,</span> <span class="n">pos</span>
+            <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">value</span> <span class="o">&gt;</span> <span class="mi">255</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">QValidator</span><span class="o">.</span><span class="n">State</span><span class="o">.</span><span class="n">Ivalid</span><span class="p">,</span> <span class="n">pos</span>
+        <span class="k">if</span> <span class="n">size</span> <span class="o">&lt;</span> <span class="mi">4</span> <span class="ow">or</span> <span class="n">emptyOctet</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">QValidator</span><span class="o">.</span><span class="n">State</span><span class="o">.</span><span class="n">Intermediate</span><span class="p">,</span> <span class="n">pos</span>
+        <span class="k">return</span> <span class="n">QValidator</span><span class="o">.</span><span class="n">State</span><span class="o">.</span><span class="n">Acceptable</span><span class="p">,</span> <span class="n">pos</span></div>
+</div>
+
+    
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Matteo Mazzanti.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

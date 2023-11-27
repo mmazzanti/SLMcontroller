@@ -1,7 +1,7 @@
-src
-===
+SLMcontroller
+=============
 
 .. toctree::
    :maxdepth: 4
 
-   src
+   SLMcontroller
