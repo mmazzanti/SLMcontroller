@@ -1,4 +1,14 @@
-# This Python file uses the following encoding: utf-8
+#!/usr/bin/env python
+
+"""Lens.py: Generates a tab used to control an optical lens element."""
+
+__author__ = "Matteo Mazzanti"
+__copyright__ = "Copyright 2022, Matteo Mazzanti"
+__license__ = "GNU GPL v3"
+__maintainer__ = "Matteo Mazzanti"
+
+# -*- coding: utf-8 -*-
+
 from PyQt6.QtWidgets import QDoubleSpinBox, QGridLayout, QVBoxLayout, QWidget, QSlider, QCheckBox
 from PyQt6.QtCore import Qt
 

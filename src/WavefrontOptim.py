@@ -1,3 +1,14 @@
+#!/usr/bin/env python
+
+"""SpotOptim.py: Generates a tab used to control the spot optimization process."""
+
+__author__ = "Matteo Mazzanti"
+__copyright__ = "Copyright 2022, Matteo Mazzanti"
+__license__ = "GNU GPL v3"
+__maintainer__ = "Matteo Mazzanti"
+
+# -*- coding: utf-8 -*-
+
 from PyQt6.QtWidgets import QMessageBox, QLineEdit, QComboBox, QLabel, QSlider, QDoubleSpinBox,QGridLayout, QVBoxLayout, QGroupBox, QHBoxLayout, QWidget, QPushButton, QFileDialog
 from PyQt6.QtCore import Qt, QThread, QMutex, QWaitCondition, QThreadPool
 from PyQt6 import QtCore
