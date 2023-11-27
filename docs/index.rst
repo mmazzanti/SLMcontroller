@@ -6,18 +6,22 @@
 Welcome to SLM controller's documentation!
 ==========================================
 
-|SLM controller|_ is a python Qt based app for controlling spatial light modulators (SLM).
+|slmcontroller|_ is a python Qt based app for controlling spatial light modulators (SLM).
 It allows to control a SLM connected to a second monitor. Phase patterns of optical elements can be added and tuned from the GUI.
-The software allows for aberration correction using algorithms described in [1]_ and [2]_.
+The software allows for aberration correction using algorithms described in [`1`_] and [`2`_].
 
 
 .. toctree::
    :maxdepth: 1
    :caption: Getting Started
+   
    installation
-   how to
+   howto
+   
+.. toctree::
+   :maxdepth: 1
+   :caption: User Guide
 
-   :caption: User Guide:
    examples
    settings
    calibration
@@ -30,7 +34,7 @@ Indices and tables
 * :ref:`modindex`
 * :ref:`search`
 
-.. |SLM controller| replace:: :mod:`SLM controller`
-.. _SLMcontroller: https://github.com/mmazzanti/SLM_controller
-.. _[1]: https://www.nature.com/articles/nphoton.2010.85
-.. _[2]: https://www.frontiersin.org/articles/10.3389/fnano.2022.998656/full
+.. |slmcontroller| replace:: :mod:`SLM controller`
+.. _slmcontroller: https://github.com/mmazzanti/SLM_controller
+.. _1: https://www.nature.com/articles/nphoton.2010.85
+.. _2: https://www.frontiersin.org/articles/10.3389/fnano.2022.998656/full
