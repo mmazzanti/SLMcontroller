@@ -26,7 +26,7 @@ The following GUI should appear on your screen:
 
 .. image:: _static/main.png
   :width: 300
-  :alt: Alternative text
+  :alt: GUI
 
 See the :ref:`how-to` section for more information on how to use the software.
 
