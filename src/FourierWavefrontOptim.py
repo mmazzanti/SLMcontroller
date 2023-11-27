@@ -8,7 +8,16 @@ import gmsh
 import numpy as np
 import time
 
+#!/usr/bin/env python
 
+"""OpticalElement.py: Generates a dialog used to load an optical element."""
+
+__author__ = "Matteo Mazzanti"
+__copyright__ = "Copyright 2022, Matteo Mazzanti"
+__license__ = "GNU GPL v3"
+__maintainer__ = "Matteo Mazzanti"
+
+# -*- coding: utf-8 -*-
 
 class SpotOptimTab(QWidget):
     def __init__(self, pattern_generator, settings_manager, hologram_manager,cameraWindow):

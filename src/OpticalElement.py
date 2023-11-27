@@ -1,3 +1,14 @@
+#!/usr/bin/env python
+
+"""OpticalElement.py: Generates a dialog used to load an optical element."""
+
+__author__ = "Matteo Mazzanti"
+__copyright__ = "Copyright 2022, Matteo Mazzanti"
+__license__ = "GNU GPL v3"
+__maintainer__ = "Matteo Mazzanti"
+
+# -*- coding: utf-8 -*-
+
 # This Python file uses the following encoding: utf-8
 from PyQt6.QtWidgets import QDialog, QDialogButtonBox, QDoubleSpinBox, QMessageBox, QLineEdit, QGridLayout, QGroupBox, QComboBox, QVBoxLayout, QHBoxLayout, QLabel, QWidget, QSlider, QCheckBox, QSpinBox , QPushButton
 from PyQt6.QtCore import Qt, pyqtSignal, QThread, QPoint
@@ -17,6 +28,9 @@ import os
 import threading
 
 class opticalElement(QDialog):
+    """Generates a dialog used to load an optical element. 
+    The list allows to choose between various optical elements (lens, grating, etc..)
+    """
     def __init__(self, elements_map, parent = None):
         super().__init__(parent)
         self.set_attributes()
@@ -31,7 +45,11 @@ class opticalElement(QDialog):
         self.setWindowTitle("Choose optical element")
 
     def generate_selection_window(self,elements_map):
-        """Create groups of radio buttons as settings elements."""
+        """Create groups of radio buttons as settings elements.
+
+        Args:
+            elements_map (list): List of optical elements to choose from.
+        """
         grid = QGridLayout()
         groupBox = QGroupBox("Which element you want to add ?")
         self.opt_elem_list = QComboBox()
@@ -52,7 +70,14 @@ class opticalElement(QDialog):
         self.accepted.connect(self.return_element)
 
     def return_element(self):
+        """Sets the selected optical element when the user selects from the list.
+        """
         self.choosen = self.opt_elem_list.currentIndex()
 
     def get_selected(self):
+        """Return the selected optical element.
+
+        Returns:
+            int: Index of the selected optical element.
+        """
         return self.choosen

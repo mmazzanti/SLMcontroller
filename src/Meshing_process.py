@@ -1,3 +1,14 @@
+#!/usr/bin/env python
+
+"""Meshing_process.py: Meshing process class. Used to handle gmesh GUI on OS that do not allow to run gmsh in a separate thread"""
+
+__author__ = "Matteo Mazzanti"
+__copyright__ = "Copyright 2022, Matteo Mazzanti"
+__license__ = "GNU GPL v3"
+__maintainer__ = "Matteo Mazzanti"
+
+# -*- coding: utf-8 -*-
+
 from multiprocessing import Process, freeze_support
 import threading
 
@@ -12,10 +23,38 @@ import numpy as np
 
 
 class MeshingHandler(Process):
-    # override the run function
+    """Meshing process class. Used to handle gmesh GUI on OS that do not allow to run gmsh in a separate thread.
+    This takes care of initializing gmsh and generating the mesh according to the user parameters.
+    Given a mesh it parses it in a np.array structure where each element has associated its meshID and returns it to the main thread.
+
+    Attributes:
+        eventsDict (dict): Dictionary containing all the events used to communicate with the main thread.
+        conditionsDict (dict): Dictionary containing all the conditions used to communicate with the main thread.
+        queue (multiprocessing.Queue): Queue used to communicate with the main thread.
+        SLM_x_res (int): SLM horizontal resolution.
+        SLM_y_res (int): SLM vertical resolution.
+        algorithm (int): Meshing algorithm to use.
+        F (float): Meshing parameter (equation for meshing, see gmsh guide).
+        algorithms (list): List of available meshing algorithms.
+        algorithms_names (list): List of available meshing algorithms names.
+        isMeshed (bool): True if the meshing process was already done, False otherwise.
+        wasINIT (bool): True if gmsh was already initialized, False otherwise.
+        Enabled (bool): True if the process should keep running, False otherwise.
+    """
     def __init__(self, eventsDict, conditionsDict, queue, SLM_x_res, SLM_y_res, algorithm, F):
-    # execute the base constructor
-        print('starting process')
+        """Constructor for the MeshingHandler class. 
+        Initializes SLM parameters and sets the events and conditions used for communication with the main thread and the queue used for data transfer.
+
+        Args:
+            eventsDict (dict): Dictionary containing all the events used to communicate with the main thread.
+            conditionsDict (dict): Dictionary containing all the conditions used to communicate with the main thread.
+            queue (queue): Queue used to communicate with the main thread.
+            SLM_x_res (int): SLM resolution in the horizontal direction.
+            SLM_y_res (int): SLM resolution in the vertical direction.
+            algorithm (int): Meshing algorithm to use.
+            F (string): Meshing parameter (equation for meshing, see gmsh guide).
+        """
+        # freeze support is needed for compiling the executable
         freeze_support()
         Process.__init__(self)
         # Settings running thread parameter (true = running, false = not running)
@@ -51,6 +90,8 @@ class MeshingHandler(Process):
         self.Enabled = True
         
     def checkUserMeshing(self):
+        """Checks if the user requested a meshing operation (remesh, closeGUI etc.) and performs it.
+        """
         if self.eventsDict['genMesh'].is_set():
             print("generating mesh")
             self.redomesh()
@@ -92,6 +133,8 @@ class MeshingHandler(Process):
 
 
     def run(self):
+        """Main function of the MeshingHandler class.
+        """
         # Stay dormant till invoked for a new task
         # Wait for waking up event
         self.eventsDict['generalEvent'].wait()
@@ -130,20 +173,23 @@ class MeshingHandler(Process):
         if gmsh.isInitialized():
             if(gmsh.fltk.isAvailable):
                 gmsh.fltk.finalize()
-
-    def setRunGUI(self,runGUIevent):
-        self.runGUIevent = runGUIevent
     
     def updatebar(self):
+        """Updates the loading bar.
+        The loading bar is extremely unnecessary. I had to add it as otherwise gmsh would not appear on top of the main GUI.
+        This trick allows the gmsh GUI to appear on top of the main GUI and immediately visible to the user.
+        """
         while self.p['value'] < 100:
             self.p['value'] += 10
+            # Sleeping time, used to give an impression of loading
             time.sleep(0.05)
-            #self.root.after(100, self.startbar)
         self.root.withdraw()
         self.root.quit()
         return 
     
     def loadMeshFromFile(self):
+        """Loads a mesh from a file.
+        """
         self.filename = self.queue.get()
         # If Gmsh wasn't initialized, do it
         if not self.wasINIT:
@@ -165,6 +211,12 @@ class MeshingHandler(Process):
     
     # TODO: This part should check that the mesh actually would fit the slm sizes
     def checkLoadedMeshSize(self):
+        """Checks if the loaded mesh fits the SLM size.
+        
+        Todo:
+            This function is a work in progress, I did not find an elegant way of getting the size of a gmsh mesh (and check that is actually 2D).
+            For now it assumes that the user knows what they're doing...
+        """
         entities = gmsh.model.getEntities()
         for e in entities:
             boundary = gmsh.model.getBoundary([e])
@@ -177,6 +229,8 @@ class MeshingHandler(Process):
 
 
     def saveMeshToFile(self):
+        """Saves the mesh to a file.
+        """
         self.filename = self.queue.get()
         if self.isMeshed:
             try:
@@ -192,6 +246,8 @@ class MeshingHandler(Process):
             self.queue.put(False)
     
     def showMeshGUI(self):
+        """Shows the loading GUI. This is not necessary, but it allows the gmsh GUI to appear on top of the main GUI.
+        """
         # Loading bar size
         w = 200 # width for the Tk root
         h = 20 # height for the Tk root
@@ -220,6 +276,8 @@ class MeshingHandler(Process):
 
 
     def redomesh(self):
+        """Redoes the meshing operation.
+        """
         # Reload new mesh variables
         self.getVariablesInQueue()
         self.reconstructMesh()
@@ -240,15 +298,14 @@ class MeshingHandler(Process):
         self.isMeshed = True
 
     def reconstructMesh(self):
+        """Deletes anre reconstructs the mesh + geometry.
+        """
         if self.wasINIT: 
             #gmsh.model.remove_entity_name("SLM Meshing")
             print("Math model: ",self.mathModel)
             gmsh.model.mesh.field.remove(self.mathModel)
             gmsh.model.geo.remove([[1,self.points[0]],[1,self.points[1]],[1,self.points[2]],[1,self.points[3]]],recursive=True)
             gmsh.model.geo.remove([[1,self.lines[0]],[1,self.lines[1]],[1,self.lines[2]],[1,self.lines[3]]],recursive=True)
-            #gmsh.model.geo.remove([2,self.contour])
-            #gmsh.model.mesh.field.remove(self.threshold)
-            #gmsh.model.geo.remove(self.pl)
             self.mathModel = None
             self.threshold=None
             gmsh.model.remove()
@@ -256,6 +313,8 @@ class MeshingHandler(Process):
         self.init_GMESH()
 
     def init_GMESH(self):
+        """Initializes gmsh + creates basic geometry for the meshing.
+        """
         if not self.wasINIT:
             self.showMeshGUI()
             gmsh.initialize()
@@ -281,6 +340,10 @@ class MeshingHandler(Process):
         self.mathModel = gmsh.model.mesh.field.add("MathEval")
 
     def parseMesh(self):
+        """Parses the mesh and returns it to the main thread.
+        Converts from a gmsh to a numpy array where each element has associated its meshID.
+        """
+
         print("parsing mesh")
         self.ids_list = []
         self.mesh = np.zeros((self.SLM_y_res, self.SLM_x_res))
@@ -299,6 +362,8 @@ class MeshingHandler(Process):
         
 
     def getVariablesInQueue(self):
+        """Loads parameters from the queue (from the main thread).
+        """
         self.SLM_x_res = self.queue.get()
         self.SLM_y_res = self.queue.get()
         self.algorithm = self.queue.get()
