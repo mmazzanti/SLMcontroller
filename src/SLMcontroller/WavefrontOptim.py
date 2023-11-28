@@ -310,11 +310,11 @@ class SpotOptimTab_ext(QWidget):
         """Loads a mesh from a file in gmsh .msh format.
         """
         # Opens a prompt for the user to select a mesh file
-        self.putVariablesInQueue(self.queue, self.eventsDict['genMesh'], self.eventsDict['generalEvent'])
         name = QFileDialog.getOpenFileName(self,"Open File","${HOME}","GMSH (*.msh);;",)
         self.queue.put(name[0])
-        self.eventsDict['loadfile'].set()
-        self.eventsDict['generalEvent'].set()
+        self.putVariablesInQueue(self.queue, self.eventsDict['loadfile'], self.eventsDict['generalEvent'])
+        # self.eventsDict['loadfile'].set()
+        # self.eventsDict['generalEvent'].set()
         with self.conditionsDict['loadfile']:
             self.conditionsDict['loadfile'].wait()
         outcome = self.queue.get()

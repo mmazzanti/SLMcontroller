@@ -698,6 +698,7 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            json(IDs list): Returns information on the current IDs list in json format for remote clients.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theOptimizer</span><span class="o">.</span><span class="n">ids_list</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">IDsList</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theOptimizer</span><span class="o">.</span><span class="n">ids_list</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span></div>
 
 

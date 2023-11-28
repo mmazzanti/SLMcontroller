@@ -61,7 +61,7 @@ class MeshingHandler(Process):
         
         self.points = [0,0,0,0] # 4 points array where to store the points tags
         self.lines = [0,0,0,0] # 4 points array where to store the lines tags
-
+        self.mathModel = None
         # Events signals
         self.eventsDict = eventsDict
         self.conditionsDict = conditionsDict
@@ -126,7 +126,7 @@ class MeshingHandler(Process):
 
         if self.eventsDict['terminate'].is_set():
             self.Enabled = False
-            
+            self._running = False
 
 
 
@@ -137,11 +137,7 @@ class MeshingHandler(Process):
         # Stay dormant till invoked for a new task
         # Wait for waking up event
         self.eventsDict['generalEvent'].wait()
-        if self.eventsDict['terminate'].is_set():
-            self.Enabled = False
-            self._running = False
-            # In this case the user didn't wake up this process (no meshing done), so kill it
-            return
+        self.checkUserMeshing()
         # Start thread having the task of checking for new params
         self.eventsDict['generalEvent'].clear()
         if not self.wasINIT:
@@ -189,8 +185,10 @@ class MeshingHandler(Process):
         """Loads a mesh from a file.
         """
         self.filename = self.queue.get()
+        self.getVariablesInQueue()
         # If Gmsh wasn't initialized, do it
         if not self.wasINIT:
+            self.showMeshGUI()
             gmsh.initialize()
             self.wasINIT = True
         try:
@@ -198,9 +196,11 @@ class MeshingHandler(Process):
             # If we have plenty of models in memory, remove them and load the new one
             while not gmsh.model.list() == ['']:
                 gmsh.model.remove()
+            print(self.filename)
             gmsh.open(self.filename)
             # Set the new model as the active one
             gmsh.model.setCurrent(gmsh.model.list()[0])
+            print(gmsh.model.list())
             #self.checkLoadedMeshSize()
             self.queue.put(True)
         except:
@@ -300,8 +300,8 @@ class MeshingHandler(Process):
         """
         if self.wasINIT: 
             #gmsh.model.remove_entity_name("SLM Meshing")
-            print("Math model: ",self.mathModel)
-            gmsh.model.mesh.field.remove(self.mathModel)
+            if self.mathModel is not None:
+                gmsh.model.mesh.field.remove(self.mathModel)
             gmsh.model.geo.remove([[1,self.points[0]],[1,self.points[1]],[1,self.points[2]],[1,self.points[3]]],recursive=True)
             gmsh.model.geo.remove([[1,self.lines[0]],[1,self.lines[1]],[1,self.lines[2]],[1,self.lines[3]]],recursive=True)
             self.mathModel = None
