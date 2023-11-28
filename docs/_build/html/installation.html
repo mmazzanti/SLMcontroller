@@ -42,14 +42,21 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <!-- Local TOC -->
-              <div class="local-toc"><ul>
-<li><a class="reference internal" href="#">Installation</a><ul>
-<li><a class="reference internal" href="#dependencies">Dependencies</a></li>
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#dependencies">Dependencies</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="howto.html">How to</a></li>
 </ul>
-</div>
+<p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="settings.html">Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="calibration.html">Calibration</a></li>
+</ul>
+
         </div>
       </div>
     </nav>
@@ -90,21 +97,21 @@ Do so by running the following command:</p>
 </pre></div>
 </div>
 <p class="linemarker linemarker-25">The following GUI should appear on your screen:</p>
-<a class="reference internal image-reference" href="_images/main.png"><img alt="GUI" src="_images/main.png" style="width: 300px;" /></a>
-<p class="linemarker linemarker-31">See the <a class="reference internal" href="howto.html#how-to"><span class="std std-ref">How to</span></a> section for more information on how to use the software.</p>
+<a class="reference internal image-reference" href="_images/main.png"><img alt="GUI" class="align-center" src="_images/main.png" style="width: 300px;" /></a>
+<p class="linemarker linemarker-32">See the <a class="reference internal" href="howto.html#how-to"><span class="std std-ref">How to</span></a> section for more information on how to use the software.</p>
 <section id="dependencies">
 <h2>Dependencies<a class="headerlink" href="#dependencies" title="Link to this heading"></a></h2>
-<p class="linemarker linemarker-36">The following dependencies are required to run <a class="reference external" href="https://github.com/mmazzanti/SLM_controller"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SLM</span> <span class="pre">controller</span></code></a>:</p>
+<p class="linemarker linemarker-37">The following dependencies are required to run <a class="reference external" href="https://github.com/mmazzanti/SLM_controller"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SLM</span> <span class="pre">controller</span></code></a>:</p>
 <ul class="simple">
-<li><p class="linemarker linemarker-38"><a class="reference external" href="https://flask.palletsprojects.com/">Flask</a>: Used for remote control of the SLM.</p></li>
-<li><p class="linemarker linemarker-39"><a class="reference external" href="https://www.riverbankcomputing.com/software/pyqt/">PyQt6</a>: Used for the GUI.</p></li>
-<li><p class="linemarker linemarker-40"><a class="reference external" href="https://pygmsh.readthedocs.io/en/latest/index.html">Gmsh</a>: Used for meshing the SLM surface.</p></li>
-<li><p class="linemarker linemarker-41"><a class="reference external" href="https://numba.pydata.org/">Numba</a>: Used for accelerating the computation of the phase patterns.</p></li>
-<li><p class="linemarker linemarker-42"><a class="reference external" href="https://numpy.org/">NumPy</a>: Handling mathematical operations.</p></li>
-<li><p class="linemarker linemarker-43"><a class="reference external" href="https://opencv.org/">OpenCV</a>: Used for image processing (when optimizing for aberration using a camera).</p></li>
-<li><p class="linemarker linemarker-44"><a class="reference external" href="https://pillow.readthedocs.io/en/stable/">Pillow</a>: Used to show remotely the phase patterns of the SLM.</p></li>
+<li><p class="linemarker linemarker-39"><a class="reference external" href="https://flask.palletsprojects.com/">Flask</a>: Used for remote control of the SLM.</p></li>
+<li><p class="linemarker linemarker-40"><a class="reference external" href="https://www.riverbankcomputing.com/software/pyqt/">PyQt6</a>: Used for the GUI.</p></li>
+<li><p class="linemarker linemarker-41"><a class="reference external" href="https://pygmsh.readthedocs.io/en/latest/index.html">Gmsh</a>: Used for meshing the SLM surface.</p></li>
+<li><p class="linemarker linemarker-42"><a class="reference external" href="https://numba.pydata.org/">Numba</a>: Used for accelerating the computation of the phase patterns.</p></li>
+<li><p class="linemarker linemarker-43"><a class="reference external" href="https://numpy.org/">NumPy</a>: Handling mathematical operations.</p></li>
+<li><p class="linemarker linemarker-44"><a class="reference external" href="https://opencv.org/">OpenCV</a>: Used for image processing (when optimizing for aberration using a camera).</p></li>
+<li><p class="linemarker linemarker-45"><a class="reference external" href="https://pillow.readthedocs.io/en/stable/">Pillow</a>: Used to show remotely the phase patterns of the SLM.</p></li>
 </ul>
-<p class="linemarker linemarker-47">You can use <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-r</span> <span class="pre">docs/requirements.txt</span></code> to install all the required dependencies directly.</p>
+<p class="linemarker linemarker-48">You can use <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-r</span> <span class="pre">docs/requirements.txt</span></code> to install all the required dependencies directly.</p>
 </section>
 </section>
 

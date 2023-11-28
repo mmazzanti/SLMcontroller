@@ -15,7 +15,6 @@ import threading
 import tkinter as tk
 from tkinter import ttk
 
-import sys
 import time
 import gmsh
 import numpy as np
@@ -150,7 +149,6 @@ class MeshingHandler(Process):
 
         while self.Enabled:
             # Check if the process should terminate (user closed the interface)
-            print("waiting for event")
             self.eventsDict['generalEvent'].wait()
             self.checkUserMeshing()
             if self.eventsDict['showGUI'].is_set():

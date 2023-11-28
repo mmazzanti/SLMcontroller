@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SLMcontroller.Grating &mdash; SLM controller 1.0.1 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=292eb321"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            SLM controller
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../howto.html">How to</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../settings.html">Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../calibration.html">Calibration</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SLM controller</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../SLMcontroller.html">SLMcontroller</a></li>
+      <li class="breadcrumb-item active">SLMcontroller.Grating</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for SLMcontroller.Grating</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="sd">&quot;&quot;&quot;Grating.py: Generates a tab used to control an optical grating element. The grating can be rotated and its line density can be changed.&quot;&quot;&quot;</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Matteo Mazzanti&quot;</span>
+<span class="n">__copyright__</span> <span class="o">=</span> <span class="s2">&quot;Copyright 2022, Matteo Mazzanti&quot;</span>
+<span class="n">__license__</span> <span class="o">=</span> <span class="s2">&quot;GNU GPL v3&quot;</span>
+<span class="n">__maintainer__</span> <span class="o">=</span> <span class="s2">&quot;Matteo Mazzanti&quot;</span>
+
+<span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">from</span> <span class="nn">PyQt6.QtWidgets</span> <span class="kn">import</span> <span class="n">QDoubleSpinBox</span><span class="p">,</span> <span class="n">QGridLayout</span><span class="p">,</span> <span class="n">QVBoxLayout</span><span class="p">,</span> <span class="n">QWidget</span><span class="p">,</span> <span class="n">QSlider</span><span class="p">,</span> <span class="n">QCheckBox</span>
+<span class="kn">from</span> <span class="nn">PyQt6.QtCore</span> <span class="kn">import</span> <span class="n">Qt</span>
+
+<span class="kn">import</span> <span class="nn">SLMcontroller.utils</span> <span class="k">as</span> <span class="nn">utils</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<div class="viewcode-block" id="GratingTab">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.Grating.GratingTab">[docs]</a>
+<span class="k">class</span> <span class="nc">GratingTab</span><span class="p">(</span><span class="n">QWidget</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generates a tab used to control an optical grating element. The grating can be rotated and its line density can be changed. </span>
+<span class="sd">    The grating is generated using the GenerateGrating function of the PatternGenerator class. </span>
+<span class="sd">    The grating will depend on the selected wavelength and SLM pixel pitch.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        pattern (:numpy.ndarray:): Array containing the generated grating.</span>
+<span class="sd">        pattern_generator (:Pattern_generator:): Pattern generator object used to generate the grating.</span>
+<span class="sd">        settings_manager (:SettingsManager:): Settings manager object used to get the wavelength, SLM resolution and SLM pixel pitch.</span>
+<span class="sd">        hologram_manager (:HologramsManager:): Hologram manager object used to update the SLM window.</span>
+<span class="sd">        minlmm (float): Minimum number of lines per mm that can be used to generate the grating.</span>
+<span class="sd">        maxlmm (float): Maximum number of lines per mm that can be used to generate the grating.</span>
+<span class="sd">        lmm (float): Number of lines per mm used to generate the grating.</span>
+<span class="sd">        angle (float): Angle of the grating in radians.</span>
+<span class="sd">        lastvals (list): List containing the last values of the angle, lmm, wavelength, pixel pitch, X resolution and Y resolution used to generate the last grating (used to avoid re-generating gratings). </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pattern_generator</span><span class="p">,</span> <span class="n">settings_manager</span><span class="p">,</span> <span class="n">hologram_manager</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Constructor for the GratingTab class.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            pattern_generator (:Pattern_generator:): Pattern generator object used to generate the grating.</span>
+<span class="sd">            settings_manager (:SettingsManager:): Settings manager object used to get the wavelength, SLM resolution and SLM pixel pitch.</span>
+<span class="sd">            hologram_manager (:HologramsManager:): Hologram manager object used to update the SLM window.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pattern</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pattern_generator</span> <span class="o">=</span> <span class="n">pattern_generator</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings_manager</span> <span class="o">=</span> <span class="n">settings_manager</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hologram_manager</span> <span class="o">=</span> <span class="n">hologram_manager</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">minlmm</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">maxlmm</span> <span class="o">=</span> <span class="mf">1e-3</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">settings_manager</span><span class="o">.</span><span class="n">get_pixel_pitch</span><span class="p">()</span><span class="o">*</span><span class="mf">1e-6</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lmm</span> <span class="o">=</span> <span class="mf">0.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">angle</span> <span class="o">=</span> <span class="mf">0.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_GUI</span><span class="p">()</span>
+    <span class="k">def</span> <span class="fm">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Destructor for the GratingTab class.</span>
+
+<span class="sd">        Todo:</span>
+<span class="sd">            Implement this?</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+
+<div class="viewcode-block" id="GratingTab.init_GUI">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.Grating.GratingTab.init_GUI">[docs]</a>
+    <span class="k">def</span> <span class="nf">init_GUI</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generates the GUI elements of the tab. </span>
+<span class="sd">        The tab will contain :</span>
+<span class="sd">            - A slider and a spinbox to control the number of lines per mm of the grating.</span>
+<span class="sd">            - A slider and a spinbox to control the angle of the grating.</span>
+<span class="sd">            - A checkbox to activate the grating.</span>
+<span class="sd">            - A checkbox to enable live updating of the grating.</span>
+<span class="sd">            - An image preview of the grating.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">general_controls_layout</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">isactive</span> <span class="o">=</span> <span class="n">QCheckBox</span><span class="p">(</span><span class="s2">&quot;Activate element : &quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">isactive</span><span class="o">.</span><span class="n">setLayoutDirection</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">LayoutDirection</span><span class="o">.</span><span class="n">RightToLeft</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">liveupdate</span> <span class="o">=</span> <span class="n">QCheckBox</span><span class="p">(</span><span class="s2">&quot;Live updating : &quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">liveupdate</span><span class="o">.</span><span class="n">setLayoutDirection</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">LayoutDirection</span><span class="o">.</span><span class="n">RightToLeft</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">general_controls_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">isactive</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">general_controls_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">liveupdate</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">make_lmm_slider</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">make_angle_slider</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">make_image_preview</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">layout</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lmm_layout</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">angle_layout</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image_preview_layout</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">general_controls_layout</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+        <span class="c1">#self.layout.addWidget(self.label,1,0)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="GratingTab.needs_updates">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.Grating.GratingTab.needs_updates">[docs]</a>
+    <span class="k">def</span> <span class="nf">needs_updates</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks if the grating needs to be re-generated.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True if the grating needs to be re-generated, False otherwise.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">new_vals</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">angle</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">lmm</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">settings_manager</span><span class="o">.</span><span class="n">get_wavelength</span><span class="p">(),</span><span class="bp">self</span><span class="o">.</span><span class="n">settings_manager</span><span class="o">.</span><span class="n">get_pixel_pitch</span><span class="p">(),</span><span class="bp">self</span><span class="o">.</span><span class="n">settings_manager</span><span class="o">.</span><span class="n">get_X_res</span><span class="p">(),</span><span class="bp">self</span><span class="o">.</span><span class="n">settings_manager</span><span class="o">.</span><span class="n">get_Y_res</span><span class="p">()]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lastvals</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lastvals</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">new_vals</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="GratingTab.make_image_preview">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.Grating.GratingTab.make_image_preview">[docs]</a>
+    <span class="k">def</span> <span class="nf">make_image_preview</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generates the image preview of the grating.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">image_preview_layout</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pattern_image</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">ImageWidget</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">image_preview_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pattern_image</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="GratingTab.make_lmm_slider">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.Grating.GratingTab.make_lmm_slider">[docs]</a>
+    <span class="k">def</span> <span class="nf">make_lmm_slider</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generates the slider and spinbox used to control the number of lines per mm of the grating and adds them to the GUI.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lmm_layout</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">spin_lmm</span> <span class="o">=</span> <span class="n">QDoubleSpinBox</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s2">&quot;l/mm &quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spin_lmm</span><span class="o">.</span><span class="n">setSuffix</span><span class="p">(</span><span class="s1">&#39; l/mm&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spin_lmm</span><span class="o">.</span><span class="n">valueChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">update_lmm_slide</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spin_lmm</span><span class="o">.</span><span class="n">setKeyboardTracking</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spin_lmm</span><span class="o">.</span><span class="n">setSingleStep</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spin_lmm</span><span class="o">.</span><span class="n">setMaximum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">maxlmm</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spin_lmm</span><span class="o">.</span><span class="n">setMinimum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">minlmm</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">lmm_slider</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">DoubleSlider</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lmm_slider</span><span class="o">.</span><span class="n">setGeometry</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span><span class="mi">50</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lmm_slider</span><span class="o">.</span><span class="n">setMinimum</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lmm_slider</span><span class="o">.</span><span class="n">setMaximum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">maxlmm</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lmm_slider</span><span class="o">.</span><span class="n">setTickPosition</span><span class="p">(</span><span class="n">QSlider</span><span class="o">.</span><span class="n">TickPosition</span><span class="o">.</span><span class="n">TicksBelow</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lmm_slider</span><span class="o">.</span><span class="n">setTickInterval</span><span class="p">(</span><span class="mi">3000</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lmm_slider</span><span class="o">.</span><span class="n">valueChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">update_lmm_spin</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">lmm_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spin_lmm</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lmm_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lmm_slider</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="GratingTab.make_angle_slider">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.Grating.GratingTab.make_angle_slider">[docs]</a>
+    <span class="k">def</span> <span class="nf">make_angle_slider</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generates the slider and spinbox used to control the angle of the grating and adds them to the GUI.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">angle_layout</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">spin_angle</span> <span class="o">=</span> <span class="n">QDoubleSpinBox</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s2">&quot;Grating angle&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spin_angle</span><span class="o">.</span><span class="n">setSuffix</span><span class="p">(</span><span class="s1">&#39; π&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spin_angle</span><span class="o">.</span><span class="n">valueChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">update_angle_slide</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spin_angle</span><span class="o">.</span><span class="n">setKeyboardTracking</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spin_angle</span><span class="o">.</span><span class="n">setSingleStep</span><span class="p">(</span><span class="mf">0.01</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">angle_slider</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">DoubleSlider</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">angle_slider</span><span class="o">.</span><span class="n">setGeometry</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span><span class="mi">50</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">angle_slider</span><span class="o">.</span><span class="n">setMinimum</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="c1"># Maximum number of lines per mm is limited by the pixel pitch of the SLM (better even avoiding getting closer to this limit)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">angle_slider</span><span class="o">.</span><span class="n">setMaximum</span><span class="p">(</span><span class="mf">2.</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">angle_slider</span><span class="o">.</span><span class="n">setTickInterval</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">angle_slider</span><span class="o">.</span><span class="n">setTickPosition</span><span class="p">(</span><span class="n">QSlider</span><span class="o">.</span><span class="n">TickPosition</span><span class="o">.</span><span class="n">TicksBelow</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">angle_slider</span><span class="o">.</span><span class="n">valueChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">update_angle_spin</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">angle_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spin_angle</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">angle_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">angle_slider</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="GratingTab.update_lmm_spin">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.Grating.GratingTab.update_lmm_spin">[docs]</a>
+    <span class="k">def</span> <span class="nf">update_lmm_spin</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Updates the number of lines per mm of the grating when the spinbox is changed (usually called from the slider valueChanged signal)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lmm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sender</span><span class="p">()</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
+        <span class="c1">#self.lmm_slider.setValue(self.lmm)</span>
+       
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">spin_lmm</span><span class="o">.</span><span class="n">value</span><span class="p">()</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lmm</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">spin_lmm</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lmm</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">liveupdate</span><span class="o">.</span><span class="n">isChecked</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_pattern</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">hologram_manager</span><span class="o">.</span><span class="n">updateSLMWindow</span><span class="p">()</span></div>
+
+    
+<div class="viewcode-block" id="GratingTab.update_lmm_slide">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.Grating.GratingTab.update_lmm_slide">[docs]</a>
+    <span class="k">def</span> <span class="nf">update_lmm_slide</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Updates the number of lines per mm of the grating when the slider is changed (usually called from the spinbox valueChanged signal)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lmm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sender</span><span class="p">()</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
+        <span class="k">if</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lmm_slider</span><span class="o">.</span><span class="n">value</span><span class="p">()</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lmm</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">lmm_slider</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lmm</span><span class="p">)</span>
+        <span class="c1">#self.spin_lmm.setValue(self.lmm)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">liveupdate</span><span class="o">.</span><span class="n">isChecked</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_pattern</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">hologram_manager</span><span class="o">.</span><span class="n">updateSLMWindow</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="GratingTab.update_angle_spin">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.Grating.GratingTab.update_angle_spin">[docs]</a>
+    <span class="k">def</span> <span class="nf">update_angle_spin</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Updates the angle of the grating when the spinbox is changed (usually called from the slider valueChanged signal)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">angle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sender</span><span class="p">()</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
+        <span class="c1">#self.angle_slider.setValue(self.angle)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spin_angle</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">angle</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">liveupdate</span><span class="o">.</span><span class="n">isChecked</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_pattern</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">hologram_manager</span><span class="o">.</span><span class="n">updateSLMWindow</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="GratingTab.update_angle_slide">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.Grating.GratingTab.update_angle_slide">[docs]</a>
+    <span class="k">def</span> <span class="nf">update_angle_slide</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Updates the angle of the grating when the slider is changed (usually called from the spinbox valueChanged signal)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">angle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sender</span><span class="p">()</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">angle_slider</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">angle</span><span class="p">)</span>
+        <span class="c1">#self.spin_angle.setValue(self.angle)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">liveupdate</span><span class="o">.</span><span class="n">isChecked</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_pattern</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">hologram_manager</span><span class="o">.</span><span class="n">updateSLMWindow</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="GratingTab.update_pattern">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.Grating.GratingTab.update_pattern">[docs]</a>
+    <span class="k">def</span> <span class="nf">update_pattern</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Updates the grating pattern.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pattern</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pattern_generator</span><span class="o">.</span><span class="n">GenerateGrating</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings_manager</span><span class="o">.</span><span class="n">get_wavelength</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings_manager</span><span class="o">.</span><span class="n">get_pixel_pitch</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">lmm</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">angle</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings_manager</span><span class="o">.</span><span class="n">get_X_res</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings_manager</span><span class="o">.</span><span class="n">get_Y_res</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pattern_image</span><span class="o">.</span><span class="n">setImage</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pattern</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lastvals</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">angle</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">lmm</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">settings_manager</span><span class="o">.</span><span class="n">get_wavelength</span><span class="p">(),</span><span class="bp">self</span><span class="o">.</span><span class="n">settings_manager</span><span class="o">.</span><span class="n">get_pixel_pitch</span><span class="p">(),</span><span class="bp">self</span><span class="o">.</span><span class="n">settings_manager</span><span class="o">.</span><span class="n">get_X_res</span><span class="p">(),</span><span class="bp">self</span><span class="o">.</span><span class="n">settings_manager</span><span class="o">.</span><span class="n">get_Y_res</span><span class="p">()]</span></div>
+
+
+<div class="viewcode-block" id="GratingTab.get_pattern">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.Grating.GratingTab.get_pattern">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_pattern</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the grating pattern.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pattern</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">needs_updates</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_pattern</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pattern</span></div>
+
+
+<div class="viewcode-block" id="GratingTab.is_active">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.Grating.GratingTab.is_active">[docs]</a>
+    <span class="k">def</span> <span class="nf">is_active</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the state of the isactive checkbox.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">isactive</span><span class="o">.</span><span class="n">isChecked</span><span class="p">()</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Matteo Mazzanti.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

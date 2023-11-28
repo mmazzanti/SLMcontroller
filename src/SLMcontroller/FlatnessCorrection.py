@@ -12,7 +12,8 @@ __maintainer__ = "Matteo Mazzanti"
 from PyQt6.QtWidgets import QMessageBox, QLineEdit, QGridLayout, QCheckBox, QVBoxLayout, QHBoxLayout, QWidget, QPushButton
 from PyQt6.QtCore import Qt
 
-import utils as utils
+
+import SLMcontroller.utils as utils
 import cv2
 import os
 import numpy as np

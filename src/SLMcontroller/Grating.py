@@ -12,7 +12,7 @@ __maintainer__ = "Matteo Mazzanti"
 from PyQt6.QtWidgets import QDoubleSpinBox, QGridLayout, QVBoxLayout, QWidget, QSlider, QCheckBox
 from PyQt6.QtCore import Qt
 
-import utils as utils
+import SLMcontroller.utils as utils
 import numpy as np
 
 class GratingTab(QWidget):

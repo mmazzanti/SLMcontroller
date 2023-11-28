@@ -14,7 +14,7 @@ from PyQt6.QtCore import QThread, QMutex, QWaitCondition
 
 
 
-import utils as utils
+import SLMcontroller.utils as utils
 import numpy as np
 
 from numba import jit
@@ -558,7 +558,8 @@ class SpotOptimTab_ext(QWidget):
         Returns:
             json(IDs list): Returns information on the current IDs list in json format for remote clients.
         """
-        return jsonify(IDsList = self.theOptimizer.ids_list)
+        print(type(self.theOptimizer.ids_list))
+        return jsonify(IDsList = np.array(self.theOptimizer.ids_list).tolist())
 
     def triggerNextStep(self):
         """Triggers the next step of the algorithm

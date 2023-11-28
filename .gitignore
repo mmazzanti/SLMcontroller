@@ -4,11 +4,11 @@
 OLD/*
 Meshes/*
 
-
+testing/*
 docs/Makefile
 docs/make.bat
-
-
+dist/*
+src/SLMcontroller.egg-info/*
 
 tests/
 Data/

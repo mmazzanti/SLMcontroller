@@ -11,7 +11,7 @@ The software offers various types of static holograms that are normally used in 
 From the main window it is possible to add new optical elements and toggle the rendering of the hologram.
 
 <p align="center">
-   <img src="Documentation/Img/main.png" alt="Main window"/>
+   <img src="https://raw.githubusercontent.com/mmazzanti/SLMcontroller/12940b5a5612849118dabec2827f9234863ffdce/Documentation/Img/main.png" alt="Main window"/>
 </p>
 
 Before doing that however the user should set-up the parameters of his SLM and system. 
@@ -41,7 +41,7 @@ In the settings windows it is possible to set the following parameters :
 
 
 <p align="center">
-   <img src="Documentation/Img/settings.png" alt="Program settings"/>
+   <img src="https://raw.githubusercontent.com/mmazzanti/SLMcontroller/12940b5a5612849118dabec2827f9234863ffdce/Documentation/Img/settings.png" alt="Program settings"/>
 </p>
 ## Optical elements
 It is possible to add various optical elements through the software. Each optical element will have a control tab where it can be activated/deactivated. The final full phase pattern rendered on the SLM will be the sum of all the active optical elements at the moment the user press "Show hologram/Update"
@@ -54,7 +54,7 @@ Some optical elements have a "live update" feature. The live update permits to c
 It is possible to add a virtual lens on the SLM by generating a fresnel lens pattern (fresnel zone plate). This can be done by adding a new "lens" optical element.
 
 <p align="center">
-   <img src="Documentation/Img/lens.png" alt="Fresnel lens tab"/>
+   <img src="https://raw.githubusercontent.com/mmazzanti/SLMcontroller/12940b5a5612849118dabec2827f9234863ffdce/Documentation/Img/lens.png" alt="Fresnel lens tab"/>
 </p>
 
 In the tab it is possible to control the focus of the lens and activate/deactivate it.
@@ -62,14 +62,14 @@ In the tab it is possible to control the focus of the lens and activate/deactiva
 ### Grating
 This adds a virtual diffractive grating. It is possible to control the lines/mm of the grating and its orientation. The number of lines per pixel will depend on the size of each SLM pixel.
 <p align="center">
-   <img src="Documentation/Img/grating.png" alt="Grating tab"/>
+   <img src="https://raw.githubusercontent.com/mmazzanti/SLMcontroller/12940b5a5612849118dabec2827f9234863ffdce/Documentation/Img/grating.png" alt="Grating tab"/>
 </p>
 
 ### Flatness correction
 This controls the flatness correction pattern typically used to correct for flatness imperfections of the SLM. The SLM manufacturing company normally provides a file for each wavelength supported by the SLM. This can be added to the total pattern by selecting the proper flatness correction for the used wavelength.
 The flatness correction is normally an image and its size should match the SLM size.
 <p align="center">
-   <img src="Documentation/Img/flatness_correction.png" alt="Flatness correction tab"/>
+   <img src="https://raw.githubusercontent.com/mmazzanti/SLMcontroller/12940b5a5612849118dabec2827f9234863ffdce/Documentation/Img/flatness_correction.png" alt="Flatness correction tab"/>
 </p>
 
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-"""widget.py: Main GUI window of the SLM controller. 
+"""MainGUI.py: Main GUI window of the SLM controller. 
 This file contains the main window of the GUI and the SLM window."""
 
 __author__ = "Matteo Mazzanti"
@@ -19,19 +19,18 @@ from PyQt6.QtWidgets import QMessageBox, QLabel, QGridLayout, QWidget, QPushButt
 from PyQt6.QtGui import QPixmap, QImage, QAction, QScreen
 
 import numpy as np
-import sys
-import settings as settings
-import camera.camera as camera
-import Phase_pattern as Phase_pattern
-import OpticalElement as opticalElement
-import Lens as Lens
-import Grating as Grating
-import FourierWavefrontOptim as FourierWavefrontOptim
-import WavefrontOptim as WavefrontOptim
-import FlatnessCorrection as FlatnessCorrection
-import Meshing_process as Meshing_process
-import Remote_control as Remote_control
-import utils as utils
+import SLMcontroller.settings as settings
+import SLMcontroller.camera.camera as camera
+import SLMcontroller.Phase_pattern as Phase_pattern
+import SLMcontroller.OpticalElement as opticalElement
+import SLMcontroller.Lens as Lens
+import SLMcontroller.Grating as Grating
+import SLMcontroller.FourierWavefrontOptim as FourierWavefrontOptim
+import SLMcontroller.WavefrontOptim as WavefrontOptim
+import SLMcontroller.FlatnessCorrection as FlatnessCorrection
+import SLMcontroller.Meshing_process as Meshing_process
+import SLMcontroller.Remote_control as Remote_control
+import SLMcontroller.utils as utils
 
 from multiprocessing import RLock, Event, Queue, Process, Condition, freeze_support
 import threading
@@ -220,7 +219,7 @@ class HologramsManager():
         file_object = BytesIO()
         img.save(file_object, 'PNG')
         file_object.seek(0)
-        return app.send_image(file_object,'pattern.png')
+        return self.app.send_image(file_object,'pattern.png')
 
     #This part corrects for the non-linearities of the SLM
     #For each wavelenght the maximum phase value is given by the company
@@ -286,7 +285,7 @@ class First(QtWidgets.QMainWindow):
         SLMWindow (QWidget): QWidget used to render the complete hologram on the SLM.
         mesh_process (Process): Process used to handle the meshing of the optical elements.
     """
-    def __init__(self, mesh_process, parent=None):
+    def __init__(self, mesh_process, flaskApp, queue, eventsDict, conditionsDict, parent=None):
         """Initializes the main window of the GUI
 
         Args:
@@ -325,15 +324,22 @@ class First(QtWidgets.QMainWindow):
         toolbar = QToolBar("Quick actions")
         grid = QGridLayout()
 
+        # Flask app for remote control
+        self.flaskApp = flaskApp
+        # Queue used to communicate with the meshing process
+        self.queue = queue
+        # Events and conditions used to synchronize the meshing process with the GUI
+        self.eventsDict, self.conditionsDict = eventsDict, conditionsDict
+
         self.InitMenu(menu,buttons)
         self.InitToolbar(toolbar,buttons)
         self.addToolBar(toolbar)
         self.InitLayout(grid,buttons)
 
-        flask_thread = threading.Thread(target=lambda: app.run(host=self.settings_manager.get_IPclient(), port=self.settings_manager.get_Portclient(), debug=True, use_reloader=False))
+        flask_thread = threading.Thread(target=lambda: self.flaskApp.run(host=self.settings_manager.get_IPclient(), port=self.settings_manager.get_Portclient(), debug=True, use_reloader=False))
         flask_thread.daemon = True
         flask_thread.start()
-        app.add_endpoint('/phasePattern', 'phasePattern', self.holograms_manager.getPhasePatternIMG, methods=['GET'])
+        self.flaskApp.add_endpoint('/phasePattern', 'phasePattern', self.holograms_manager.getPhasePatternIMG, methods=['GET'])
 
 
         wid.setLayout(grid)
@@ -419,7 +425,7 @@ class First(QtWidgets.QMainWindow):
         - /optimiser/phasePattern : returns the current phase pattern
         """
         tab = WavefrontOptim.SpotOptimTab_ext(self.pattern_generator, self.settings_manager, self.holograms_manager, self.mesh_process)
-        tab.setEventsHandlers(eventsDict, conditionsDict, queue)
+        tab.setEventsHandlers(self.eventsDict, self.conditionsDict, self.queue)
         self.tabwidget.addTab(tab,"Optimizer (ext)")
         self.holograms_manager.addElementToList(id(tab), tab)
         self.add_endpoint_connections(tab)
@@ -454,23 +460,23 @@ class First(QtWidgets.QMainWindow):
         Args:
             tab (WavefrontOptim.SpotOptimTab_ext): SpotOptimTab_ext object (for now the only tab that uses the endpoints)
         """
-        app.add_endpoint('/optimiser/start', 'optimiser/start', tab.start_algo_rem, methods=['GET'])
+        self.flaskApp.add_endpoint('/optimiser/start', 'optimiser/start', tab.start_algo_rem, methods=['GET'])
 
-        app.add_endpoint('/optimiser/nextStep', 'optimiser/nextStep', tab.triggerNextStep, methods=['GET'])
+        self.flaskApp.add_endpoint('/optimiser/nextStep', 'optimiser/nextStep', tab.triggerNextStep, methods=['GET'])
 
-        app.add_endpoint('/optimiser/refzone', 'optimiser/refzone', tab.getProbRefZone, methods=['GET'])
-        app.add_endpoint('/optimiser/refzone/<refzone>', 'optimiser/refzone/<int:refzone>', tab.setRefZone, methods=['GET'])
+        self.flaskApp.add_endpoint('/optimiser/refzone', 'optimiser/refzone', tab.getProbRefZone, methods=['GET'])
+        self.flaskApp.add_endpoint('/optimiser/refzone/<refzone>', 'optimiser/refzone/<int:refzone>', tab.setRefZone, methods=['GET'])
 
-        app.add_endpoint('/optimiser/probzone', 'optimiser/probzone', tab.getProbRefZone, methods=['GET'])
-        app.add_endpoint('/optimiser/probzone/<probzone>', 'optimiser/probzone/<int:probzone>', tab.setProbZone, methods=['GET'])
+        self.flaskApp.add_endpoint('/optimiser/probzone', 'optimiser/probzone', tab.getProbRefZone, methods=['GET'])
+        self.flaskApp.add_endpoint('/optimiser/probzone/<probzone>', 'optimiser/probzone/<int:probzone>', tab.setProbZone, methods=['GET'])
 
-        app.add_endpoint('/optimiser/phase', 'optimiser/phase', tab.getProbRefZone, methods=['GET'])
-        app.add_endpoint('/optimiser/phase/<phase>', 'optimiser/phase/<float:phase>', tab.setPhase, methods=['GET'])
-        app.add_endpoint('/optimiser/phaseStep/<float:phaseStep>', 'optimiser/phaseStep/<phaseStep>', tab.setPhaseStep, methods=['GET'])
+        self.flaskApp.add_endpoint('/optimiser/phase', 'optimiser/phase', tab.getProbRefZone, methods=['GET'])
+        self.flaskApp.add_endpoint('/optimiser/phase/<phase>', 'optimiser/phase/<float:phase>', tab.setPhase, methods=['GET'])
+        self.flaskApp.add_endpoint('/optimiser/phaseStep/<float:phaseStep>', 'optimiser/phaseStep/<phaseStep>', tab.setPhaseStep, methods=['GET'])
 
-        app.add_endpoint('/optimiser/IDsList', 'optimiser/IDsList', tab.getIdsList, methods=['GET'])
-        app.add_endpoint('/optimiser/phasePattern', 'optimiser/phasePattern', tab.getPhasePatternIMG, methods=['GET'])
-        app.add_endpoint('/optimiser/phasePatternData', 'optimiser/phasePatternData', tab.getPhasePattern, methods=['GET'])
+        self.flaskApp.add_endpoint('/optimiser/IDsList', 'optimiser/IDsList', tab.getIdsList, methods=['GET'])
+        self.flaskApp.add_endpoint('/optimiser/phasePattern', 'optimiser/phasePattern', tab.getPhasePatternIMG, methods=['GET'])
+        self.flaskApp.add_endpoint('/optimiser/phasePatternData', 'optimiser/phasePatternData', tab.getPhasePattern, methods=['GET'])
 
     def on_pushButton_clicked(self):
         """Updates the SLM window with the new phase pattern. Connected to the "Show Hologram/Update" button.
@@ -560,56 +566,9 @@ class First(QtWidgets.QMainWindow):
         """
         self.holograms_manager.updateSLMWindow()
 
-def closeSecondProcess():
-    """Closes the GMSH GUI process
-    """
-    eventsDict['terminate'].set()
-    eventsDict['generalEvent'].set()
 
-    
-
-
-# Events list for :
-# 0 - Mesh generation request
-# 1 - General event to check user request
-# 2 - Parse mesh request
-# 3 - Show GUI event (opens GMSH GUI)
-# 4 - Close GUI event (closes GMSH GUI)
-# 5 - Terminate meshing handler process
-# 6 - Save meshing file
-# 7 - Load meshing file
-eventsDict = {"genMesh":Event(),"generalEvent":Event(),"parseMesh":Event(),"showGUI":Event(),"closeGUI":Event(),"terminate":Event(), "savefile":Event(), "loadfile":Event()}
-
-
-# Conditions list for :
-# 0 - Mesh generation request
-# 1 - Save meshing file
-# 2 - Load meshing file
-conditionsDict = {"parsingCond":Condition(), "savefile":Condition(), "loadfile":Condition()}
-
-if __name__ == '__main__':
-    # Pyinstaller fix
-    freeze_support()
-
-    # Flask app for remote control
-    flask_app = Remote_control.Flask(__name__)
-    app = Remote_control.NetworkManager(flask_app)
-    # Queue for inter-processing communication
-    queue = Queue()
-
-    # Start meshing process, this will be needed to show GMESH GUI in another process
-    mesh_process = Meshing_process.MeshingHandler(eventsDict, conditionsDict, queue, 0, 0, 0 , "")
-    mesh_process.start()
-
-    # Start GUI
-    GUIapp = QtWidgets.QApplication(sys.argv)
-    GUIapp.setStyle('macos')
-    main = First(mesh_process)
-    main.show()
-    retval = GUIapp.exec()
-
-    # Close Gmsh process
-    closeSecondProcess()
-    
-    sys.exit(retval)
-
+# def closeSecondProcess(eventsDict):
+#     """Closes the GMSH GUI process
+#     """
+#     eventsDict['terminate'].set()
+#     eventsDict['generalEvent'].set()

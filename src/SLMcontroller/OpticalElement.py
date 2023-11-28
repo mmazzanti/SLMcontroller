@@ -13,8 +13,8 @@ __maintainer__ = "Matteo Mazzanti"
 from PyQt6.QtWidgets import QDialog, QDialogButtonBox, QGridLayout, QGroupBox, QComboBox, QVBoxLayout
 
 
-import utils as utils
-import Lens as Lens
+import SLMcontroller.utils as utils
+import SLMcontroller.Lens as Lens
 
 
 class opticalElement(QDialog):

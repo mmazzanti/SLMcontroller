@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import QMessageBox, QLineEdit, QGridLayout, QComboBox, QVBo
 from PyQt6.QtCore import Qt, QThread
 
 import os
-import utils as utils
+import SLMcontroller.utils as utils
 import gmsh
 import numpy as np
 import time
