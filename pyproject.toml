@@ -17,7 +17,7 @@ name = "SLMcontroller"  # Required
 #
 # For a discussion on single-sourcing the version, see
 # https://packaging.python.org/guides/single-sourcing-package-version/
-version = "1.0.2"  # Required
+version = "1.0.3"  # Required
 
 # This is a one-line description or tagline of what your project does. This
 # corresponds to the "Summary" metadata field:
@@ -107,7 +107,7 @@ classifiers = [  # Optional
 # https://packaging.python.org/discussions/install-requires-vs-requirements/
 
 dependencies = [ # Optional
-  "flask", "gmsh", "PyQt6", "Pillow", "opencv-python", "numpy", "numba",
+  "flask >= 3", "gmsh >= 4", "PyQt6", "Pillow", "opencv-python", "numpy", "numba",
 ]
 
 [tool.setuptools.packages.find]
@@ -161,5 +161,5 @@ SLMcontroller = "SLMcontroller:main"
 [build-system]
 # These are the assumed default build requirements from pip:
 # https://pip.pypa.io/en/stable/reference/pip/#pep-517-and-518-support
-requires = ["setuptools>=43.0.0", "wheel", "PyQt6", ]
+requires = ["setuptools>=43.0.0", "wheel"]
 build-backend = "setuptools.build_meta"
