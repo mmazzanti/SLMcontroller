@@ -46,7 +46,7 @@ class SpotOptimTab(QWidget):
         self.mesh = np.zeros((self.SLM_y_res, self.SLM_x_res))
         self.ids_list = []
         self.frequencies = []
-        self.theOptimizer = OptimizerAlgorithm(self.hologram_manager,self.cameraWindow)
+        self.theOptimizer = OptimizerAlgorithmFourier(self.hologram_manager,self.cameraWindow)
 
 
     def __del__(self):
@@ -224,7 +224,7 @@ class SpotOptimTab(QWidget):
         # self.th_active = False
         # time.sleep(2)
         
-class OptimizerAlgorithm(QThread):
+class OptimizerAlgorithmFourier(QThread):
 
     def __init__(self,hologram_manager,cameraWindow):
         QThread.__init__(self)

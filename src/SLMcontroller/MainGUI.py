@@ -11,7 +11,7 @@ __maintainer__ = "Matteo Mazzanti"
 # -*- coding: utf-8 -*-
 
 from PyQt6 import QtCore, QtWidgets
-from PyQt6.QtCore import Qt, QSize, QWaitCondition
+from PyQt6.QtCore import Qt, QSize
 from PyQt6.QtWidgets import QMessageBox, QLabel, QGridLayout, QWidget, QPushButton, QToolBar, QApplication, QHBoxLayout, QSpinBox, QVBoxLayout, QFileDialog, QLabel, QErrorMessage, QTabWidget
 from PyQt6.QtGui import QPixmap, QImage, QAction, QScreen
 
@@ -563,9 +563,3 @@ class First(QtWidgets.QMainWindow):
         """
         self.holograms_manager.updateSLMWindow()
 
-
-# def closeSecondProcess(eventsDict):
-#     """Closes the GMSH GUI process
-#     """
-#     eventsDict['terminate'].set()
-#     eventsDict['generalEvent'].set()

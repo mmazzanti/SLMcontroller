@@ -18,7 +18,8 @@
         <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" /> 
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="SLMcontroller" href="modules.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -51,6 +52,80 @@
 <li class="toctree-l1"><a class="reference internal" href="settings.html">Settings</a></li>
 <li class="toctree-l1"><a class="reference internal" href="calibration.html">Calibration</a></li>
 </ul>
+<p class="caption" role="heading"><span class="caption-text">Modules</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">SLMcontroller</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">SLMcontroller package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-SLMcontroller.FlatnessCorrection">SLMcontroller.FlatnessCorrection module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#SLMcontroller.FlatnessCorrection.FlatnessCorrectionTab"><code class="docutils literal notranslate"><span class="pre">FlatnessCorrectionTab</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-SLMcontroller.FourierWavefrontOptim">SLMcontroller.FourierWavefrontOptim module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithmFourier"><code class="docutils literal notranslate"><span class="pre">OptimizerAlgorithmFourier</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#SLMcontroller.FourierWavefrontOptim.SpotOptimTab"><code class="docutils literal notranslate"><span class="pre">SpotOptimTab</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-SLMcontroller.Grating">SLMcontroller.Grating module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#SLMcontroller.Grating.GratingTab"><code class="docutils literal notranslate"><span class="pre">GratingTab</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-SLMcontroller.Lens">SLMcontroller.Lens module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#SLMcontroller.Lens.LensTab"><code class="docutils literal notranslate"><span class="pre">LensTab</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-SLMcontroller.Meshing_process">SLMcontroller.Meshing_process module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#SLMcontroller.Meshing_process.MeshingHandler"><code class="docutils literal notranslate"><span class="pre">MeshingHandler</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-SLMcontroller.OpticalElement">SLMcontroller.OpticalElement module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#SLMcontroller.OpticalElement.opticalElement"><code class="docutils literal notranslate"><span class="pre">opticalElement</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-SLMcontroller.Phase_pattern">SLMcontroller.Phase_pattern module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#SLMcontroller.Phase_pattern.Patter_generator"><code class="docutils literal notranslate"><span class="pre">Patter_generator</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-SLMcontroller.Remote_control">SLMcontroller.Remote_control module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#SLMcontroller.Remote_control.NetworkManager"><code class="docutils literal notranslate"><span class="pre">NetworkManager</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-SLMcontroller.MainGUI">SLMcontroller.MainGUI module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#SLMcontroller.MainGUI.First"><code class="docutils literal notranslate"><span class="pre">First</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#SLMcontroller.MainGUI.HologramsManager"><code class="docutils literal notranslate"><span class="pre">HologramsManager</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#SLMcontroller.MainGUI.SLMWindow"><code class="docutils literal notranslate"><span class="pre">SLMWindow</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-SLMcontroller.WavefrontOptim">SLMcontroller.WavefrontOptim module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#SLMcontroller.WavefrontOptim.OptimizerAlgorithm"><code class="docutils literal notranslate"><span class="pre">OptimizerAlgorithm</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#SLMcontroller.WavefrontOptim.SpotOptimTab_ext"><code class="docutils literal notranslate"><span class="pre">SpotOptimTab_ext</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#SLMcontroller.WavefrontOptim.load_pattern"><code class="docutils literal notranslate"><span class="pre">load_pattern()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#SLMcontroller.WavefrontOptim.next_step_fast"><code class="docutils literal notranslate"><span class="pre">next_step_fast()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-SLMcontroller.settings">SLMcontroller.settings module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#SLMcontroller.settings.IP4Validator"><code class="docutils literal notranslate"><span class="pre">IP4Validator</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#SLMcontroller.settings.SettingsDialog"><code class="docutils literal notranslate"><span class="pre">SettingsDialog</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#SLMcontroller.settings.SettingsManager"><code class="docutils literal notranslate"><span class="pre">SettingsManager</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-SLMcontroller.utils">SLMcontroller.utils module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#SLMcontroller.utils.DoubleSlider"><code class="docutils literal notranslate"><span class="pre">DoubleSlider</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#SLMcontroller.utils.ImageWidget"><code class="docutils literal notranslate"><span class="pre">ImageWidget</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#SLMcontroller.utils.MeshVisualizer"><code class="docutils literal notranslate"><span class="pre">MeshVisualizer</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#SLMcontroller.utils.OpticalTabBar"><code class="docutils literal notranslate"><span class="pre">OpticalTabBar</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-SLMcontroller">Module contents</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#SLMcontroller.closeSecondProcess"><code class="docutils literal notranslate"><span class="pre">closeSecondProcess()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#SLMcontroller.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
 
         </div>
       </div>
@@ -66,6 +141,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">SLMcontroller</a></li>
       <li class="breadcrumb-item active">SLMcontroller package</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/SLMcontroller.rst.txt" rel="nofollow"> View page source</a>
@@ -176,15 +252,11 @@
 <dt class="sig sig-object py" id="SLMcontroller.FlatnessCorrection.FlatnessCorrectionTab.Init_GUI">
 <span class="sig-name descname"><span class="pre">Init_GUI</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/FlatnessCorrection.html#FlatnessCorrectionTab.Init_GUI"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.FlatnessCorrection.FlatnessCorrectionTab.Init_GUI" title="Link to this definition"></a></dt>
 <dd><p class="linemarker linemarker-1">Generates the GUI elements of the tab.</p>
-<dl class="simple">
-<dt>The tab contains:</dt><dd><ul class="simple">
-<li><p class="linemarker linemarker-4">A text field to enter the path to the flatness correction image.</p></li>
-<li><p class="linemarker linemarker-5">A button to load the flatness correction image.</p></li>
-<li><p class="linemarker linemarker-6">A checkbox to activate the flatness correction.</p></li>
-<li><p class="linemarker linemarker-7">An image preview of the flatness correction image.</p></li>
-</ul>
-</dd>
-</dl>
+<p class="linemarker linemarker-3">The tab contains:
+- A text field to enter the path to the flatness correction image.
+- A button to load the flatness correction image.
+- A checkbox to activate the flatness correction.
+- An image preview of the flatness correction image.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -224,77 +296,77 @@
 <section id="module-SLMcontroller.FourierWavefrontOptim">
 <span id="slmcontroller-fourierwavefrontoptim-module"></span><h2>SLMcontroller.FourierWavefrontOptim module<a class="headerlink" href="#module-SLMcontroller.FourierWavefrontOptim" title="Link to this heading"></a></h2>
 <dl class="py class">
-<dt class="sig sig-object py" id="SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithm">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">SLMcontroller.FourierWavefrontOptim.</span></span><span class="sig-name descname"><span class="pre">OptimizerAlgorithm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hologram_manager</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cameraWindow</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/FourierWavefrontOptim.html#OptimizerAlgorithm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithm" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithmFourier">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">SLMcontroller.FourierWavefrontOptim.</span></span><span class="sig-name descname"><span class="pre">OptimizerAlgorithmFourier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hologram_manager</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cameraWindow</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/FourierWavefrontOptim.html#OptimizerAlgorithmFourier"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithmFourier" title="Link to this definition"></a></dt>
 <dd><p class="linemarker linemarker-1">Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QThread</span></code></p>
 <dl class="py method">
-<dt class="sig sig-object py" id="SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithm.GeneratePhases">
-<span class="sig-name descname"><span class="pre">GeneratePhases</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/FourierWavefrontOptim.html#OptimizerAlgorithm.GeneratePhases"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithm.GeneratePhases" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithmFourier.GeneratePhases">
+<span class="sig-name descname"><span class="pre">GeneratePhases</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/FourierWavefrontOptim.html#OptimizerAlgorithmFourier.GeneratePhases"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithmFourier.GeneratePhases" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithm.SaveData">
-<span class="sig-name descname"><span class="pre">SaveData</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/FourierWavefrontOptim.html#OptimizerAlgorithm.SaveData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithm.SaveData" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithmFourier.SaveData">
+<span class="sig-name descname"><span class="pre">SaveData</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/FourierWavefrontOptim.html#OptimizerAlgorithmFourier.SaveData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithmFourier.SaveData" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithm.SaveImg">
-<span class="sig-name descname"><span class="pre">SaveImg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/FourierWavefrontOptim.html#OptimizerAlgorithm.SaveImg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithm.SaveImg" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithmFourier.SaveImg">
+<span class="sig-name descname"><span class="pre">SaveImg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/FourierWavefrontOptim.html#OptimizerAlgorithmFourier.SaveImg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithmFourier.SaveImg" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithm.activate">
-<span class="sig-name descname"><span class="pre">activate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/FourierWavefrontOptim.html#OptimizerAlgorithm.activate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithm.activate" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithmFourier.activate">
+<span class="sig-name descname"><span class="pre">activate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/FourierWavefrontOptim.html#OptimizerAlgorithmFourier.activate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithmFourier.activate" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithm.initPattern">
-<span class="sig-name descname"><span class="pre">initPattern</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/FourierWavefrontOptim.html#OptimizerAlgorithm.initPattern"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithm.initPattern" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithmFourier.initPattern">
+<span class="sig-name descname"><span class="pre">initPattern</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/FourierWavefrontOptim.html#OptimizerAlgorithmFourier.initPattern"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithmFourier.initPattern" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithm.isPhaseReady">
-<span class="sig-name descname"><span class="pre">isPhaseReady</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/FourierWavefrontOptim.html#OptimizerAlgorithm.isPhaseReady"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithm.isPhaseReady" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithmFourier.isPhaseReady">
+<span class="sig-name descname"><span class="pre">isPhaseReady</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/FourierWavefrontOptim.html#OptimizerAlgorithmFourier.isPhaseReady"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithmFourier.isPhaseReady" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithm.isThreadReady">
-<span class="sig-name descname"><span class="pre">isThreadReady</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/FourierWavefrontOptim.html#OptimizerAlgorithm.isThreadReady"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithm.isThreadReady" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithmFourier.isThreadReady">
+<span class="sig-name descname"><span class="pre">isThreadReady</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/FourierWavefrontOptim.html#OptimizerAlgorithmFourier.isThreadReady"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithmFourier.isThreadReady" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithm.run">
-<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/FourierWavefrontOptim.html#OptimizerAlgorithm.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithm.run" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithmFourier.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/FourierWavefrontOptim.html#OptimizerAlgorithmFourier.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithmFourier.run" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithm.setFrequencies">
-<span class="sig-name descname"><span class="pre">setFrequencies</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frequencies</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/FourierWavefrontOptim.html#OptimizerAlgorithm.setFrequencies"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithm.setFrequencies" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithmFourier.setFrequencies">
+<span class="sig-name descname"><span class="pre">setFrequencies</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frequencies</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/FourierWavefrontOptim.html#OptimizerAlgorithmFourier.setFrequencies"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithmFourier.setFrequencies" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithm.setIdsList">
-<span class="sig-name descname"><span class="pre">setIdsList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ids_list</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/FourierWavefrontOptim.html#OptimizerAlgorithm.setIdsList"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithm.setIdsList" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithmFourier.setIdsList">
+<span class="sig-name descname"><span class="pre">setIdsList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ids_list</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/FourierWavefrontOptim.html#OptimizerAlgorithmFourier.setIdsList"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithmFourier.setIdsList" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithm.setMesh">
-<span class="sig-name descname"><span class="pre">setMesh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mesh</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/FourierWavefrontOptim.html#OptimizerAlgorithm.setMesh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithm.setMesh" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithmFourier.setMesh">
+<span class="sig-name descname"><span class="pre">setMesh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mesh</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/FourierWavefrontOptim.html#OptimizerAlgorithmFourier.setMesh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithmFourier.setMesh" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithm.setSLMsizes">
-<span class="sig-name descname"><span class="pre">setSLMsizes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">SLM_x_res</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">SLM_y_res</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/FourierWavefrontOptim.html#OptimizerAlgorithm.setSLMsizes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithm.setSLMsizes" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithmFourier.setSLMsizes">
+<span class="sig-name descname"><span class="pre">setSLMsizes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">SLM_x_res</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">SLM_y_res</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/FourierWavefrontOptim.html#OptimizerAlgorithmFourier.setSLMsizes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithmFourier.setSLMsizes" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithm.setTimes">
-<span class="sig-name descname"><span class="pre">setTimes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">times</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/FourierWavefrontOptim.html#OptimizerAlgorithm.setTimes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithm.setTimes" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithmFourier.setTimes">
+<span class="sig-name descname"><span class="pre">setTimes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">times</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/FourierWavefrontOptim.html#OptimizerAlgorithmFourier.setTimes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithmFourier.setTimes" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithm.stop">
-<span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/FourierWavefrontOptim.html#OptimizerAlgorithm.stop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithm.stop" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithmFourier.stop">
+<span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/FourierWavefrontOptim.html#OptimizerAlgorithmFourier.stop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithmFourier.stop" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1177,12 +1249,503 @@ Based on Flask.</p>
 </dd></dl>
 
 </section>
-<section id="slmcontroller-slm-controller-module">
-<h2>SLMcontroller.SLM_controller module<a class="headerlink" href="#slmcontroller-slm-controller-module" title="Link to this heading"></a></h2>
+<section id="module-SLMcontroller.MainGUI">
+<span id="slmcontroller-maingui-module"></span><h2>SLMcontroller.MainGUI module<a class="headerlink" href="#module-SLMcontroller.MainGUI" title="Link to this heading"></a></h2>
+<p class="linemarker linemarker-1">MainGUI.py: Main GUI window of the SLM controller.
+This file contains the main window of the GUI and the SLM window.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="SLMcontroller.MainGUI.First">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">SLMcontroller.MainGUI.</span></span><span class="sig-name descname"><span class="pre">First</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mesh_process</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flaskApp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">queue</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eventsDict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conditionsDict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/MainGUI.html#First"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.MainGUI.First" title="Link to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QMainWindow</span></code></p>
+<p class="linemarker linemarker-1">Main window of the GUI. This class is used to initialize the GUI and the SLM window.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">settings_manager</span> <span class="pre">(</span></span></dt>
+<dd><p class="linemarker linemarker-5">SettingsManager:): Settings manager class used to retrieve the SLM settings.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">pattern_generator</span> <span class="pre">(</span></span></dt>
+<dd><p class="linemarker linemarker-9">Pattern_generator:): Pattern generator class used to generate the phase patterns.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SLMcontroller.MainGUI.First.pattern">
+<span class="sig-name descname"><span class="pre">pattern</span></span><a class="headerlink" href="#SLMcontroller.MainGUI.First.pattern" title="Link to this definition"></a></dt>
+<dd><p class="linemarker linemarker-13">Phase pattern currently being rendered on the SLM.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p class="linemarker linemarker-15">np.array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SLMcontroller.MainGUI.First.tabwidget">
+<span class="sig-name descname"><span class="pre">tabwidget</span></span><a class="headerlink" href="#SLMcontroller.MainGUI.First.tabwidget" title="Link to this definition"></a></dt>
+<dd><p class="linemarker linemarker-19">QTabWidget parent object. Used to locate the parent object in the screen and open warnings/errors on top of that.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p class="linemarker linemarker-21">QTabWidget</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SLMcontroller.MainGUI.First.cameraWindow">
+<span class="sig-name descname"><span class="pre">cameraWindow</span></span><a class="headerlink" href="#SLMcontroller.MainGUI.First.cameraWindow" title="Link to this definition"></a></dt>
+<dd><p class="linemarker linemarker-25">QWidget used to display the camera feed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p class="linemarker linemarker-27">QWidget</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">holograms_manager</span> <span class="pre">(</span></span></dt>
+<dd><p class="linemarker linemarker-31">HologramsManager:): HologramsManager class used to render the optical elements patterns on the SLM window.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SLMcontroller.MainGUI.First.possible_optical_elements">
+<span class="sig-name descname"><span class="pre">possible_optical_elements</span></span><a class="headerlink" href="#SLMcontroller.MainGUI.First.possible_optical_elements" title="Link to this definition"></a></dt>
+<dd><p class="linemarker linemarker-35">List of possible optical elements that can be added to the GUI.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p class="linemarker linemarker-37">list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SLMcontroller.MainGUI.First.tabs_constructors">
+<span class="sig-name descname"><span class="pre">tabs_constructors</span></span><a class="headerlink" href="#SLMcontroller.MainGUI.First.tabs_constructors" title="Link to this definition"></a></dt>
+<dd><p class="linemarker linemarker-41">List of functions used to generate the optical elements tabs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p class="linemarker linemarker-43">list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SLMcontroller.MainGUI.First.SLMWindow">
+<span class="sig-name descname"><span class="pre">SLMWindow</span></span><a class="headerlink" href="#SLMcontroller.MainGUI.First.SLMWindow" title="Link to this definition"></a></dt>
+<dd><p class="linemarker linemarker-47">QWidget used to render the complete hologram on the SLM.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p class="linemarker linemarker-49">QWidget</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SLMcontroller.MainGUI.First.mesh_process">
+<span class="sig-name descname"><span class="pre">mesh_process</span></span><a class="headerlink" href="#SLMcontroller.MainGUI.First.mesh_process" title="Link to this definition"></a></dt>
+<dd><p class="linemarker linemarker-53">Process used to handle the meshing of the optical elements.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p class="linemarker linemarker-55">Process</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.MainGUI.First.AddOpticalElement">
+<span class="sig-name descname"><span class="pre">AddOpticalElement</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/MainGUI.html#First.AddOpticalElement"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.MainGUI.First.AddOpticalElement" title="Link to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">Adds a new optical element to the GUI</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.MainGUI.First.InitButtons">
+<span class="sig-name descname"><span class="pre">InitButtons</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">buttons</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/MainGUI.html#First.InitButtons"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.MainGUI.First.InitButtons" title="Link to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">Initializes the GUI buttons</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>buttons</strong> (<em>dict</em>) – Dictionary of buttons used in the GUI</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.MainGUI.First.InitLayout">
+<span class="sig-name descname"><span class="pre">InitLayout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buttons</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/MainGUI.html#First.InitLayout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.MainGUI.First.InitLayout" title="Link to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">Initializes the GUI layout</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>grid</strong> (<em>QGridLayout</em>) – QGridLayout of the GUI</p></li>
+<li><p><strong>buttons</strong> (<em>Dict</em>) – Dictionary of buttons used in the GUI</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.MainGUI.First.InitMenu">
+<span class="sig-name descname"><span class="pre">InitMenu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">menu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buttons</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/MainGUI.html#First.InitMenu"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.MainGUI.First.InitMenu" title="Link to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">Initializes the GUI menu</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>menu</strong> (<em>QGridLayout</em>) – QGridLayout of the GUI</p></li>
+<li><p><strong>buttons</strong> (<em>dict</em>) – Dictionary of buttons used in the GUI</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.MainGUI.First.InitToolbar">
+<span class="sig-name descname"><span class="pre">InitToolbar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">toolbar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">buttons</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/MainGUI.html#First.InitToolbar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.MainGUI.First.InitToolbar" title="Link to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">Initializes the GUI toolbar</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>toolbar</strong> (<em>QToolBar</em>) – QToolBar of the GUI</p></li>
+<li><p><strong>buttons</strong> (<em>dict</em>) – Dictionary of buttons used in the GUI</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.MainGUI.First.LUT_tab">
+<span class="sig-name descname"><span class="pre">LUT_tab</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/MainGUI.html#First.LUT_tab"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.MainGUI.First.LUT_tab" title="Link to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">Creates a new LUT tab and adds it to the tabwidget.
+.. todo:: Implement LUT tab</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.MainGUI.First.Spot_optim">
+<span class="sig-name descname"><span class="pre">Spot_optim</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/MainGUI.html#First.Spot_optim"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.MainGUI.First.Spot_optim" title="Link to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">Creates a new SpotOptimTab tab and adds it to the tabwidget.
+The spot optimization algorithm used in the SpotOptimTab is based on <a class="reference external" href="https://www.frontiersin.org/articles/10.3389/fnano.2022.998656/full">https://www.frontiersin.org/articles/10.3389/fnano.2022.998656/full</a>
+This algorithm relies on a camera to measure the spot intensity where aberrations should be reduced.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.MainGUI.First.Spot_optim_ext">
+<span class="sig-name descname"><span class="pre">Spot_optim_ext</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/MainGUI.html#First.Spot_optim_ext"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.MainGUI.First.Spot_optim_ext" title="Link to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">Creates a new SpotOptimTab_ext tab and adds it to the tabwidget.
+The spot optimization algorithm used in the SpotOptimTab_ext is based on <a class="reference external" href="https://www.nature.com/articles/nphoton.2010.85">https://www.nature.com/articles/nphoton.2010.85</a>
+The algorithm relies on an external feedback for the spot intensity measurement.
+The algorithm steps and parameters can be controlled remotely on the network using the following endpoints:
+- /optimiser/start : starts the algorithm (if already running, triggers a next step)
+- /optimiser/nextStep : triggers the next step of the algorithm (once scaned till the end of the phase pattern, this will return phase = null)
+- /optimiser/refzone : returns the current reference zone
+- /optimiser/refzone/&lt;refzone&gt; : sets the reference zone to &lt;refzone&gt;
+- /optimiser/probzone : returns the current probe zone
+- /optimiser/probzone/&lt;probzone&gt; : sets the probe zone to &lt;probzone&gt;
+- /optimiser/phase : returns the current phase
+- /optimiser/phase/&lt;phase&gt; : sets the phase to &lt;phase&gt;
+- /optimiser/phaseStep/&lt;phaseStep&gt; : sets the phase step to &lt;phaseStep&gt;
+- /optimiser/IDsList : returns the list of IDs of the active optical elements
+- /optimiser/phasePattern : returns the current phase pattern</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.MainGUI.First.add_endpoint_connections">
+<span class="sig-name descname"><span class="pre">add_endpoint_connections</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tab</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/MainGUI.html#First.add_endpoint_connections"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.MainGUI.First.add_endpoint_connections" title="Link to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">Adds the endpoints connections to the Flask app</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>tab</strong> (<a class="reference internal" href="#SLMcontroller.WavefrontOptim.SpotOptimTab_ext" title="SLMcontroller.WavefrontOptim.SpotOptimTab_ext"><em>WavefrontOptim.SpotOptimTab_ext</em></a>) – SpotOptimTab_ext object (for now the only tab that uses the endpoints)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.MainGUI.First.closeEvent">
+<span class="sig-name descname"><span class="pre">closeEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/MainGUI.html#First.closeEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.MainGUI.First.closeEvent" title="Link to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">Closes the SLM window and the GUI
+At the closing event remove all tabs in memory calling their destructor</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.MainGUI.First.closeTab">
+<span class="sig-name descname"><span class="pre">closeTab</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/MainGUI.html#First.closeTab"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.MainGUI.First.closeTab" title="Link to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">Closes the selected tab</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>index</strong> (<em>int</em>) – Index of the tab to be closed</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.MainGUI.First.edit_SLM_settings">
+<span class="sig-name descname"><span class="pre">edit_SLM_settings</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/MainGUI.html#First.edit_SLM_settings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.MainGUI.First.edit_SLM_settings" title="Link to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">Opens the settings dialog
+.. todo:: Resizing of the SLM pattern to match the SLM resolution</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.MainGUI.First.flatness_correction_tab">
+<span class="sig-name descname"><span class="pre">flatness_correction_tab</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/MainGUI.html#First.flatness_correction_tab"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.MainGUI.First.flatness_correction_tab" title="Link to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">Creates a new Flatness Correction tab and adds it to the tabwidget</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.MainGUI.First.grating_tab">
+<span class="sig-name descname"><span class="pre">grating_tab</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/MainGUI.html#First.grating_tab"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.MainGUI.First.grating_tab" title="Link to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">Creates a new Grating tab and adds it to the tabwidget</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.MainGUI.First.lens_tab">
+<span class="sig-name descname"><span class="pre">lens_tab</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/MainGUI.html#First.lens_tab"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.MainGUI.First.lens_tab" title="Link to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">Creates a new Lens tab and adds it to the tabwidget</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.MainGUI.First.on_pushButton_clicked">
+<span class="sig-name descname"><span class="pre">on_pushButton_clicked</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/MainGUI.html#First.on_pushButton_clicked"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.MainGUI.First.on_pushButton_clicked" title="Link to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">Updates the SLM window with the new phase pattern. Connected to the “Show Hologram/Update” button.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.MainGUI.First.start_camera">
+<span class="sig-name descname"><span class="pre">start_camera</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/MainGUI.html#First.start_camera"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.MainGUI.First.start_camera" title="Link to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">Starts the camera feed</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.MainGUI.First.update_pattern">
+<span class="sig-name descname"><span class="pre">update_pattern</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/MainGUI.html#First.update_pattern"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.MainGUI.First.update_pattern" title="Link to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">Updates the SLM window with the new phase pattern</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.MainGUI.First.zernike_tab">
+<span class="sig-name descname"><span class="pre">zernike_tab</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/MainGUI.html#First.zernike_tab"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.MainGUI.First.zernike_tab" title="Link to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">Creates a new Zernike tab and adds it to the tabwidget.
+.. todo:: Implement Zernike tab</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="SLMcontroller.MainGUI.HologramsManager">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">SLMcontroller.MainGUI.</span></span><span class="sig-name descname"><span class="pre">HologramsManager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">SLMwindow</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">settings_manager</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern_generator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tabwidget</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/MainGUI.html#HologramsManager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.MainGUI.HologramsManager" title="Link to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p class="linemarker linemarker-1">Class in charge of handling the rendering of the optical elements patterns on the SLM window.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SLMcontroller.MainGUI.HologramsManager.SLMWindow">
+<span class="sig-name descname"><span class="pre">SLMWindow</span></span><a class="headerlink" href="#SLMcontroller.MainGUI.HologramsManager.SLMWindow" title="Link to this definition"></a></dt>
+<dd><p class="linemarker linemarker-5">QWidget used to render the complete hologram on the SLM.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p class="linemarker linemarker-7">QWidget</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">settings_manager</span> <span class="pre">(</span></span></dt>
+<dd><p class="linemarker linemarker-11">SettingsManager:): Settings manager class used to retrieve the SLM settings.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">pattern_generator</span> <span class="pre">(</span></span></dt>
+<dd><p class="linemarker linemarker-15">Pattern_generator:): Pattern generator class used to generate the phase patterns.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SLMcontroller.MainGUI.HologramsManager.tabwidget">
+<span class="sig-name descname"><span class="pre">tabwidget</span></span><a class="headerlink" href="#SLMcontroller.MainGUI.HologramsManager.tabwidget" title="Link to this definition"></a></dt>
+<dd><p class="linemarker linemarker-19">QTabWidget parent object. Used to locate the parent object in the screen and open warnings/errors on top of that.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p class="linemarker linemarker-21">QTabWidget</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.MainGUI.HologramsManager.RenormalizePattern">
+<span class="sig-name descname"><span class="pre">RenormalizePattern</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/MainGUI.html#HologramsManager.RenormalizePattern"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.MainGUI.HologramsManager.RenormalizePattern" title="Link to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">Corrects for the non-linearities of the SLM.
+For each wavelenght the maximum uint8 phase value is usually given by the company but can also be measured
+e.g. at 760nm 255(2pi) —&gt; 226(new 2pi value)
+So we need to renormalize the hologram such that value%226</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.MainGUI.HologramsManager.addElementToList">
+<span class="sig-name descname"><span class="pre">addElementToList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elem</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/MainGUI.html#HologramsManager.addElementToList"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.MainGUI.HologramsManager.addElementToList" title="Link to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">Adds an optical element to the list of active optical elements</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>int</em>) – Optical element identifier</p></li>
+<li><p><strong>elem</strong> (<em>OpticalElement</em><em>, </em><em>QWidget</em>) – Optical element object (usually a QWidget)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.MainGUI.HologramsManager.closeSLMWindow">
+<span class="sig-name descname"><span class="pre">closeSLMWindow</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/MainGUI.html#HologramsManager.closeSLMWindow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.MainGUI.HologramsManager.closeSLMWindow" title="Link to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">Closes the SLM window</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.MainGUI.HologramsManager.getElementsList">
+<span class="sig-name descname"><span class="pre">getElementsList</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/MainGUI.html#HologramsManager.getElementsList"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.MainGUI.HologramsManager.getElementsList" title="Link to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">Returns the list of active optical elements</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dictionary of active optical elements</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.MainGUI.HologramsManager.getPatterns">
+<span class="sig-name descname"><span class="pre">getPatterns</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/MainGUI.html#HologramsManager.getPatterns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.MainGUI.HologramsManager.getPatterns" title="Link to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">This function gets all the patterns from the active elements and combines them</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.MainGUI.HologramsManager.getPhasePatternIMG">
+<span class="sig-name descname"><span class="pre">getPhasePatternIMG</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/MainGUI.html#HologramsManager.getPhasePatternIMG"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.MainGUI.HologramsManager.getPhasePatternIMG" title="Link to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">Returns the phase pattern currently being rendered on the SLM in PNG image format for remote clients.
+Calls the NetworkManager.send_image which sends the contents of a file to the client.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.MainGUI.HologramsManager.isListEmpty">
+<span class="sig-name descname"><span class="pre">isListEmpty</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/MainGUI.html#HologramsManager.isListEmpty"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.MainGUI.HologramsManager.isListEmpty" title="Link to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">Checks if the list of active optical elements is empty</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if the list is empty, False otherwise</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>Bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.MainGUI.HologramsManager.removeAll">
+<span class="sig-name descname"><span class="pre">removeAll</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/MainGUI.html#HologramsManager.removeAll"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.MainGUI.HologramsManager.removeAll" title="Link to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">Removes all the active optical elements from the list</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.MainGUI.HologramsManager.removeElementFromList">
+<span class="sig-name descname"><span class="pre">removeElementFromList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/MainGUI.html#HologramsManager.removeElementFromList"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.MainGUI.HologramsManager.removeElementFromList" title="Link to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">Removes an optical element from the list of active optical elements</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>id</strong> (<em>int</em>) – Optical element identifier</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.MainGUI.HologramsManager.renderAlgorithmPattern">
+<span class="sig-name descname"><span class="pre">renderAlgorithmPattern</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pattern</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">others</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/MainGUI.html#HologramsManager.renderAlgorithmPattern"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.MainGUI.HologramsManager.renderAlgorithmPattern" title="Link to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">Renders a phase pattern generated from an algorithm, bypassing the active optical elements</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pattern</strong> (<em>np.array</em>) – Phase pattern to be rendered on the SLM</p></li>
+<li><p><strong>others</strong> (<em>bool</em>) – If True, the other active optical elements will be rendered on the SLM as well</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.MainGUI.HologramsManager.renderPattern">
+<span class="sig-name descname"><span class="pre">renderPattern</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/MainGUI.html#HologramsManager.renderPattern"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.MainGUI.HologramsManager.renderPattern" title="Link to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">This function does the actual render of the phase pattern. Updates the QPixmap used on the SLM window</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.MainGUI.HologramsManager.updateSLMWindow">
+<span class="sig-name descname"><span class="pre">updateSLMWindow</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/MainGUI.html#HologramsManager.updateSLMWindow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.MainGUI.HologramsManager.updateSLMWindow" title="Link to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">This function updates the SLM window when a new pattern is generated</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="SLMcontroller.MainGUI.SLMWindow">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">SLMcontroller.MainGUI.</span></span><span class="sig-name descname"><span class="pre">SLMWindow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">resX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resY</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">SLMmonitor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/MainGUI.html#SLMWindow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.MainGUI.SLMWindow" title="Link to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QWidget</span></code></p>
+<p class="linemarker linemarker-1">SLM window. The window is used to display the phase pattern generated by the optical elements.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SLMcontroller.MainGUI.SLMWindow.lbl">
+<span class="sig-name descname"><span class="pre">lbl</span></span><a class="headerlink" href="#SLMcontroller.MainGUI.SLMWindow.lbl" title="Link to this definition"></a></dt>
+<dd><p class="linemarker linemarker-5">QLabel for pattern image rendering.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p class="linemarker linemarker-7">QLabel</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.MainGUI.SLMWindow.Change_window">
+<span class="sig-name descname"><span class="pre">Change_window</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">SLMmonitor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/MainGUI.html#SLMWindow.Change_window"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.MainGUI.SLMWindow.Change_window" title="Link to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">Moves the SLM window to the selected monitor</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>SLMmonitor</strong> (<em>int</em>) – Monitor identifier</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.MainGUI.SLMWindow.ResizeWindow">
+<span class="sig-name descname"><span class="pre">ResizeWindow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">resX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resY</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/MainGUI.html#SLMWindow.ResizeWindow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.MainGUI.SLMWindow.ResizeWindow" title="Link to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">Resize the SLM window to the selected resolution</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>resX</strong> (<em>int</em>) – Window width</p></li>
+<li><p><strong>resY</strong> (<em>int</em>) – Window height</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SLMcontroller.MainGUI.SLMWindow.UpdatePattern">
+<span class="sig-name descname"><span class="pre">UpdatePattern</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pixmap</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/MainGUI.html#SLMWindow.UpdatePattern"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.MainGUI.SLMWindow.UpdatePattern" title="Link to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">Updates the SLM window with the new phase pattern</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>pixmap</strong> (<em>QPixmap</em>) – QPixmap of the new phase pattern</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">lbl</span></span><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dd><p class="linemarker linemarker-1">Move QLabel at the top left corner of the SLM screen</p>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 <section id="module-SLMcontroller.WavefrontOptim">
 <span id="slmcontroller-wavefrontoptim-module"></span><h2>SLMcontroller.WavefrontOptim module<a class="headerlink" href="#module-SLMcontroller.WavefrontOptim" title="Link to this heading"></a></h2>
-<p class="linemarker linemarker-1">SpotOptim.py: Generates a tab used to control the spot optimization process.</p>
+<p class="linemarker linemarker-1">WavefrontOptim.py: Generates a tab used to control the spot optimization process.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="SLMcontroller.WavefrontOptim.OptimizerAlgorithm">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">SLMcontroller.WavefrontOptim.</span></span><span class="sig-name descname"><span class="pre">OptimizerAlgorithm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hologram_manager</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern_generator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">settings_manager</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mutex</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">waitCond</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/WavefrontOptim.html#OptimizerAlgorithm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.WavefrontOptim.OptimizerAlgorithm" title="Link to this definition"></a></dt>
@@ -1471,8 +2034,8 @@ If they were it needs to regenerate the grating patterns</p>
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="id0">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">phase</span></span><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="id4">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">phase</span></span><a class="headerlink" href="#id4" title="Link to this definition"></a></dt>
 <dd><p class="linemarker linemarker-1">Returns the phase of the reference zone.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -2376,7 +2939,7 @@ If it is not specified then 0 is used.
 arguments is the optional sequence of the names of the signal’s arguments.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p class="linemarker linemarker-13">pyqtSignal(<a href="#id4"><span class="problematic" id="id5">*</span></a>types, name</p>
+<dd class="field-odd"><p class="linemarker linemarker-13">pyqtSignal(<a href="#id6"><span class="problematic" id="id7">*</span></a>types, name</p>
 </dd>
 <dt class="field-even">Type<span class="colon">:</span></dt>
 <dd class="field-even"><p class="linemarker linemarker-15">str = …, revision</p>
@@ -2492,6 +3055,7 @@ arguments is the optional sequence of the names of the signal’s arguments.</p>
 </section>
 <section id="module-SLMcontroller">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-SLMcontroller" title="Link to this heading"></a></h2>
+<p class="linemarker linemarker-1">__init__.py: Defines main function for the program.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="SLMcontroller.closeSecondProcess">
 <span class="sig-prename descclassname"><span class="pre">SLMcontroller.</span></span><span class="sig-name descname"><span class="pre">closeSecondProcess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eventsDict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller.html#closeSecondProcess"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.closeSecondProcess" title="Link to this definition"></a></dt>
@@ -2509,7 +3073,9 @@ arguments is the optional sequence of the names of the signal’s arguments.</p>
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="SLMcontroller" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
 
   <hr/>
 

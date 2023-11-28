@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SLMcontroller.MainGUI &mdash; SLM controller 1.0.3 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=baaebd52"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            SLM controller
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../howto.html">How to</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../settings.html">Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../calibration.html">Calibration</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">SLM controller</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../SLMcontroller.html">SLMcontroller</a></li>
+      <li class="breadcrumb-item active">SLMcontroller.MainGUI</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for SLMcontroller.MainGUI</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="sd">&quot;&quot;&quot;MainGUI.py: Main GUI window of the SLM controller. </span>
+<span class="sd">This file contains the main window of the GUI and the SLM window.&quot;&quot;&quot;</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Matteo Mazzanti&quot;</span>
+<span class="n">__copyright__</span> <span class="o">=</span> <span class="s2">&quot;Copyright 2022, Matteo Mazzanti&quot;</span>
+<span class="n">__license__</span> <span class="o">=</span> <span class="s2">&quot;GNU GPL v3&quot;</span>
+<span class="n">__maintainer__</span> <span class="o">=</span> <span class="s2">&quot;Matteo Mazzanti&quot;</span>
+
+<span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">from</span> <span class="nn">PyQt6</span> <span class="kn">import</span> <span class="n">QtCore</span><span class="p">,</span> <span class="n">QtWidgets</span>
+<span class="kn">from</span> <span class="nn">PyQt6.QtCore</span> <span class="kn">import</span> <span class="n">Qt</span><span class="p">,</span> <span class="n">QSize</span><span class="p">,</span> <span class="n">QWaitCondition</span>
+<span class="kn">from</span> <span class="nn">PyQt6.QtWidgets</span> <span class="kn">import</span> <span class="n">QMessageBox</span><span class="p">,</span> <span class="n">QLabel</span><span class="p">,</span> <span class="n">QGridLayout</span><span class="p">,</span> <span class="n">QWidget</span><span class="p">,</span> <span class="n">QPushButton</span><span class="p">,</span> <span class="n">QToolBar</span><span class="p">,</span> <span class="n">QApplication</span><span class="p">,</span> <span class="n">QHBoxLayout</span><span class="p">,</span> <span class="n">QSpinBox</span><span class="p">,</span> <span class="n">QVBoxLayout</span><span class="p">,</span> <span class="n">QFileDialog</span><span class="p">,</span> <span class="n">QLabel</span><span class="p">,</span> <span class="n">QErrorMessage</span><span class="p">,</span> <span class="n">QTabWidget</span>
+<span class="kn">from</span> <span class="nn">PyQt6.QtGui</span> <span class="kn">import</span> <span class="n">QPixmap</span><span class="p">,</span> <span class="n">QImage</span><span class="p">,</span> <span class="n">QAction</span><span class="p">,</span> <span class="n">QScreen</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">SLMcontroller.settings</span> <span class="k">as</span> <span class="nn">settings</span>
+<span class="kn">import</span> <span class="nn">SLMcontroller.camera.camera</span> <span class="k">as</span> <span class="nn">camera</span>
+<span class="kn">import</span> <span class="nn">SLMcontroller.Phase_pattern</span> <span class="k">as</span> <span class="nn">Phase_pattern</span>
+<span class="kn">import</span> <span class="nn">SLMcontroller.OpticalElement</span> <span class="k">as</span> <span class="nn">opticalElement</span>
+<span class="kn">import</span> <span class="nn">SLMcontroller.Lens</span> <span class="k">as</span> <span class="nn">Lens</span>
+<span class="kn">import</span> <span class="nn">SLMcontroller.Grating</span> <span class="k">as</span> <span class="nn">Grating</span>
+<span class="kn">import</span> <span class="nn">SLMcontroller.FourierWavefrontOptim</span> <span class="k">as</span> <span class="nn">FourierWavefrontOptim</span>
+<span class="kn">import</span> <span class="nn">SLMcontroller.WavefrontOptim</span> <span class="k">as</span> <span class="nn">WavefrontOptim</span>
+<span class="kn">import</span> <span class="nn">SLMcontroller.FlatnessCorrection</span> <span class="k">as</span> <span class="nn">FlatnessCorrection</span>
+<span class="kn">import</span> <span class="nn">SLMcontroller.Meshing_process</span> <span class="k">as</span> <span class="nn">Meshing_process</span>
+<span class="kn">import</span> <span class="nn">SLMcontroller.Remote_control</span> <span class="k">as</span> <span class="nn">Remote_control</span>
+<span class="kn">import</span> <span class="nn">SLMcontroller.utils</span> <span class="k">as</span> <span class="nn">utils</span>
+
+<span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="kn">import</span> <span class="n">RLock</span><span class="p">,</span> <span class="n">Event</span><span class="p">,</span> <span class="n">Queue</span><span class="p">,</span> <span class="n">Process</span><span class="p">,</span> <span class="n">Condition</span><span class="p">,</span> <span class="n">freeze_support</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">BytesIO</span>
+
+
+<div class="viewcode-block" id="SLMWindow">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.MainGUI.SLMWindow">[docs]</a>
+<span class="k">class</span> <span class="nc">SLMWindow</span><span class="p">(</span><span class="n">QWidget</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;SLM window. The window is used to display the phase pattern generated by the optical elements.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        lbl (QLabel): QLabel for pattern image rendering.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">resX</span><span class="p">,</span><span class="n">resY</span><span class="p">,</span><span class="n">SLMmonitor</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initializes the SLM pattern window</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            resX (int): Window width</span>
+<span class="sd">            resY (int): Window height</span>
+<span class="sd">            window (int): Monitor number to display the window on</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            QWidget: QWidget of the SLM window</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="n">layout</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">layout</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Change_window</span><span class="p">(</span><span class="n">SLMmonitor</span><span class="p">)</span>
+
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Set necessary flags for the window to be on top of the GUI &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowFlags</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">WindowType</span><span class="o">.</span><span class="n">BypassWindowManagerHint</span> <span class="o">|</span> <span class="n">Qt</span><span class="o">.</span><span class="n">WindowType</span><span class="o">.</span><span class="n">X11BypassWindowManagerHint</span> <span class="o">|</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">Qt</span><span class="o">.</span><span class="n">WindowType</span><span class="o">.</span><span class="n">FramelessWindowHint</span> <span class="o">|</span> <span class="n">Qt</span><span class="o">.</span><span class="n">WindowType</span><span class="o">.</span><span class="n">WindowStaysOnTopHint</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ResizeWindow</span><span class="p">(</span><span class="n">resX</span><span class="p">,</span><span class="n">resY</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">lbl</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Move QLabel at the top left corner of the SLM screen &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lbl</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Set QLabel background color to black </span>
+<span class="sd">        (this is useful the SLM resolution doesn&#39;t match the usable number of pixels on the SLM) &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">&quot;background-color: black;&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Resize pattern window size</span>
+<div class="viewcode-block" id="SLMWindow.Change_window">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.MainGUI.SLMWindow.Change_window">[docs]</a>
+    <span class="k">def</span> <span class="nf">Change_window</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">SLMmonitor</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Moves the SLM window to the selected monitor</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            SLMmonitor (int): Monitor identifier</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">monitors</span> <span class="o">=</span> <span class="n">QScreen</span><span class="o">.</span><span class="n">virtualSiblings</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="p">())</span>
+        <span class="c1"># If the user selected a monitor that doesn&#39;t exist, use the primary monitor</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">monitors</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">SLMmonitor</span><span class="p">:</span>
+            <span class="n">SLMmonitor</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">monitor</span> <span class="o">=</span> <span class="n">monitors</span><span class="p">[</span><span class="n">SLMmonitor</span><span class="p">]</span><span class="o">.</span><span class="n">availableGeometry</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">monitor</span><span class="o">.</span><span class="n">left</span><span class="p">(),</span> <span class="n">monitor</span><span class="o">.</span><span class="n">top</span><span class="p">())</span></div>
+
+
+<div class="viewcode-block" id="SLMWindow.ResizeWindow">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.MainGUI.SLMWindow.ResizeWindow">[docs]</a>
+    <span class="k">def</span> <span class="nf">ResizeWindow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">resX</span><span class="p">,</span><span class="n">resY</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Resize the SLM window to the selected resolution</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            resX (int): Window width</span>
+<span class="sd">            resY (int): Window height</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setFixedSize</span><span class="p">(</span><span class="n">QSize</span><span class="p">(</span><span class="n">resX</span><span class="p">,</span><span class="n">resY</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="SLMWindow.UpdatePattern">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.MainGUI.SLMWindow.UpdatePattern">[docs]</a>
+    <span class="k">def</span> <span class="nf">UpdatePattern</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">pixmap</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Updates the SLM window with the new phase pattern</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            pixmap (QPixmap): QPixmap of the new phase pattern</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lbl</span><span class="o">.</span><span class="n">setPixmap</span><span class="p">(</span><span class="n">pixmap</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lbl</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">pixmap</span><span class="o">.</span><span class="n">width</span><span class="p">(),</span> <span class="n">pixmap</span><span class="o">.</span><span class="n">height</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span></div>
+</div>
+
+
+<div class="viewcode-block" id="HologramsManager">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.MainGUI.HologramsManager">[docs]</a>
+<span class="k">class</span> <span class="nc">HologramsManager</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class in charge of handling the rendering of the optical elements patterns on the SLM window.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        SLMWindow (QWidget): QWidget used to render the complete hologram on the SLM.</span>
+<span class="sd">        settings_manager (:SettingsManager:): Settings manager class used to retrieve the SLM settings.</span>
+<span class="sd">        pattern_generator (:Pattern_generator:): Pattern generator class used to generate the phase patterns.</span>
+<span class="sd">        tabwidget (QTabWidget): QTabWidget parent object. Used to locate the parent object in the screen and open warnings/errors on top of that.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">SLMwindow</span><span class="p">,</span> <span class="n">settings_manager</span><span class="p">,</span> <span class="n">pattern_generator</span><span class="p">,</span><span class="n">tabwidget</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initializes the HologramsManager class</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            optical_elements (dict): Dictionary of active optical elements.</span>
+<span class="sd">            SLMwindow (QWidget): QWidget used to render the complete hologram on the SLM.</span>
+<span class="sd">            settings_manager (:SettingsManager:): Settings manager class used to retrieve the SLM settings.</span>
+<span class="sd">            pattern_generator (:Pattern_generator:): Pattern generator class used to generate the phase patterns.</span>
+<span class="sd">            tabwidget (QTabWidget): QTabWidget parent object. Used to locate the parent object in the screen and open warnings/errors on top of that.</span>
+<span class="sd">            pattern (np.array): Phase pattern currently being rendered on the SLM.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">optical_elements</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SLMWindow</span> <span class="o">=</span> <span class="n">SLMwindow</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings_manager</span> <span class="o">=</span> <span class="n">settings_manager</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pattern_generator</span> <span class="o">=</span> <span class="n">pattern_generator</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tabwidget</span> <span class="o">=</span> <span class="n">tabwidget</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pattern</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="HologramsManager.addElementToList">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.MainGUI.HologramsManager.addElementToList">[docs]</a>
+    <span class="k">def</span> <span class="nf">addElementToList</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">elem</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Adds an optical element to the list of active optical elements</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            id (int): Optical element identifier</span>
+<span class="sd">            elem (OpticalElement, QWidget): Optical element object (usually a QWidget)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">optical_elements</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">elem</span></div>
+
+
+<div class="viewcode-block" id="HologramsManager.getElementsList">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.MainGUI.HologramsManager.getElementsList">[docs]</a>
+    <span class="k">def</span> <span class="nf">getElementsList</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the list of active optical elements</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            dict: Dictionary of active optical elements</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">optical_elements</span></div>
+
+
+<div class="viewcode-block" id="HologramsManager.isListEmpty">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.MainGUI.HologramsManager.isListEmpty">[docs]</a>
+    <span class="k">def</span> <span class="nf">isListEmpty</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks if the list of active optical elements is empty</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Bool: True if the list is empty, False otherwise</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">optical_elements</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span></div>
+
+
+<div class="viewcode-block" id="HologramsManager.removeAll">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.MainGUI.HologramsManager.removeAll">[docs]</a>
+    <span class="k">def</span> <span class="nf">removeAll</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Removes all the active optical elements from the list</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">todelete</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">el</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">optical_elements</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">el</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">todelete</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">el</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">el</span> <span class="ow">in</span> <span class="n">todelete</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">optical_elements</span><span class="p">[</span><span class="n">el</span><span class="p">]</span><span class="o">.</span><span class="fm">__del__</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="HologramsManager.removeElementFromList">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.MainGUI.HologramsManager.removeElementFromList">[docs]</a>
+    <span class="k">def</span> <span class="nf">removeElementFromList</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Removes an optical element from the list of active optical elements</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            id (int): Optical element identifier</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">optical_elements</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="HologramsManager.closeSLMWindow">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.MainGUI.HologramsManager.closeSLMWindow">[docs]</a>
+    <span class="k">def</span> <span class="nf">closeSLMWindow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Closes the SLM window</span>
+
+<span class="sd">        Todo:</span>
+<span class="sd">            This function is still to be implemented (did not see it&#39;s usage so far)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span> <span class="c1">#Hide SLM window</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Destructor of the HologramsManager class. Empties the list of active optical elements and closes the SLM window.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">removeAll</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SLMWindow</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">optical_elements</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># This function is used to render a pattern generated from an algorithm, </span>
+    <span class="c1"># bypassing the active optical elements</span>
+<div class="viewcode-block" id="HologramsManager.renderAlgorithmPattern">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.MainGUI.HologramsManager.renderAlgorithmPattern">[docs]</a>
+    <span class="k">def</span> <span class="nf">renderAlgorithmPattern</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pattern</span><span class="p">,</span> <span class="n">others</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Renders a phase pattern generated from an algorithm, bypassing the active optical elements</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            pattern (np.array): Phase pattern to be rendered on the SLM</span>
+<span class="sd">            others (bool): If True, the other active optical elements will be rendered on the SLM as well</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;rendering&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pattern</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pattern</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pattern_generator</span><span class="o">.</span><span class="n">empty_pattern</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings_manager</span><span class="o">.</span><span class="n">get_X_res</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings_manager</span><span class="o">.</span><span class="n">get_Y_res</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pattern</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">pattern</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">others</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">getPatterns</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">renderPattern</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="HologramsManager.getPhasePatternIMG">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.MainGUI.HologramsManager.getPhasePatternIMG">[docs]</a>
+    <span class="k">def</span> <span class="nf">getPhasePatternIMG</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the phase pattern currently being rendered on the SLM in PNG image format for remote clients.</span>
+<span class="sd">            Calls the NetworkManager.send_image which sends the contents of a file to the client.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pattern</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">404</span>
+        <span class="n">img</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pattern</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;uint8&#39;</span><span class="p">))</span>
+        <span class="n">file_object</span> <span class="o">=</span> <span class="n">BytesIO</span><span class="p">()</span>
+        <span class="n">img</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">file_object</span><span class="p">,</span> <span class="s1">&#39;PNG&#39;</span><span class="p">)</span>
+        <span class="n">file_object</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">send_image</span><span class="p">(</span><span class="n">file_object</span><span class="p">,</span><span class="s1">&#39;pattern.png&#39;</span><span class="p">)</span></div>
+
+
+    <span class="c1">#This part corrects for the non-linearities of the SLM</span>
+    <span class="c1">#For each wavelenght the maximum phase value is given by the company</span>
+    <span class="c1">#e.g. at 760nm 255 ---&gt; 226</span>
+    <span class="c1">#So we need to renormalize the hologram such that value%226</span>
+<div class="viewcode-block" id="HologramsManager.RenormalizePattern">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.MainGUI.HologramsManager.RenormalizePattern">[docs]</a>
+    <span class="k">def</span> <span class="nf">RenormalizePattern</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Corrects for the non-linearities of the SLM. </span>
+<span class="sd">        For each wavelenght the maximum uint8 phase value is usually given by the company but can also be measured</span>
+<span class="sd">        e.g. at 760nm 255(2pi) ---&gt; 226(new 2pi value)</span>
+<span class="sd">        So we need to renormalize the hologram such that value%226</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pattern</span> <span class="o">=</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">pattern</span><span class="o">%</span><span class="mi">256</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings_manager</span><span class="o">.</span><span class="n">get_phase_correction</span><span class="p">())</span><span class="o">/</span><span class="mi">255</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="HologramsManager.getPatterns">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.MainGUI.HologramsManager.getPatterns">[docs]</a>
+    <span class="k">def</span> <span class="nf">getPatterns</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;This function gets all the patterns from the active elements and combines them</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">el</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">optical_elements</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">el</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">optical_elements</span><span class="p">[</span><span class="n">el</span><span class="p">]</span><span class="o">.</span><span class="n">is_active</span><span class="p">():</span>
+                    <span class="n">pattern_from_el</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">optical_elements</span><span class="p">[</span><span class="n">el</span><span class="p">]</span><span class="o">.</span><span class="n">get_pattern</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">pattern_from_el</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings_manager</span><span class="o">.</span><span class="n">get_X_res</span><span class="p">())</span> <span class="ow">or</span> <span class="p">(</span><span class="n">pattern_from_el</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings_manager</span><span class="o">.</span><span class="n">get_Y_res</span><span class="p">())</span> <span class="p">:</span>
+                        <span class="n">dlg</span> <span class="o">=</span> <span class="n">QMessageBox</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tabwidget</span><span class="p">)</span>
+                        <span class="n">dlg</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">QMessageBox</span><span class="o">.</span><span class="n">Icon</span><span class="o">.</span><span class="n">Warning</span><span class="p">)</span>
+                        <span class="n">dlg</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s2">&quot;WARNING!&quot;</span><span class="p">)</span>
+                        <span class="n">dlg</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s2">&quot;One of the optical elements don&#39;t match with the SLM resolution. Please check the settings.&quot;</span><span class="p">)</span>
+                        <span class="n">button</span> <span class="o">=</span> <span class="n">dlg</span><span class="o">.</span><span class="n">exec</span><span class="p">()</span>
+                        <span class="k">if</span> <span class="n">button</span> <span class="o">==</span> <span class="n">QMessageBox</span><span class="o">.</span><span class="n">StandardButton</span><span class="o">.</span><span class="n">Ok</span><span class="p">:</span>
+                            <span class="k">return</span>	<span class="mi">4444</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">pattern</span> <span class="o">+=</span> <span class="n">pattern_from_el</span></div>
+
+
+<div class="viewcode-block" id="HologramsManager.renderPattern">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.MainGUI.HologramsManager.renderPattern">[docs]</a>
+    <span class="k">def</span> <span class="nf">renderPattern</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;This function does the actual render of the phase pattern. Updates the QPixmap used on the SLM window</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">RenormalizePattern</span><span class="p">()</span>
+        <span class="n">q_img</span> <span class="o">=</span> <span class="n">QImage</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pattern</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings_manager</span><span class="o">.</span><span class="n">get_X_res</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings_manager</span><span class="o">.</span><span class="n">get_Y_res</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings_manager</span><span class="o">.</span><span class="n">get_X_res</span><span class="p">(),</span> <span class="n">QImage</span><span class="o">.</span><span class="n">Format</span><span class="o">.</span><span class="n">Format_Grayscale8</span><span class="p">)</span>
+<span class="c1">#        label = QLabel(self)</span>
+        <span class="n">pixmap</span> <span class="o">=</span> <span class="n">QPixmap</span><span class="p">(</span><span class="n">q_img</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SLMWindow</span><span class="o">.</span><span class="n">ResizeWindow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings_manager</span><span class="o">.</span><span class="n">get_X_win_size</span><span class="p">(),</span><span class="bp">self</span><span class="o">.</span><span class="n">settings_manager</span><span class="o">.</span><span class="n">get_Y_win_size</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SLMWindow</span><span class="o">.</span><span class="n">UpdatePattern</span><span class="p">(</span><span class="n">pixmap</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="HologramsManager.updateSLMWindow">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.MainGUI.HologramsManager.updateSLMWindow">[docs]</a>
+    <span class="k">def</span> <span class="nf">updateSLMWindow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;This function updates the SLM window when a new pattern is generated</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pattern</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pattern_generator</span><span class="o">.</span><span class="n">empty_pattern</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings_manager</span><span class="o">.</span><span class="n">get_X_res</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings_manager</span><span class="o">.</span><span class="n">get_Y_res</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">getPatterns</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">renderPattern</span><span class="p">()</span></div>
+</div>
+
+        
+
+
+<div class="viewcode-block" id="First">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.MainGUI.First">[docs]</a>
+<span class="k">class</span> <span class="nc">First</span><span class="p">(</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QMainWindow</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Main window of the GUI. This class is used to initialize the GUI and the SLM window.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        settings_manager (:SettingsManager:): Settings manager class used to retrieve the SLM settings.</span>
+<span class="sd">        pattern_generator (:Pattern_generator:): Pattern generator class used to generate the phase patterns.</span>
+<span class="sd">        pattern (np.array): Phase pattern currently being rendered on the SLM.</span>
+<span class="sd">        tabwidget (QTabWidget): QTabWidget parent object. Used to locate the parent object in the screen and open warnings/errors on top of that.</span>
+<span class="sd">        cameraWindow (QWidget): QWidget used to display the camera feed.</span>
+<span class="sd">        holograms_manager (:HologramsManager:): HologramsManager class used to render the optical elements patterns on the SLM window.</span>
+<span class="sd">        possible_optical_elements (list): List of possible optical elements that can be added to the GUI.</span>
+<span class="sd">        tabs_constructors (list): List of functions used to generate the optical elements tabs.</span>
+<span class="sd">        SLMWindow (QWidget): QWidget used to render the complete hologram on the SLM.</span>
+<span class="sd">        mesh_process (Process): Process used to handle the meshing of the optical elements.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mesh_process</span><span class="p">,</span> <span class="n">flaskApp</span><span class="p">,</span> <span class="n">queue</span><span class="p">,</span> <span class="n">eventsDict</span><span class="p">,</span> <span class="n">conditionsDict</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initializes the main window of the GUI</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            mesh_process (Process): Process used to handle the meshing of the optical elements.</span>
+<span class="sd">            parent (_type_, optional): Parent class. Defaults to None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">First</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setMinimumSize</span><span class="p">(</span><span class="n">QSize</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">700</span><span class="p">))</span>
+        <span class="c1">#centerPoint = QGuiApplication.primaryScreen().availableGeometry()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s2">&quot;SLM hologram control&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings_manager</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">SettingsManager</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pattern_generator</span> <span class="o">=</span> <span class="n">Phase_pattern</span><span class="o">.</span><span class="n">Patter_generator</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pattern</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1">#self.tabwidget = </span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tabwidget</span> <span class="o">=</span> <span class="n">QTabWidget</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tabwidget</span><span class="o">.</span><span class="n">setTabBar</span><span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">OpticalTabBar</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tabwidget</span><span class="o">.</span><span class="n">setUsesScrollButtons</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tabwidget</span><span class="o">.</span><span class="n">setTabsClosable</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cameraWindow</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tabwidget</span><span class="o">.</span><span class="n">tabCloseRequested</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">closeTab</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mesh_process</span> <span class="o">=</span> <span class="n">mesh_process</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">SLMWindow</span> <span class="o">=</span> <span class="n">SLMWindow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings_manager</span><span class="o">.</span><span class="n">get_X_res</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings_manager</span><span class="o">.</span><span class="n">get_Y_res</span><span class="p">(),</span><span class="bp">self</span><span class="o">.</span><span class="n">settings_manager</span><span class="o">.</span><span class="n">get_SLM_window</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">holograms_manager</span> <span class="o">=</span> <span class="n">HologramsManager</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">SLMWindow</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings_manager</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pattern_generator</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">tabwidget</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">possible_optical_elements</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Lens&quot;</span><span class="p">,</span> <span class="s2">&quot;Grating&quot;</span><span class="p">,</span> <span class="s2">&quot;Flatness correction&quot;</span><span class="p">,</span> <span class="s2">&quot;Zernike&quot;</span><span class="p">,</span> <span class="s2">&quot;LUT&quot;</span><span class="p">,</span> <span class="s2">&quot;Spot optimization&quot;</span><span class="p">,</span> <span class="s2">&quot;Spot optimization (ext)&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tabs_constructors</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">lens_tab</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">grating_tab</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">flatness_correction_tab</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">zernike_tab</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">LUT_tab</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Spot_optim</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Spot_optim_ext</span><span class="p">]</span>
+
+        <span class="n">wid</span> <span class="o">=</span> <span class="n">QtWidgets</span><span class="o">.</span><span class="n">QWidget</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setCentralWidget</span><span class="p">(</span><span class="n">wid</span><span class="p">)</span>
+
+        <span class="n">buttons</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">InitButtons</span><span class="p">(</span><span class="n">buttons</span><span class="p">)</span>
+
+        <span class="n">menu</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">menuBar</span><span class="p">()</span>
+        <span class="n">toolbar</span> <span class="o">=</span> <span class="n">QToolBar</span><span class="p">(</span><span class="s2">&quot;Quick actions&quot;</span><span class="p">)</span>
+        <span class="n">grid</span> <span class="o">=</span> <span class="n">QGridLayout</span><span class="p">()</span>
+
+        <span class="c1"># Flask app for remote control</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">flaskApp</span> <span class="o">=</span> <span class="n">flaskApp</span>
+        <span class="c1"># Queue used to communicate with the meshing process</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">queue</span> <span class="o">=</span> <span class="n">queue</span>
+        <span class="c1"># Events and conditions used to synchronize the meshing process with the GUI</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eventsDict</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">conditionsDict</span> <span class="o">=</span> <span class="n">eventsDict</span><span class="p">,</span> <span class="n">conditionsDict</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">InitMenu</span><span class="p">(</span><span class="n">menu</span><span class="p">,</span><span class="n">buttons</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">InitToolbar</span><span class="p">(</span><span class="n">toolbar</span><span class="p">,</span><span class="n">buttons</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">addToolBar</span><span class="p">(</span><span class="n">toolbar</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">InitLayout</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span><span class="n">buttons</span><span class="p">)</span>
+
+        <span class="n">flask_thread</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">flaskApp</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">settings_manager</span><span class="o">.</span><span class="n">get_IPclient</span><span class="p">(),</span> <span class="n">port</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">settings_manager</span><span class="o">.</span><span class="n">get_Portclient</span><span class="p">(),</span> <span class="n">debug</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">use_reloader</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+        <span class="n">flask_thread</span><span class="o">.</span><span class="n">daemon</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">flask_thread</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">flaskApp</span><span class="o">.</span><span class="n">add_endpoint</span><span class="p">(</span><span class="s1">&#39;/phasePattern&#39;</span><span class="p">,</span> <span class="s1">&#39;phasePattern&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">holograms_manager</span><span class="o">.</span><span class="n">getPhasePatternIMG</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">])</span>
+
+
+        <span class="n">wid</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<div class="viewcode-block" id="First.closeTab">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.MainGUI.First.closeTab">[docs]</a>
+    <span class="k">def</span> <span class="nf">closeTab</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">index</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Closes the selected tab</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            index (int): Index of the tab to be closed</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">widget</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tabwidget</span><span class="o">.</span><span class="n">widget</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">widget</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">widget</span><span class="o">.</span><span class="n">deleteLater</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tabwidget</span><span class="o">.</span><span class="n">removeTab</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">holograms_manager</span><span class="o">.</span><span class="n">removeElementFromList</span><span class="p">(</span><span class="nb">id</span><span class="p">(</span><span class="n">widget</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="First.lens_tab">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.MainGUI.First.lens_tab">[docs]</a>
+    <span class="k">def</span> <span class="nf">lens_tab</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates a new Lens tab and adds it to the tabwidget</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tab</span> <span class="o">=</span> <span class="n">Lens</span><span class="o">.</span><span class="n">LensTab</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pattern_generator</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings_manager</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">holograms_manager</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tabwidget</span><span class="o">.</span><span class="n">addTab</span><span class="p">(</span><span class="n">tab</span><span class="p">,</span><span class="s2">&quot;Lens&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">holograms_manager</span><span class="o">.</span><span class="n">addElementToList</span><span class="p">(</span><span class="nb">id</span><span class="p">(</span><span class="n">tab</span><span class="p">),</span> <span class="n">tab</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="First.grating_tab">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.MainGUI.First.grating_tab">[docs]</a>
+    <span class="k">def</span> <span class="nf">grating_tab</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates a new Grating tab and adds it to the tabwidget</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tab</span> <span class="o">=</span> <span class="n">Grating</span><span class="o">.</span><span class="n">GratingTab</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pattern_generator</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings_manager</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">holograms_manager</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tabwidget</span><span class="o">.</span><span class="n">addTab</span><span class="p">(</span><span class="n">tab</span><span class="p">,</span><span class="s2">&quot;Grating&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">holograms_manager</span><span class="o">.</span><span class="n">addElementToList</span><span class="p">(</span><span class="nb">id</span><span class="p">(</span><span class="n">tab</span><span class="p">),</span> <span class="n">tab</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="First.flatness_correction_tab">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.MainGUI.First.flatness_correction_tab">[docs]</a>
+    <span class="k">def</span> <span class="nf">flatness_correction_tab</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates a new Flatness Correction tab and adds it to the tabwidget</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tab</span> <span class="o">=</span> <span class="n">FlatnessCorrection</span><span class="o">.</span><span class="n">FlatnessCorrectionTab</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pattern_generator</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings_manager</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">holograms_manager</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tabwidget</span><span class="o">.</span><span class="n">addTab</span><span class="p">(</span><span class="n">tab</span><span class="p">,</span><span class="s2">&quot;Flatness Correction&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">holograms_manager</span><span class="o">.</span><span class="n">addElementToList</span><span class="p">(</span><span class="nb">id</span><span class="p">(</span><span class="n">tab</span><span class="p">),</span> <span class="n">tab</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="First.zernike_tab">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.MainGUI.First.zernike_tab">[docs]</a>
+    <span class="k">def</span> <span class="nf">zernike_tab</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates a new Zernike tab and adds it to the tabwidget.</span>
+<span class="sd">            Todo: </span>
+<span class="sd">                Implement Zernike tab</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="First.LUT_tab">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.MainGUI.First.LUT_tab">[docs]</a>
+    <span class="k">def</span> <span class="nf">LUT_tab</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates a new LUT tab and adds it to the tabwidget.</span>
+<span class="sd">            Todo:</span>
+<span class="sd">                Implement LUT tab</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="First.Spot_optim">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.MainGUI.First.Spot_optim">[docs]</a>
+    <span class="k">def</span> <span class="nf">Spot_optim</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates a new SpotOptimTab tab and adds it to the tabwidget.</span>
+<span class="sd">        The spot optimization algorithm used in the SpotOptimTab is based on https://www.frontiersin.org/articles/10.3389/fnano.2022.998656/full</span>
+<span class="sd">        This algorithm relies on a camera to measure the spot intensity where aberrations should be reduced.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cameraWindow</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">dlg</span> <span class="o">=</span> <span class="n">QMessageBox</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="n">dlg</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">QMessageBox</span><span class="o">.</span><span class="n">Icon</span><span class="o">.</span><span class="n">Warning</span><span class="p">)</span>
+            <span class="n">dlg</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s2">&quot;WARNING!&quot;</span><span class="p">)</span>
+            <span class="n">dlg</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s2">&quot;Initialize camera first!&quot;</span><span class="p">)</span>
+            <span class="n">button</span> <span class="o">=</span> <span class="n">dlg</span><span class="o">.</span><span class="n">exec</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">button</span> <span class="o">==</span> <span class="n">QMessageBox</span><span class="o">.</span><span class="n">StandardButton</span><span class="o">.</span><span class="n">Ok</span><span class="p">:</span>
+                <span class="k">return</span>
+        <span class="n">tab</span> <span class="o">=</span> <span class="n">FourierWavefrontOptim</span><span class="o">.</span><span class="n">SpotOptimTab</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pattern_generator</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings_manager</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">holograms_manager</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">cameraWindow</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tabwidget</span><span class="o">.</span><span class="n">addTab</span><span class="p">(</span><span class="n">tab</span><span class="p">,</span><span class="s2">&quot;Optimizer (camera)&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">holograms_manager</span><span class="o">.</span><span class="n">addElementToList</span><span class="p">(</span><span class="nb">id</span><span class="p">(</span><span class="n">tab</span><span class="p">),</span> <span class="n">tab</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="First.Spot_optim_ext">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.MainGUI.First.Spot_optim_ext">[docs]</a>
+    <span class="k">def</span> <span class="nf">Spot_optim_ext</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates a new SpotOptimTab_ext tab and adds it to the tabwidget.</span>
+<span class="sd">        The spot optimization algorithm used in the SpotOptimTab_ext is based on https://www.nature.com/articles/nphoton.2010.85</span>
+<span class="sd">        The algorithm relies on an external feedback for the spot intensity measurement.</span>
+<span class="sd">        The algorithm steps and parameters can be controlled remotely on the network using the following endpoints:</span>
+<span class="sd">        - /optimiser/start : starts the algorithm (if already running, triggers a next step)</span>
+<span class="sd">        - /optimiser/nextStep : triggers the next step of the algorithm (once scaned till the end of the phase pattern, this will return phase = null)</span>
+<span class="sd">        - /optimiser/refzone : returns the current reference zone</span>
+<span class="sd">        - /optimiser/refzone/&lt;refzone&gt; : sets the reference zone to &lt;refzone&gt;</span>
+<span class="sd">        - /optimiser/probzone : returns the current probe zone</span>
+<span class="sd">        - /optimiser/probzone/&lt;probzone&gt; : sets the probe zone to &lt;probzone&gt;</span>
+<span class="sd">        - /optimiser/phase : returns the current phase</span>
+<span class="sd">        - /optimiser/phase/&lt;phase&gt; : sets the phase to &lt;phase&gt;</span>
+<span class="sd">        - /optimiser/phaseStep/&lt;phaseStep&gt; : sets the phase step to &lt;phaseStep&gt;</span>
+<span class="sd">        - /optimiser/IDsList : returns the list of IDs of the active optical elements</span>
+<span class="sd">        - /optimiser/phasePattern : returns the current phase pattern</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tab</span> <span class="o">=</span> <span class="n">WavefrontOptim</span><span class="o">.</span><span class="n">SpotOptimTab_ext</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pattern_generator</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings_manager</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">holograms_manager</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mesh_process</span><span class="p">)</span>
+        <span class="n">tab</span><span class="o">.</span><span class="n">setEventsHandlers</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">eventsDict</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">conditionsDict</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tabwidget</span><span class="o">.</span><span class="n">addTab</span><span class="p">(</span><span class="n">tab</span><span class="p">,</span><span class="s2">&quot;Optimizer (ext)&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">holograms_manager</span><span class="o">.</span><span class="n">addElementToList</span><span class="p">(</span><span class="nb">id</span><span class="p">(</span><span class="n">tab</span><span class="p">),</span> <span class="n">tab</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_endpoint_connections</span><span class="p">(</span><span class="n">tab</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="First.edit_SLM_settings">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.MainGUI.First.edit_SLM_settings">[docs]</a>
+    <span class="k">def</span> <span class="nf">edit_SLM_settings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Opens the settings dialog</span>
+<span class="sd">            Todo: </span>
+<span class="sd">                Resizing of the SLM pattern to match the SLM resolution</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dlg</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">SettingsDialog</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings_manager</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">dlg</span><span class="o">.</span><span class="n">exec</span><span class="p">()</span>
+        <span class="c1"># Update where the SLM window is (TODO: IS IT GOOD TO DO THIS HERE ??)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SLMWindow</span><span class="o">.</span><span class="n">Change_window</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings_manager</span><span class="o">.</span><span class="n">get_SLM_window</span><span class="p">())</span></div>
+
+    
+<div class="viewcode-block" id="First.start_camera">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.MainGUI.First.start_camera">[docs]</a>
+    <span class="k">def</span> <span class="nf">start_camera</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Starts the camera feed</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cameraWindow</span> <span class="o">=</span> <span class="n">camera</span><span class="o">.</span><span class="n">CameraWindow</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cameraWindow</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="First.closeEvent">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.MainGUI.First.closeEvent">[docs]</a>
+    <span class="k">def</span> <span class="nf">closeEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">event</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Closes the SLM window and the GUI</span>
+<span class="sd">        At the closing event remove all tabs in memory calling their destructor</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">holograms_manager</span><span class="o">.</span><span class="n">removeAll</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Closing Hologram window&quot;</span><span class="p">)</span>
+        <span class="n">QApplication</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span></div>
+
+    
+<div class="viewcode-block" id="First.add_endpoint_connections">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.MainGUI.First.add_endpoint_connections">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_endpoint_connections</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">tab</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Adds the endpoints connections to the Flask app</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            tab (WavefrontOptim.SpotOptimTab_ext): SpotOptimTab_ext object (for now the only tab that uses the endpoints)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">flaskApp</span><span class="o">.</span><span class="n">add_endpoint</span><span class="p">(</span><span class="s1">&#39;/optimiser/start&#39;</span><span class="p">,</span> <span class="s1">&#39;optimiser/start&#39;</span><span class="p">,</span> <span class="n">tab</span><span class="o">.</span><span class="n">start_algo_rem</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">flaskApp</span><span class="o">.</span><span class="n">add_endpoint</span><span class="p">(</span><span class="s1">&#39;/optimiser/nextStep&#39;</span><span class="p">,</span> <span class="s1">&#39;optimiser/nextStep&#39;</span><span class="p">,</span> <span class="n">tab</span><span class="o">.</span><span class="n">triggerNextStep</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">flaskApp</span><span class="o">.</span><span class="n">add_endpoint</span><span class="p">(</span><span class="s1">&#39;/optimiser/refzone&#39;</span><span class="p">,</span> <span class="s1">&#39;optimiser/refzone&#39;</span><span class="p">,</span> <span class="n">tab</span><span class="o">.</span><span class="n">getProbRefZone</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">flaskApp</span><span class="o">.</span><span class="n">add_endpoint</span><span class="p">(</span><span class="s1">&#39;/optimiser/refzone/&lt;refzone&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;optimiser/refzone/&lt;int:refzone&gt;&#39;</span><span class="p">,</span> <span class="n">tab</span><span class="o">.</span><span class="n">setRefZone</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">flaskApp</span><span class="o">.</span><span class="n">add_endpoint</span><span class="p">(</span><span class="s1">&#39;/optimiser/probzone&#39;</span><span class="p">,</span> <span class="s1">&#39;optimiser/probzone&#39;</span><span class="p">,</span> <span class="n">tab</span><span class="o">.</span><span class="n">getProbRefZone</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">flaskApp</span><span class="o">.</span><span class="n">add_endpoint</span><span class="p">(</span><span class="s1">&#39;/optimiser/probzone/&lt;probzone&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;optimiser/probzone/&lt;int:probzone&gt;&#39;</span><span class="p">,</span> <span class="n">tab</span><span class="o">.</span><span class="n">setProbZone</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">flaskApp</span><span class="o">.</span><span class="n">add_endpoint</span><span class="p">(</span><span class="s1">&#39;/optimiser/phase&#39;</span><span class="p">,</span> <span class="s1">&#39;optimiser/phase&#39;</span><span class="p">,</span> <span class="n">tab</span><span class="o">.</span><span class="n">getProbRefZone</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">flaskApp</span><span class="o">.</span><span class="n">add_endpoint</span><span class="p">(</span><span class="s1">&#39;/optimiser/phase/&lt;phase&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;optimiser/phase/&lt;float:phase&gt;&#39;</span><span class="p">,</span> <span class="n">tab</span><span class="o">.</span><span class="n">setPhase</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">flaskApp</span><span class="o">.</span><span class="n">add_endpoint</span><span class="p">(</span><span class="s1">&#39;/optimiser/phaseStep/&lt;float:phaseStep&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;optimiser/phaseStep/&lt;phaseStep&gt;&#39;</span><span class="p">,</span> <span class="n">tab</span><span class="o">.</span><span class="n">setPhaseStep</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">flaskApp</span><span class="o">.</span><span class="n">add_endpoint</span><span class="p">(</span><span class="s1">&#39;/optimiser/IDsList&#39;</span><span class="p">,</span> <span class="s1">&#39;optimiser/IDsList&#39;</span><span class="p">,</span> <span class="n">tab</span><span class="o">.</span><span class="n">getIdsList</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">flaskApp</span><span class="o">.</span><span class="n">add_endpoint</span><span class="p">(</span><span class="s1">&#39;/optimiser/phasePattern&#39;</span><span class="p">,</span> <span class="s1">&#39;optimiser/phasePattern&#39;</span><span class="p">,</span> <span class="n">tab</span><span class="o">.</span><span class="n">getPhasePatternIMG</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">flaskApp</span><span class="o">.</span><span class="n">add_endpoint</span><span class="p">(</span><span class="s1">&#39;/optimiser/phasePatternData&#39;</span><span class="p">,</span> <span class="s1">&#39;optimiser/phasePatternData&#39;</span><span class="p">,</span> <span class="n">tab</span><span class="o">.</span><span class="n">getPhasePattern</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="First.on_pushButton_clicked">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.MainGUI.First.on_pushButton_clicked">[docs]</a>
+    <span class="k">def</span> <span class="nf">on_pushButton_clicked</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Updates the SLM window with the new phase pattern. Connected to the &quot;Show Hologram/Update&quot; button.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SLMWindow</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+        <span class="c1"># Initialize empty pattern. WARNING! Resolution of SLM must be already defined!!</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pattern</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pattern</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pattern_generator</span><span class="o">.</span><span class="n">empty_pattern</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings_manager</span><span class="o">.</span><span class="n">get_X_res</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings_manager</span><span class="o">.</span><span class="n">get_Y_res</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_pattern</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="First.InitLayout">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.MainGUI.First.InitLayout">[docs]</a>
+    <span class="k">def</span> <span class="nf">InitLayout</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">grid</span><span class="p">,</span><span class="n">buttons</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initializes the GUI layout</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            grid (QGridLayout): QGridLayout of the GUI</span>
+<span class="sd">            buttons (Dict): Dictionary of buttons used in the GUI</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">grid</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">buttons</span><span class="p">[</span><span class="s2">&quot;SLM_hologram_window&quot;</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">grid</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">buttons</span><span class="p">[</span><span class="s2">&quot;Add_optical_elem&quot;</span><span class="p">],</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">grid</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tabwidget</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="First.AddOpticalElement">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.MainGUI.First.AddOpticalElement">[docs]</a>
+    <span class="k">def</span> <span class="nf">AddOpticalElement</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Adds a new optical element to the GUI</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">holograms_manager</span><span class="o">.</span><span class="n">isListEmpty</span><span class="p">()</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">tabwidget</span><span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># If the user still didn&#39;t choose any optical element generate the tabs layout ?</span>
+            <span class="k">pass</span>
+        <span class="n">inputter</span> <span class="o">=</span> <span class="n">opticalElement</span><span class="o">.</span><span class="n">opticalElement</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">possible_optical_elements</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">inputter</span><span class="o">.</span><span class="n">exec</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tabs_constructors</span><span class="p">[</span><span class="n">inputter</span><span class="o">.</span><span class="n">get_selected</span><span class="p">()]()</span></div>
+
+
+<div class="viewcode-block" id="First.InitButtons">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.MainGUI.First.InitButtons">[docs]</a>
+    <span class="k">def</span> <span class="nf">InitButtons</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">buttons</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initializes the GUI buttons</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            buttons (dict): Dictionary of buttons used in the GUI</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">button_exit</span> <span class="o">=</span> <span class="n">QAction</span><span class="p">(</span><span class="s2">&quot;Exit&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">button_exit</span><span class="o">.</span><span class="n">setStatusTip</span><span class="p">(</span><span class="s2">&quot;Exit&quot;</span><span class="p">)</span>
+        <span class="n">button_exit</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">QApplication</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span><span class="o">.</span><span class="n">quit</span><span class="p">)</span>
+        <span class="n">button_exit</span><span class="o">.</span><span class="n">setCheckable</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">buttons</span><span class="p">[</span><span class="s2">&quot;Exit&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">button_exit</span>
+
+
+        <span class="n">button_camera</span> <span class="o">=</span> <span class="n">QAction</span><span class="p">(</span><span class="s2">&quot;Start Camera&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">button_camera</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">start_camera</span><span class="p">)</span>
+        <span class="n">buttons</span><span class="p">[</span><span class="s2">&quot;Start Camera&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">button_camera</span>
+
+        <span class="n">button_settings</span> <span class="o">=</span> <span class="n">QAction</span><span class="p">(</span><span class="s2">&quot;Settings&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">button_settings</span><span class="o">.</span><span class="n">triggered</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">edit_SLM_settings</span><span class="p">)</span>
+        <span class="n">buttons</span><span class="p">[</span><span class="s2">&quot;Settings&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">button_settings</span>
+
+        <span class="n">SLM_hologram_window</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s2">&quot;Show Hologram/Update&quot;</span><span class="p">)</span>
+        <span class="n">SLM_hologram_window</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">on_pushButton_clicked</span><span class="p">)</span>
+        <span class="n">buttons</span><span class="p">[</span><span class="s2">&quot;SLM_hologram_window&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">SLM_hologram_window</span>
+
+        <span class="n">AddOpticalElement</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s2">&quot;Add new optical element&quot;</span><span class="p">)</span>
+        <span class="n">AddOpticalElement</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">AddOpticalElement</span><span class="p">)</span>
+        <span class="n">buttons</span><span class="p">[</span><span class="s2">&quot;Add_optical_elem&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">AddOpticalElement</span></div>
+
+
+<div class="viewcode-block" id="First.InitToolbar">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.MainGUI.First.InitToolbar">[docs]</a>
+    <span class="k">def</span> <span class="nf">InitToolbar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">toolbar</span><span class="p">,</span><span class="n">buttons</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initializes the GUI toolbar</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            toolbar (QToolBar): QToolBar of the GUI</span>
+<span class="sd">            buttons (dict): Dictionary of buttons used in the GUI</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">toolbar</span><span class="o">.</span><span class="n">setIconSize</span><span class="p">(</span><span class="n">QSize</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">16</span><span class="p">))</span>
+        <span class="n">toolbar</span><span class="o">.</span><span class="n">addSeparator</span><span class="p">()</span>
+        <span class="n">toolbar</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="n">buttons</span><span class="p">[</span><span class="s2">&quot;Settings&quot;</span><span class="p">])</span>
+        <span class="n">toolbar</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="n">buttons</span><span class="p">[</span><span class="s2">&quot;Start Camera&quot;</span><span class="p">])</span>
+        <span class="n">toolbar</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="n">buttons</span><span class="p">[</span><span class="s2">&quot;Exit&quot;</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="First.InitMenu">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.MainGUI.First.InitMenu">[docs]</a>
+    <span class="k">def</span> <span class="nf">InitMenu</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">menu</span><span class="p">,</span><span class="n">buttons</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initializes the GUI menu</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            menu (QGridLayout): QGridLayout of the GUI</span>
+<span class="sd">            buttons (dict): Dictionary of buttons used in the GUI</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">file_menu</span> <span class="o">=</span> <span class="n">menu</span><span class="o">.</span><span class="n">addMenu</span><span class="p">(</span><span class="s2">&quot;&amp;File&quot;</span><span class="p">)</span>
+        <span class="n">file_menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="n">buttons</span><span class="p">[</span><span class="s2">&quot;Settings&quot;</span><span class="p">])</span>
+        <span class="n">file_menu</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="n">buttons</span><span class="p">[</span><span class="s2">&quot;Exit&quot;</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="First.update_pattern">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.MainGUI.First.update_pattern">[docs]</a>
+    <span class="k">def</span> <span class="nf">update_pattern</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Updates the SLM window with the new phase pattern</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">holograms_manager</span><span class="o">.</span><span class="n">updateSLMWindow</span><span class="p">()</span></div>
+</div>
+
+
+
+<span class="c1"># def closeSecondProcess(eventsDict):</span>
+<span class="c1">#     &quot;&quot;&quot;Closes the GMSH GUI process</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     eventsDict[&#39;terminate&#39;].set()</span>
+<span class="c1">#     eventsDict[&#39;generalEvent&#39;].set()</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Matteo Mazzanti.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

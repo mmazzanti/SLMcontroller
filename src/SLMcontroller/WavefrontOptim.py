@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-"""SpotOptim.py: Generates a tab used to control the spot optimization process."""
+"""WavefrontOptim.py: Generates a tab used to control the spot optimization process."""
 
 __author__ = "Matteo Mazzanti"
 __copyright__ = "Copyright 2022, Matteo Mazzanti"

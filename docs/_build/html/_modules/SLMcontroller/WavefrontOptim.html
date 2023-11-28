@@ -79,7 +79,7 @@
   <h1>Source code for SLMcontroller.WavefrontOptim</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 
-<span class="sd">&quot;&quot;&quot;SpotOptim.py: Generates a tab used to control the spot optimization process.&quot;&quot;&quot;</span>
+<span class="sd">&quot;&quot;&quot;WavefrontOptim.py: Generates a tab used to control the spot optimization process.&quot;&quot;&quot;</span>
 
 <span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Matteo Mazzanti&quot;</span>
 <span class="n">__copyright__</span> <span class="o">=</span> <span class="s2">&quot;Copyright 2022, Matteo Mazzanti&quot;</span>
@@ -112,8 +112,8 @@
 <span class="sd">    The algorithm is based on https://www.nature.com/articles/nphoton.2010.85.</span>
 
 <span class="sd">    This code is meant to be controlled remotely from a separate acquisition system that will measure the intensity of the interference between probe and reference zones.</span>
-<span class="sd">    The control is done via Flask.</span>
-<span class="sd">    The following endpoints are available:</span>
+<span class="sd">    </span>
+<span class="sd">    The control is done via Flask. The following endpoints are available:</span>
 <span class="sd">        - /optimiser/start : starts the algorithm (if already running, triggers a next step).</span>
 <span class="sd">        - /optimiser/nextStep : triggers the next step of the algorithm (once scaned till the end of the phase pattern, this will return phase = null).</span>
 <span class="sd">        - /optimiser/refzone : returns the current reference zone</span>
@@ -1094,8 +1094,7 @@
 
     <span class="nd">@phase</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">phase</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phase</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Sets the phase of the reference zone.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">_phase</span> <span class="o">=</span> <span class="n">phase</span>
 
     <span class="nd">@property</span>

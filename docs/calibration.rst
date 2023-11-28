@@ -1,2 +1,5 @@
+.. _calibration:
+
 Calibration
-*********
+***********
+

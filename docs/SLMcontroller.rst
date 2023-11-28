@@ -68,10 +68,10 @@ SLMcontroller.Remote\_control module
    :undoc-members:
    :show-inheritance:
 
-SLMcontroller.SLM\_controller module
+SLMcontroller.MainGUI module
 ------------------------------------
 
-.. automodule:: SLMcontroller.SLM_controller
+.. automodule:: SLMcontroller.MainGUI
    :members:
    :undoc-members:
    :show-inheritance:
