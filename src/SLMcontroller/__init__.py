@@ -1,3 +1,14 @@
+#!/usr/bin/env python
+
+"""__init__.py: Defines main function for the program."""
+
+__author__ = "Matteo Mazzanti"
+__copyright__ = "Copyright 2022, Matteo Mazzanti"
+__license__ = "GNU GPL v3"
+__maintainer__ = "Matteo Mazzanti"
+
+# -*- coding: utf-8 -*-
+
 from PyQt6 import QtWidgets
 
 import sys

@@ -12,7 +12,7 @@ sys.path.insert(0, os.path.abspath('..'))
 project = 'SLM controller'
 copyright = '2023, Matteo Mazzanti'
 author = 'Matteo Mazzanti'
-release = '1.0.1'
+release = '1.0.3'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -21,7 +21,8 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.viewcode',
     'sphinx.ext.napoleon',
-    'sphinx_rtd_theme'
+    'sphinx_rtd_theme',
+    'sphinx.ext.todo',
 ]
 
 templates_path = ['_templates']

@@ -59,12 +59,12 @@ class GratingTab(QWidget):
 
     def init_GUI(self):
         """Generates the GUI elements of the tab. 
-        The tab will contain :
-            - A slider and a spinbox to control the number of lines per mm of the grating.
-            - A slider and a spinbox to control the angle of the grating.
-            - A checkbox to activate the grating.
-            - A checkbox to enable live updating of the grating.
-            - An image preview of the grating.
+        The tab contains:
+        - A slider and a spinbox to control the number of lines per mm of the grating.
+        - A slider and a spinbox to control the angle of the grating.
+        - A checkbox to activate the grating.
+        - A checkbox to enable live updating of the grating.
+        - An image preview of the grating.
         """
         self.general_controls_layout = QVBoxLayout()
         self.isactive = QCheckBox("Activate element : ")

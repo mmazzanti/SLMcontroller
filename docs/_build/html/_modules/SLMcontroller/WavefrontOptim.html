@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SLMcontroller.WavefrontOptim &mdash; SLM controller 1.0.1 documentation</title>
+  <title>SLMcontroller.WavefrontOptim &mdash; SLM controller 1.0.3 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -12,7 +12,7 @@
   
         <script src="../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../_static/documentation_options.js?v=292eb321"></script>
+        <script src="../../_static/documentation_options.js?v=baaebd52"></script>
         <script src="../../_static/doctools.js?v=888ff710"></script>
         <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
@@ -114,8 +114,8 @@
 <span class="sd">    This code is meant to be controlled remotely from a separate acquisition system that will measure the intensity of the interference between probe and reference zones.</span>
 <span class="sd">    The control is done via Flask.</span>
 <span class="sd">    The following endpoints are available:</span>
-<span class="sd">        - /optimiser/start : starts the algorithm (if already running, triggers a next step)</span>
-<span class="sd">        - /optimiser/nextStep : triggers the next step of the algorithm (once scaned till the end of the phase pattern, this will return phase = null)</span>
+<span class="sd">        - /optimiser/start : starts the algorithm (if already running, triggers a next step).</span>
+<span class="sd">        - /optimiser/nextStep : triggers the next step of the algorithm (once scaned till the end of the phase pattern, this will return phase = null).</span>
 <span class="sd">        - /optimiser/refzone : returns the current reference zone</span>
 <span class="sd">        - /optimiser/refzone/&lt;refzone&gt; : sets the reference zone to &lt;refzone&gt;</span>
 <span class="sd">        - /optimiser/probzone : returns the current probe zone</span>
@@ -405,11 +405,11 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Loads a mesh from a file in gmsh .msh format.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Opens a prompt for the user to select a mesh file</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">putVariablesInQueue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">eventsDict</span><span class="p">[</span><span class="s1">&#39;genMesh&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">eventsDict</span><span class="p">[</span><span class="s1">&#39;generalEvent&#39;</span><span class="p">])</span>
         <span class="n">name</span> <span class="o">=</span> <span class="n">QFileDialog</span><span class="o">.</span><span class="n">getOpenFileName</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="s2">&quot;Open File&quot;</span><span class="p">,</span><span class="s2">&quot;$</span><span class="si">{HOME}</span><span class="s2">&quot;</span><span class="p">,</span><span class="s2">&quot;GMSH (*.msh);;&quot;</span><span class="p">,)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">eventsDict</span><span class="p">[</span><span class="s1">&#39;loadfile&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">eventsDict</span><span class="p">[</span><span class="s1">&#39;generalEvent&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">putVariablesInQueue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">eventsDict</span><span class="p">[</span><span class="s1">&#39;loadfile&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">eventsDict</span><span class="p">[</span><span class="s1">&#39;generalEvent&#39;</span><span class="p">])</span>
+        <span class="c1"># self.eventsDict[&#39;loadfile&#39;].set()</span>
+        <span class="c1"># self.eventsDict[&#39;generalEvent&#39;].set()</span>
         <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">conditionsDict</span><span class="p">[</span><span class="s1">&#39;loadfile&#39;</span><span class="p">]:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">conditionsDict</span><span class="p">[</span><span class="s1">&#39;loadfile&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
         <span class="n">outcome</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>

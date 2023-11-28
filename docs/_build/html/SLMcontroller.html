@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SLMcontroller package &mdash; SLM controller 1.0.1 documentation</title>
+  <title>SLMcontroller package &mdash; SLM controller 1.0.3 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -13,7 +13,7 @@
   
         <script src="_static/jquery.js?v=5d32c60e"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=292eb321"></script>
+        <script src="_static/documentation_options.js?v=baaebd52"></script>
         <script src="_static/doctools.js?v=888ff710"></script>
         <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -175,16 +175,16 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="SLMcontroller.FlatnessCorrection.FlatnessCorrectionTab.Init_GUI">
 <span class="sig-name descname"><span class="pre">Init_GUI</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/FlatnessCorrection.html#FlatnessCorrectionTab.Init_GUI"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.FlatnessCorrection.FlatnessCorrectionTab.Init_GUI" title="Link to this definition"></a></dt>
-<dd><p class="linemarker linemarker-1">Generates the GUI elements of the tab.
-The tab will contain :</p>
-<blockquote>
-<div><ul class="simple">
-<li><p class="linemarker linemarker-3">A text field to enter the path to the flatness correction image.</p></li>
-<li><p class="linemarker linemarker-4">A button to load the flatness correction image.</p></li>
-<li><p class="linemarker linemarker-5">A checkbox to activate the flatness correction.</p></li>
-<li><p class="linemarker linemarker-6">An image preview of the flatness correction image.</p></li>
+<dd><p class="linemarker linemarker-1">Generates the GUI elements of the tab.</p>
+<dl class="simple">
+<dt>The tab contains:</dt><dd><ul class="simple">
+<li><p class="linemarker linemarker-4">A text field to enter the path to the flatness correction image.</p></li>
+<li><p class="linemarker linemarker-5">A button to load the flatness correction image.</p></li>
+<li><p class="linemarker linemarker-6">A checkbox to activate the flatness correction.</p></li>
+<li><p class="linemarker linemarker-7">An image preview of the flatness correction image.</p></li>
 </ul>
-</div></blockquote>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -460,16 +460,12 @@ The grating will depend on the selected wavelength and SLM pixel pitch.</p>
 <dt class="sig sig-object py" id="SLMcontroller.Grating.GratingTab.init_GUI">
 <span class="sig-name descname"><span class="pre">init_GUI</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/Grating.html#GratingTab.init_GUI"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.Grating.GratingTab.init_GUI" title="Link to this definition"></a></dt>
 <dd><p class="linemarker linemarker-1">Generates the GUI elements of the tab.
-The tab will contain :</p>
-<blockquote>
-<div><ul class="simple">
-<li><p class="linemarker linemarker-3">A slider and a spinbox to control the number of lines per mm of the grating.</p></li>
-<li><p class="linemarker linemarker-4">A slider and a spinbox to control the angle of the grating.</p></li>
-<li><p class="linemarker linemarker-5">A checkbox to activate the grating.</p></li>
-<li><p class="linemarker linemarker-6">A checkbox to enable live updating of the grating.</p></li>
-<li><p class="linemarker linemarker-7">An image preview of the grating.</p></li>
-</ul>
-</div></blockquote>
+The tab contains:
+- A slider and a spinbox to control the number of lines per mm of the grating.
+- A slider and a spinbox to control the angle of the grating.
+- A checkbox to activate the grating.
+- A checkbox to enable live updating of the grating.
+- An image preview of the grating.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -635,16 +631,16 @@ The lens will depend on the selected wavelength, focus and SLM pixel pitch.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="SLMcontroller.Lens.LensTab.init_GUI">
 <span class="sig-name descname"><span class="pre">init_GUI</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SLMcontroller/Lens.html#LensTab.init_GUI"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#SLMcontroller.Lens.LensTab.init_GUI" title="Link to this definition"></a></dt>
-<dd><p class="linemarker linemarker-1">Generates the GUI elements of the tab.
-The tab will contain :</p>
-<blockquote>
-<div><ul class="simple">
-<li><p class="linemarker linemarker-3">A slider and a spinbox to control the focus distance of the lens.</p></li>
-<li><p class="linemarker linemarker-4">A checkbox to activate the lens.</p></li>
-<li><p class="linemarker linemarker-5">A checkbox to enable live updating of the lens.</p></li>
-<li><p class="linemarker linemarker-6">An image preview of the lens.</p></li>
+<dd><p class="linemarker linemarker-1">Generates the GUI elements of the tab.</p>
+<dl class="simple">
+<dt>The tab contains:</dt><dd><ul class="simple">
+<li><p class="linemarker linemarker-4">A slider and a spinbox to control the focus distance of the lens.</p></li>
+<li><p class="linemarker linemarker-5">A checkbox to activate the lens.</p></li>
+<li><p class="linemarker linemarker-6">A checkbox to enable live updating of the lens.</p></li>
+<li><p class="linemarker linemarker-7">An image preview of the lens.</p></li>
 </ul>
-</div></blockquote>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -1584,13 +1580,11 @@ If they were it needs to regenerate the grating patterns</p>
 <dd><p class="linemarker linemarker-1">Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QWidget</span></code></p>
 <p class="linemarker linemarker-1">Spot optimization tab used to control the spot optimization process.
 The algorithm is based on <a class="reference external" href="https://www.nature.com/articles/nphoton.2010.85">https://www.nature.com/articles/nphoton.2010.85</a>.</p>
-<p class="linemarker linemarker-4">This code is meant to be controlled remotely from a separate acquisition system that will measure the intensity of the interference between probe and reference zones.
-The control is done via Flask.
-The following endpoints are available:</p>
-<blockquote>
-<div><ul class="simple">
-<li><p class="linemarker linemarker-7">/optimiser/start : starts the algorithm (if already running, triggers a next step)</p></li>
-<li><p class="linemarker linemarker-8">/optimiser/nextStep : triggers the next step of the algorithm (once scaned till the end of the phase pattern, this will return phase = null)</p></li>
+<p class="linemarker linemarker-4">This code is meant to be controlled remotely from a separate acquisition system that will measure the intensity of the interference between probe and reference zones.</p>
+<dl class="simple">
+<dt>The control is done via Flask. The following endpoints are available:</dt><dd><ul class="simple">
+<li><p class="linemarker linemarker-7">/optimiser/start : starts the algorithm (if already running, triggers a next step).</p></li>
+<li><p class="linemarker linemarker-8">/optimiser/nextStep : triggers the next step of the algorithm (once scaned till the end of the phase pattern, this will return phase = null).</p></li>
 <li><p class="linemarker linemarker-9">/optimiser/refzone : returns the current reference zone</p></li>
 <li><p class="linemarker linemarker-10">/optimiser/refzone/&lt;refzone&gt; : sets the reference zone to &lt;refzone&gt;</p></li>
 <li><p class="linemarker linemarker-11">/optimiser/probzone : returns the current probe zone</p></li>
@@ -1601,7 +1595,8 @@ The following endpoints are available:</p>
 <li><p class="linemarker linemarker-16">/optimiser/IDsList : returns the list of IDs of the active optical elements</p></li>
 <li><p class="linemarker linemarker-17">/optimiser/phasePattern : returns the current phase pattern</p></li>
 </ul>
-</div></blockquote>
+</dd>
+</dl>
 <p class="linemarker linemarker-19">— Setting up the algorithm —
 First the user has to define the probe and references zones on the SLM. This can be done using gmsh.
 Mesh parameters and algorithms can be choosen in the tab. Once obtaining a satisfactory meshing this can be saved and loaded later.
@@ -2381,7 +2376,7 @@ If it is not specified then 0 is used.
 arguments is the optional sequence of the names of the signal’s arguments.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p class="linemarker linemarker-13">pyqtSignal(<a href="#id1"><span class="problematic" id="id2">*</span></a>types, name</p>
+<dd class="field-odd"><p class="linemarker linemarker-13">pyqtSignal(<a href="#id4"><span class="problematic" id="id5">*</span></a>types, name</p>
 </dd>
 <dt class="field-even">Type<span class="colon">:</span></dt>
 <dd class="field-even"><p class="linemarker linemarker-15">str = …, revision</p>

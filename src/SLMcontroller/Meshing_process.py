@@ -212,8 +212,7 @@ class MeshingHandler(Process):
         """Checks if the loaded mesh fits the SLM size.
         
         Todo:
-            This function is a work in progress, I did not find an elegant way of getting the size of a gmsh mesh (and check that is actually 2D).
-            For now it assumes that the user knows what they're doing...
+            * This function is a work in progress, I did not find an elegant way of getting the size of a gmsh mesh (and check that is actually 2D). For now it assumes that the user knows what they're doing...
         """
         entities = gmsh.model.getEntities()
         for e in entities:

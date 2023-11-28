@@ -62,11 +62,12 @@ class FlatnessCorrectionTab(QWidget):
 
     def Init_GUI(self):
         """Generates the GUI elements of the tab.
-        The tab will contain :
-            - A text field to enter the path to the flatness correction image.
-            - A button to load the flatness correction image.
-            - A checkbox to activate the flatness correction.
-            - An image preview of the flatness correction image.
+
+        The tab contains:
+        - A text field to enter the path to the flatness correction image.
+        - A button to load the flatness correction image.
+        - A checkbox to activate the flatness correction.
+        - An image preview of the flatness correction image.
         """
         self.layout = QGridLayout()
         

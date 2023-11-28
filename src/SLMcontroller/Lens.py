@@ -57,7 +57,8 @@ class LensTab(QWidget):
 
     def init_GUI(self):
         """Generates the GUI elements of the tab.
-        The tab will contain :
+
+        The tab contains:
             - A slider and a spinbox to control the focus distance of the lens.
             - A checkbox to activate the lens.
             - A checkbox to enable live updating of the lens.

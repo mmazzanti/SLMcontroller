@@ -142,7 +142,7 @@
         
         <span class="bp">self</span><span class="o">.</span><span class="n">points</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># 4 points array where to store the points tags</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">lines</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># 4 points array where to store the lines tags</span>
-
+        <span class="bp">self</span><span class="o">.</span><span class="n">mathModel</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="c1"># Events signals</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">eventsDict</span> <span class="o">=</span> <span class="n">eventsDict</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">conditionsDict</span> <span class="o">=</span> <span class="n">conditionsDict</span>
@@ -223,11 +223,7 @@
         <span class="c1"># Stay dormant till invoked for a new task</span>
         <span class="c1"># Wait for waking up event</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">eventsDict</span><span class="p">[</span><span class="s1">&#39;generalEvent&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">eventsDict</span><span class="p">[</span><span class="s1">&#39;terminate&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">is_set</span><span class="p">():</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">Enabled</span> <span class="o">=</span> <span class="kc">False</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_running</span> <span class="o">=</span> <span class="kc">False</span>
-            <span class="c1"># In this case the user didn&#39;t wake up this process (no meshing done), so kill it</span>
-            <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">checkUserMeshing</span><span class="p">()</span>
         <span class="c1"># Start thread having the task of checking for new params</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">eventsDict</span><span class="p">[</span><span class="s1">&#39;generalEvent&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">wasINIT</span><span class="p">:</span>
@@ -281,8 +277,10 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Loads a mesh from a file.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">getVariablesInQueue</span><span class="p">()</span>
         <span class="c1"># If Gmsh wasn&#39;t initialized, do it</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">wasINIT</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">showMeshGUI</span><span class="p">()</span>
             <span class="n">gmsh</span><span class="o">.</span><span class="n">initialize</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">wasINIT</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">try</span><span class="p">:</span>
@@ -290,9 +288,11 @@
             <span class="c1"># If we have plenty of models in memory, remove them and load the new one</span>
             <span class="k">while</span> <span class="ow">not</span> <span class="n">gmsh</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">list</span><span class="p">()</span> <span class="o">==</span> <span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">]:</span>
                 <span class="n">gmsh</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
             <span class="n">gmsh</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
             <span class="c1"># Set the new model as the active one</span>
             <span class="n">gmsh</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">setCurrent</span><span class="p">(</span><span class="n">gmsh</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">list</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">gmsh</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">list</span><span class="p">())</span>
             <span class="c1">#self.checkLoadedMeshSize()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
         <span class="k">except</span><span class="p">:</span>
@@ -407,8 +407,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">wasINIT</span><span class="p">:</span> 
             <span class="c1">#gmsh.model.remove_entity_name(&quot;SLM Meshing&quot;)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Math model: &quot;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">mathModel</span><span class="p">)</span>
-            <span class="n">gmsh</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">field</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mathModel</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mathModel</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">gmsh</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">field</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mathModel</span><span class="p">)</span>
             <span class="n">gmsh</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">geo</span><span class="o">.</span><span class="n">remove</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">]],[</span><span class="mi">1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="mi">1</span><span class="p">]],[</span><span class="mi">1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="mi">2</span><span class="p">]],[</span><span class="mi">1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">points</span><span class="p">[</span><span class="mi">3</span><span class="p">]]],</span><span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="n">gmsh</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">geo</span><span class="o">.</span><span class="n">remove</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="p">[</span><span class="mi">0</span><span class="p">]],[</span><span class="mi">1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="p">[</span><span class="mi">1</span><span class="p">]],[</span><span class="mi">1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="p">[</span><span class="mi">2</span><span class="p">]],[</span><span class="mi">1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="p">[</span><span class="mi">3</span><span class="p">]]],</span><span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">mathModel</span> <span class="o">=</span> <span class="kc">None</span>

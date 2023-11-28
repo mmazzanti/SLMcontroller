@@ -31,10 +31,10 @@ class SpotOptimTab_ext(QWidget):
     The algorithm is based on https://www.nature.com/articles/nphoton.2010.85.
 
     This code is meant to be controlled remotely from a separate acquisition system that will measure the intensity of the interference between probe and reference zones.
-    The control is done via Flask.
-    The following endpoints are available:
-        - /optimiser/start : starts the algorithm (if already running, triggers a next step)
-        - /optimiser/nextStep : triggers the next step of the algorithm (once scaned till the end of the phase pattern, this will return phase = null)
+    
+    The control is done via Flask. The following endpoints are available:
+        - /optimiser/start : starts the algorithm (if already running, triggers a next step).
+        - /optimiser/nextStep : triggers the next step of the algorithm (once scaned till the end of the phase pattern, this will return phase = null).
         - /optimiser/refzone : returns the current reference zone
         - /optimiser/refzone/<refzone> : sets the reference zone to <refzone>
         - /optimiser/probzone : returns the current probe zone
