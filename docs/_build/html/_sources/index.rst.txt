@@ -41,6 +41,17 @@ Indices and tables
 * :ref:`modindex`
 * :ref:`search`
 
+Acknowledgements
+================
+
+SLMcontroller was built and is maintaned by me (Matteo Mazzanti). 
+If you find the software useful, please consider be one of the few `buying me a coffee <https://www.buymeacoffee.com/mmazzanti>`_.
+
+.. raw:: html
+
+   <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="mmazzanti" data-description="Support me on Buy me a coffee!" data-message="Thanks for your contribution and for using my software :)" data-color="#BD5FFF" data-position="Right" data-x_margin="18" data-y_margin="18">
+   </script>
+
 .. |slmcontroller| replace:: :mod:`SLM controller`
 .. _slmcontroller: https://github.com/mmazzanti/SLM_controller
 .. _1: https://www.nature.com/articles/nphoton.2010.85
