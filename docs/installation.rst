@@ -3,6 +3,29 @@
 Installation
 ============
 
+From PyPI (recommended)
+------------------------
+You can install directly |slmcontroller|_ from PyPI using the following command:
+
+.. code-block:: python
+   
+   python3 -m pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ SLMcontroller
+
+afterwards you can run the following command to start the software:
+
+.. code-block:: python
+   
+   python3 -m SLMcontroller
+
+or 
+
+.. code-block:: python
+   
+   SLMcontroller
+
+From source
+-----------
+
 Download the latest stable release `here`_.
 You can use either the precompiled binaries or compile the source code yourself.
 
@@ -20,7 +43,7 @@ Then, you can run the following command to start the software:
 
 .. code-block:: python
    
-   python3 <INSTALLATION_PATH>/SLMcontroller/SLM_controller.py
+   python3 <INSTALLATION_PATH>/SLMcontroller/SLMcontroller.py
 
 The following GUI should appear on your screen:
 

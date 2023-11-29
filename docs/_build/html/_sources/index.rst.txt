@@ -27,13 +27,15 @@ The software allows for aberration correction using algorithms described in [`1`
    calibration
 
 
-Indices and tables
-==================
+
 .. toctree::
    :maxdepth: 1
    :caption: Modules
 
    modules
+
+Indices and tables
+==================
 
 * :ref:`genindex`
 * :ref:`modindex`

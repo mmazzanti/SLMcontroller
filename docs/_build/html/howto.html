@@ -16,6 +16,7 @@
         <script src="_static/documentation_options.js?v=baaebd52"></script>
         <script src="_static/doctools.js?v=888ff710"></script>
         <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -45,7 +46,14 @@
               <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">How to</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">How to</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#setting-things-up">Setting things up</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#adding-patterns">Adding patterns</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#phase-lenses">Phase lenses</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#phase-grating">Phase grating</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#flatness-correction">Flatness correction</a></li>
+</ul>
+</li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
 <ul>
@@ -84,6 +92,60 @@
              
   <section id="how-to">
 <span id="id1"></span><h1>How to<a class="headerlink" href="#how-to" title="Link to this heading"></a></h1>
+<p class="linemarker linemarker-6">After starting the app the following screen will appear:</p>
+<a class="reference internal image-reference" href="https://raw.githubusercontent.com/mmazzanti/SLMcontroller/12940b5a5612849118dabec2827f9234863ffdce/Documentation/Img/main.png"><img alt="https://raw.githubusercontent.com/mmazzanti/SLMcontroller/12940b5a5612849118dabec2827f9234863ffdce/Documentation/Img/main.png" class="align-center" src="https://raw.githubusercontent.com/mmazzanti/SLMcontroller/12940b5a5612849118dabec2827f9234863ffdce/Documentation/Img/main.png" style="width: 400px;" /></a>
+<section id="setting-things-up">
+<h2>Setting things up<a class="headerlink" href="#setting-things-up" title="Link to this heading"></a></h2>
+<p class="linemarker linemarker-15">You can set the parameters of the SLM by clicking on the “Settings” button. The following screen will appear:</p>
+<a class="reference internal image-reference" href="https://raw.githubusercontent.com/mmazzanti/SLMcontroller/12940b5a5612849118dabec2827f9234863ffdce/Documentation/Img/settings.png"><img alt="https://raw.githubusercontent.com/mmazzanti/SLMcontroller/12940b5a5612849118dabec2827f9234863ffdce/Documentation/Img/settings.png" class="align-center" src="https://raw.githubusercontent.com/mmazzanti/SLMcontroller/12940b5a5612849118dabec2827f9234863ffdce/Documentation/Img/settings.png" style="width: 400px;" /></a>
+<p class="linemarker linemarker-21">The available parameters are:</p>
+<ul class="simple">
+<li><p class="linemarker linemarker-23"><strong>SLM ID</strong>: ID of the SLM in use. At the moment this variable is not used. In the following versions it will be used to identify the SLM in use and to automatically load the correct calibration file.</p></li>
+<li><p class="linemarker linemarker-24"><strong>Screen number</strong>: number of the screen on which the SLM is displayed. I advice you to use at least two screens (one to run the control software and one to display the SLM). If you use only one screen, the SLM will be displayed on the same screen as the control software.</p></li>
+<li><p class="linemarker linemarker-25"><strong>Laser wavelength</strong>: wavelength of the laser in use.</p></li>
+<li><p class="linemarker linemarker-26"><strong>SLM resolution</strong>: resolution of the SLM in use.</p></li>
+<li><p class="linemarker linemarker-27"><strong>SLM pixel pitch</strong>: pixel pitch of the SLM in use.</p></li>
+<li><p class="linemarker linemarker-28"><strong>SLM phase correction</strong>: Phase correction value for <span class="math notranslate nohighlight">\({2\pi}\)</span>  phase shift. This value can be found in the calibration sheet of the SLM (provided by the vendor). Or measured with the calibration procedure (see <a class="reference internal" href="examples.html#examples"><span class="std std-ref">Examples</span></a>)</p></li>
+<li><p class="linemarker linemarker-29"><strong>Pattern size</strong>: size of the pattern that needs to be rendered on the SLM. Notice that its size might differ from the SLM resolution as an SLM might use a higher display resolution that number of pixels available. The extra pixels will appear black.</p></li>
+<li><p class="linemarker linemarker-30"><strong>IP address &amp; port</strong>: IP address and port on which to listen for network connections. The software will accepts controls coming from any IP address. If you want to limit the IP addresses that can control the SLM, you can use a firewall. I strongly advice to use the software on a private network (this not for security reasons but to reduce the probability of incoming connections from other computers during sentive operations).</p></li>
+</ul>
+</section>
+<section id="adding-patterns">
+<h2>Adding patterns<a class="headerlink" href="#adding-patterns" title="Link to this heading"></a></h2>
+<p class="linemarker linemarker-36">It is possible to add multiple optical elements phase patterns to the SLM. Each pattern will appear as a separate tab where it is possible to modify its parameters.
+Besides optical elements some tabs are used for iterative algorithms that can be used to compensate for optical aberrations (see <a class="reference internal" href="examples.html#examples"><span class="std std-ref">Examples</span></a>).</p>
+<p class="linemarker linemarker-39">Between the available optical elements there are:</p>
+<ul class="simple">
+<li><p class="linemarker linemarker-41"><strong>Lens</strong>: a lens with a given focal length (used to focus/defocus the beam).</p></li>
+<li><p class="linemarker linemarker-42"><strong>Grating</strong>: a grating phase pattern with a given pitch and angle (used to steer the beam).</p></li>
+<li><p class="linemarker linemarker-43"><strong>Flatness correction</strong>: a phase pattern used to correct for the flatness of the SLM.</p></li>
+</ul>
+<p class="linemarker linemarker-45">&amp; more to come.</p>
+<p class="linemarker linemarker-47">In the center of the tab will be shown a small preview of the phase pattern that will be rendered on the SLM.
+Each optical elemnt tab has a checkbox to activate/deactivate the element.
+Active elements will be rendered on the SLM (summed up and rendered). Inactive elements will be ignored.</p>
+<p class="linemarker linemarker-51">The “live update” checkbox will enable/disable the live update of the phase pattern on the SLM. If the checkbox is not selected, the phase pattern will be updated only when the “Show hologram/update” button is pressed.</p>
+</section>
+<section id="phase-lenses">
+<h2>Phase lenses<a class="headerlink" href="#phase-lenses" title="Link to this heading"></a></h2>
+<p class="linemarker linemarker-55">If the user selects “Lens” after clicking on “Add new optical element” the following tab will be created:</p>
+<a class="reference internal image-reference" href="https://raw.githubusercontent.com/mmazzanti/SLMcontroller/12940b5a5612849118dabec2827f9234863ffdce/Documentation/Img/lens.png"><img alt="https://raw.githubusercontent.com/mmazzanti/SLMcontroller/12940b5a5612849118dabec2827f9234863ffdce/Documentation/Img/lens.png" class="align-center" src="https://raw.githubusercontent.com/mmazzanti/SLMcontroller/12940b5a5612849118dabec2827f9234863ffdce/Documentation/Img/lens.png" style="width: 400px;" /></a>
+<p class="linemarker linemarker-61">Activating the element will render a phase pattern on the SLM that will focus/defocus the beam. The focal length of the lens can be set by changing the value of the focus using the scrollbox or the slider in the tab. The focal length is expressed in mm. The focal length can be positive or negative. A positive focal length will focus the beam, a negative focal length will defocus the beam.</p>
+</section>
+<section id="phase-grating">
+<h2>Phase grating<a class="headerlink" href="#phase-grating" title="Link to this heading"></a></h2>
+<p class="linemarker linemarker-65">Selecting “Grating” after clicking on “Add new optical element” will create a new grating tab that appears as follows:</p>
+<a class="reference internal image-reference" href="https://raw.githubusercontent.com/mmazzanti/SLMcontroller/12940b5a5612849118dabec2827f9234863ffdce/Documentation/Img/grating.png"><img alt="https://raw.githubusercontent.com/mmazzanti/SLMcontroller/12940b5a5612849118dabec2827f9234863ffdce/Documentation/Img/grating.png" class="align-center" src="https://raw.githubusercontent.com/mmazzanti/SLMcontroller/12940b5a5612849118dabec2827f9234863ffdce/Documentation/Img/grating.png" style="width: 400px;" /></a>
+<p class="linemarker linemarker-71">Using the scrollbox or the slider it is possible to set the pitch of the grating and its angle. The pitch is expressed in lines/mm. The angle is expressed in radians.
+Similar to the lens, the grating can be activated/deactivated using the checkbox in the tab.</p>
+</section>
+<section id="flatness-correction">
+<h2>Flatness correction<a class="headerlink" href="#flatness-correction" title="Link to this heading"></a></h2>
+<p class="linemarker linemarker-76">Selecting “Flatness correction” after clicking on “Add new optical element” will create a new flatness correction tab that appears as follows:</p>
+<a class="reference internal image-reference" href="https://raw.githubusercontent.com/mmazzanti/SLMcontroller/12940b5a5612849118dabec2827f9234863ffdce/Documentation/Img/flatness_correction.png"><img alt="https://raw.githubusercontent.com/mmazzanti/SLMcontroller/12940b5a5612849118dabec2827f9234863ffdce/Documentation/Img/flatness_correction.png" class="align-center" src="https://raw.githubusercontent.com/mmazzanti/SLMcontroller/12940b5a5612849118dabec2827f9234863ffdce/Documentation/Img/flatness_correction.png" style="width: 400px;" /></a>
+<p class="linemarker linemarker-82">The flatness correction pattern is usually provided by the company as a bmp image. It is possible to load the image by pasting its path in the text box.
+“Load Flatness Correction Image” will then load the image as a phase pattern. Be sure that the flatness correction image is a 8bit grayscale bmp image.</p>
+</section>
 </section>
 
 

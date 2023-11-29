@@ -45,6 +45,8 @@
               <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#from-pypi-recommended">From PyPI (recommended)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#from-source">From source</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#dependencies">Dependencies</a></li>
 </ul>
 </li>
@@ -87,35 +89,53 @@
              
   <section id="installation">
 <span id="id1"></span><h1>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h1>
-<p class="linemarker linemarker-6">Download the latest stable release <a class="reference external" href="https://github.com/mmazzanti/SLM_controller">here</a>.
+<section id="from-pypi-recommended">
+<h2>From PyPI (recommended)<a class="headerlink" href="#from-pypi-recommended" title="Link to this heading"></a></h2>
+<p class="linemarker linemarker-8">You can install directly <a class="reference external" href="https://github.com/mmazzanti/SLM_controller"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SLM</span> <span class="pre">controller</span></code></a> from PyPI using the following command:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">index</span><span class="o">-</span><span class="n">url</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">test</span><span class="o">.</span><span class="n">pypi</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">simple</span><span class="o">/</span> <span class="o">--</span><span class="n">extra</span><span class="o">-</span><span class="n">index</span><span class="o">-</span><span class="n">url</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">pypi</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">simple</span><span class="o">/</span> <span class="n">SLMcontroller</span>
+</pre></div>
+</div>
+<p class="linemarker linemarker-14">afterwards you can run the following command to start the software:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">SLMcontroller</span>
+</pre></div>
+</div>
+<p class="linemarker linemarker-20">or</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">SLMcontroller</span>
+</pre></div>
+</div>
+</section>
+<section id="from-source">
+<h2>From source<a class="headerlink" href="#from-source" title="Link to this heading"></a></h2>
+<p class="linemarker linemarker-29">Download the latest stable release <a class="reference external" href="https://github.com/mmazzanti/SLM_controller">here</a>.
 You can use either the precompiled binaries or compile the source code yourself.</p>
-<p class="linemarker linemarker-9">Once downloaded move the folder <code class="docutils literal notranslate"><span class="pre">SLMcontroller</span></code> to a location of your choice.
+<p class="linemarker linemarker-32">Once downloaded move the folder <code class="docutils literal notranslate"><span class="pre">SLMcontroller</span></code> to a location of your choice.
 I will refer to this location as <code class="docutils literal notranslate"><span class="pre">&lt;INSTALLATION_PATH&gt;</span></code>.</p>
-<p class="linemarker linemarker-12">First step is to install all the necessary dependencies (see below).
+<p class="linemarker linemarker-35">First step is to install all the necessary dependencies (see below).
 Do so by running the following command:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pip3</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="o">&lt;</span><span class="n">INSTALLATION_PATH</span><span class="o">&gt;/</span><span class="n">SLMcontroller</span><span class="o">/</span><span class="n">requirements</span><span class="o">.</span><span class="n">txt</span>
 </pre></div>
 </div>
-<p class="linemarker linemarker-19">Then, you can run the following command to start the software:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="o">&lt;</span><span class="n">INSTALLATION_PATH</span><span class="o">&gt;/</span><span class="n">SLMcontroller</span><span class="o">/</span><span class="n">SLM_controller</span><span class="o">.</span><span class="n">py</span>
+<p class="linemarker linemarker-42">Then, you can run the following command to start the software:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="o">&lt;</span><span class="n">INSTALLATION_PATH</span><span class="o">&gt;/</span><span class="n">SLMcontroller</span><span class="o">/</span><span class="n">SLMcontroller</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
-<p class="linemarker linemarker-25">The following GUI should appear on your screen:</p>
+<p class="linemarker linemarker-48">The following GUI should appear on your screen:</p>
 <a class="reference internal image-reference" href="_images/main.png"><img alt="GUI" class="align-center" src="_images/main.png" style="width: 300px;" /></a>
-<p class="linemarker linemarker-32">See the <a class="reference internal" href="howto.html#how-to"><span class="std std-ref">How to</span></a> section for more information on how to use the software.</p>
+<p class="linemarker linemarker-55">See the <a class="reference internal" href="howto.html#how-to"><span class="std std-ref">How to</span></a> section for more information on how to use the software.</p>
+</section>
 <section id="dependencies">
 <h2>Dependencies<a class="headerlink" href="#dependencies" title="Link to this heading"></a></h2>
-<p class="linemarker linemarker-37">The following dependencies are required to run <a class="reference external" href="https://github.com/mmazzanti/SLM_controller"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SLM</span> <span class="pre">controller</span></code></a>:</p>
+<p class="linemarker linemarker-60">The following dependencies are required to run <a class="reference external" href="https://github.com/mmazzanti/SLM_controller"><code class="xref py py-mod docutils literal notranslate"><span class="pre">SLM</span> <span class="pre">controller</span></code></a>:</p>
 <ul class="simple">
-<li><p class="linemarker linemarker-39"><a class="reference external" href="https://flask.palletsprojects.com/">Flask</a>: Used for remote control of the SLM.</p></li>
-<li><p class="linemarker linemarker-40"><a class="reference external" href="https://www.riverbankcomputing.com/software/pyqt/">PyQt6</a>: Used for the GUI.</p></li>
-<li><p class="linemarker linemarker-41"><a class="reference external" href="https://pygmsh.readthedocs.io/en/latest/index.html">Gmsh</a>: Used for meshing the SLM surface.</p></li>
-<li><p class="linemarker linemarker-42"><a class="reference external" href="https://numba.pydata.org/">Numba</a>: Used for accelerating the computation of the phase patterns.</p></li>
-<li><p class="linemarker linemarker-43"><a class="reference external" href="https://numpy.org/">NumPy</a>: Handling mathematical operations.</p></li>
-<li><p class="linemarker linemarker-44"><a class="reference external" href="https://opencv.org/">OpenCV</a>: Used for image processing (when optimizing for aberration using a camera).</p></li>
-<li><p class="linemarker linemarker-45"><a class="reference external" href="https://pillow.readthedocs.io/en/stable/">Pillow</a>: Used to show remotely the phase patterns of the SLM.</p></li>
+<li><p class="linemarker linemarker-62"><a class="reference external" href="https://flask.palletsprojects.com/">Flask</a>: Used for remote control of the SLM.</p></li>
+<li><p class="linemarker linemarker-63"><a class="reference external" href="https://www.riverbankcomputing.com/software/pyqt/">PyQt6</a>: Used for the GUI.</p></li>
+<li><p class="linemarker linemarker-64"><a class="reference external" href="https://pygmsh.readthedocs.io/en/latest/index.html">Gmsh</a>: Used for meshing the SLM surface.</p></li>
+<li><p class="linemarker linemarker-65"><a class="reference external" href="https://numba.pydata.org/">Numba</a>: Used for accelerating the computation of the phase patterns.</p></li>
+<li><p class="linemarker linemarker-66"><a class="reference external" href="https://numpy.org/">NumPy</a>: Handling mathematical operations.</p></li>
+<li><p class="linemarker linemarker-67"><a class="reference external" href="https://opencv.org/">OpenCV</a>: Used for image processing (when optimizing for aberration using a camera).</p></li>
+<li><p class="linemarker linemarker-68"><a class="reference external" href="https://pillow.readthedocs.io/en/stable/">Pillow</a>: Used to show remotely the phase patterns of the SLM.</p></li>
 </ul>
-<p class="linemarker linemarker-48">You can use <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-r</span> <span class="pre">docs/requirements.txt</span></code> to install all the required dependencies directly.</p>
+<p class="linemarker linemarker-71">You can use <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-r</span> <span class="pre">docs/requirements.txt</span></code> to install all the required dependencies directly.</p>
 </section>
 </section>
 
