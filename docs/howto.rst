@@ -83,4 +83,9 @@ The flatness correction pattern is usually provided by the company as a bmp imag
 "Load Flatness Correction Image" will then load the image as a phase pattern. Be sure that the flatness correction image is a 8bit grayscale bmp image.
 
 
+.. raw:: html
+
+   <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="mmazzanti" data-description="Support me on Buy me a coffee!" data-message="Hey there! If you like my software consider buying me a coffee :)" data-color="#BD5FFF" data-position="Right" data-x_margin="18" data-y_margin="18">
+   </script>
+
 .. |2pi| replace:: :math:`{2\pi}`
