@@ -50,6 +50,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../../settings.html">Settings</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../calibration.html">Calibration</a></li>
 </ul>
+<p class="caption" role="heading"><span class="caption-text">Modules</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">SLMcontroller</a></li>
+</ul>
 
         </div>
       </div>
@@ -90,7 +94,7 @@
 <span class="c1"># -*- coding: utf-8 -*-</span>
 
 <span class="kn">from</span> <span class="nn">PyQt6</span> <span class="kn">import</span> <span class="n">QtCore</span><span class="p">,</span> <span class="n">QtWidgets</span>
-<span class="kn">from</span> <span class="nn">PyQt6.QtCore</span> <span class="kn">import</span> <span class="n">Qt</span><span class="p">,</span> <span class="n">QSize</span><span class="p">,</span> <span class="n">QWaitCondition</span>
+<span class="kn">from</span> <span class="nn">PyQt6.QtCore</span> <span class="kn">import</span> <span class="n">Qt</span><span class="p">,</span> <span class="n">QSize</span>
 <span class="kn">from</span> <span class="nn">PyQt6.QtWidgets</span> <span class="kn">import</span> <span class="n">QMessageBox</span><span class="p">,</span> <span class="n">QLabel</span><span class="p">,</span> <span class="n">QGridLayout</span><span class="p">,</span> <span class="n">QWidget</span><span class="p">,</span> <span class="n">QPushButton</span><span class="p">,</span> <span class="n">QToolBar</span><span class="p">,</span> <span class="n">QApplication</span><span class="p">,</span> <span class="n">QHBoxLayout</span><span class="p">,</span> <span class="n">QSpinBox</span><span class="p">,</span> <span class="n">QVBoxLayout</span><span class="p">,</span> <span class="n">QFileDialog</span><span class="p">,</span> <span class="n">QLabel</span><span class="p">,</span> <span class="n">QErrorMessage</span><span class="p">,</span> <span class="n">QTabWidget</span>
 <span class="kn">from</span> <span class="nn">PyQt6.QtGui</span> <span class="kn">import</span> <span class="n">QPixmap</span><span class="p">,</span> <span class="n">QImage</span><span class="p">,</span> <span class="n">QAction</span><span class="p">,</span> <span class="n">QScreen</span>
 
@@ -753,12 +757,6 @@
 </div>
 
 
-
-<span class="c1"># def closeSecondProcess(eventsDict):</span>
-<span class="c1">#     &quot;&quot;&quot;Closes the GMSH GUI process</span>
-<span class="c1">#     &quot;&quot;&quot;</span>
-<span class="c1">#     eventsDict[&#39;terminate&#39;].set()</span>
-<span class="c1">#     eventsDict[&#39;generalEvent&#39;].set()</span>
 </pre></div>
 
            </div>

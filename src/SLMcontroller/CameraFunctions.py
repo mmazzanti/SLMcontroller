@@ -1,3 +1,14 @@
+#!/usr/bin/env python
+
+"""CameraFunctions.py: Contains the functions and classes needed to control the camera acquisition."""
+
+__author__ = "Matteo Mazzanti"
+__copyright__ = "Copyright 2022, Matteo Mazzanti"
+__license__ = "GNU GPL v3"
+__maintainer__ = "Matteo Mazzanti"
+
+# -*- coding: utf-8 -*-
+
 import time
 import numpy as np
 import os

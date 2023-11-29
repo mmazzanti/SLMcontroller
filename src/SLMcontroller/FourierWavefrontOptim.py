@@ -1,4 +1,15 @@
-from PyQt6.QtWidgets import QMessageBox, QLineEdit, QGridLayout, QComboBox, QVBoxLayout, QHBoxLayout, QWidget, QCheckBox, QPushButton
+#!/usr/bin/env python
+
+"""FourierWavefrontOptim.py: Uses the camera to correct for aberrations using a Fourier-based algorithm. The algorithm is based on: https://www.frontiersin.org/articles/10.3389/fnano.2022.998656/full """
+
+__author__ = "Matteo Mazzanti"
+__copyright__ = "Copyright 2022, Matteo Mazzanti"
+__license__ = "GNU GPL v3"
+__maintainer__ = "Matteo Mazzanti"
+
+# -*- coding: utf-8 -*-
+
+from PyQt6.QtWidgets import QMessageBox, QLineEdit, QComboBox, QVBoxLayout, QHBoxLayout, QWidget, QPushButton
 from PyQt6.QtCore import Qt, QThread
 
 import os

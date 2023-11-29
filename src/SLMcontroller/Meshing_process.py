@@ -140,10 +140,9 @@ class MeshingHandler(Process):
         self.checkUserMeshing()
         # Start thread having the task of checking for new params
         self.eventsDict['generalEvent'].clear()
-        if not self.wasINIT:
-            self.init_GMESH()
-
         while self.Enabled:
+            if not self.wasINIT:
+                self.init_GMESH()
             # Check if the process should terminate (user closed the interface)
             self.eventsDict['generalEvent'].wait()
             self.checkUserMeshing()

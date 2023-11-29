@@ -17,7 +17,7 @@ from PyQt6.QtGui import QPixmap, QImage, QAction, QScreen
 
 import numpy as np
 import SLMcontroller.settings as settings
-import SLMcontroller.camera.camera as camera
+import SLMcontroller.CameraFunctions as CameraFunctions
 import SLMcontroller.Phase_pattern as Phase_pattern
 import SLMcontroller.OpticalElement as opticalElement
 import SLMcontroller.Lens as Lens
@@ -440,7 +440,7 @@ class First(QtWidgets.QMainWindow):
     def start_camera(self):
         """Starts the camera feed
         """
-        self.cameraWindow = camera.CameraWindow()
+        self.cameraWindow = CameraFunctions.CameraWindow()
         self.cameraWindow.show()
 
     def closeEvent(self,event):

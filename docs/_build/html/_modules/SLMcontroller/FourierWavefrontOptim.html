@@ -50,6 +50,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../../settings.html">Settings</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../calibration.html">Calibration</a></li>
 </ul>
+<p class="caption" role="heading"><span class="caption-text">Modules</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">SLMcontroller</a></li>
+</ul>
 
         </div>
       </div>
@@ -127,7 +131,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">SLM_y_res</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">SLM_x_res</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ids_list</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">frequencies</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">theOptimizer</span> <span class="o">=</span> <span class="n">OptimizerAlgorithm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hologram_manager</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">cameraWindow</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">theOptimizer</span> <span class="o">=</span> <span class="n">OptimizerAlgorithmFourier</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hologram_manager</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">cameraWindow</span><span class="p">)</span>
 
 
     <span class="k">def</span> <span class="fm">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -339,9 +343,9 @@
         <span class="c1"># self.th_active = False</span>
         <span class="c1"># time.sleep(2)</span>
         
-<div class="viewcode-block" id="OptimizerAlgorithm">
-<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithm">[docs]</a>
-<span class="k">class</span> <span class="nc">OptimizerAlgorithm</span><span class="p">(</span><span class="n">QThread</span><span class="p">):</span>
+<div class="viewcode-block" id="OptimizerAlgorithmFourier">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithmFourier">[docs]</a>
+<span class="k">class</span> <span class="nc">OptimizerAlgorithmFourier</span><span class="p">(</span><span class="n">QThread</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">hologram_manager</span><span class="p">,</span><span class="n">cameraWindow</span><span class="p">):</span>
         <span class="n">QThread</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
@@ -361,8 +365,8 @@
     <span class="k">def</span> <span class="fm">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
 
-<div class="viewcode-block" id="OptimizerAlgorithm.run">
-<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithm.run">[docs]</a>
+<div class="viewcode-block" id="OptimizerAlgorithmFourier.run">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithmFourier.run">[docs]</a>
     <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">initPattern</span><span class="p">()</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Done with init ...&quot;</span><span class="p">)</span>
@@ -383,55 +387,55 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">isPhaseReady</span> <span class="o">=</span> <span class="kc">True</span></div>
 
     
-<div class="viewcode-block" id="OptimizerAlgorithm.isPhaseReady">
-<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithm.isPhaseReady">[docs]</a>
+<div class="viewcode-block" id="OptimizerAlgorithmFourier.isPhaseReady">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithmFourier.isPhaseReady">[docs]</a>
     <span class="k">def</span> <span class="nf">isPhaseReady</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">isPhaseReady</span></div>
 
     <span class="c1"># Checks that everything was properly initialized before running</span>
-<div class="viewcode-block" id="OptimizerAlgorithm.isThreadReady">
-<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithm.isThreadReady">[docs]</a>
+<div class="viewcode-block" id="OptimizerAlgorithmFourier.isThreadReady">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithmFourier.isThreadReady">[docs]</a>
     <span class="k">def</span> <span class="nf">isThreadReady</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">times</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">frequencies</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">SLM_x_res</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">SLM_y_res</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">ids_list</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span></div>
 
-<div class="viewcode-block" id="OptimizerAlgorithm.stop">
-<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithm.stop">[docs]</a>
+<div class="viewcode-block" id="OptimizerAlgorithmFourier.stop">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithmFourier.stop">[docs]</a>
     <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_active</span> <span class="o">=</span> <span class="kc">False</span></div>
 
-<div class="viewcode-block" id="OptimizerAlgorithm.activate">
-<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithm.activate">[docs]</a>
+<div class="viewcode-block" id="OptimizerAlgorithmFourier.activate">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithmFourier.activate">[docs]</a>
     <span class="k">def</span> <span class="nf">activate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_active</span> <span class="o">=</span> <span class="kc">True</span></div>
 
-<div class="viewcode-block" id="OptimizerAlgorithm.setFrequencies">
-<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithm.setFrequencies">[docs]</a>
+<div class="viewcode-block" id="OptimizerAlgorithmFourier.setFrequencies">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithmFourier.setFrequencies">[docs]</a>
     <span class="k">def</span> <span class="nf">setFrequencies</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frequencies</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">frequencies</span> <span class="o">=</span> <span class="n">frequencies</span></div>
 
-<div class="viewcode-block" id="OptimizerAlgorithm.setTimes">
-<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithm.setTimes">[docs]</a>
+<div class="viewcode-block" id="OptimizerAlgorithmFourier.setTimes">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithmFourier.setTimes">[docs]</a>
     <span class="k">def</span> <span class="nf">setTimes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">times</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">times</span> <span class="o">=</span> <span class="n">times</span></div>
 
-<div class="viewcode-block" id="OptimizerAlgorithm.setMesh">
-<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithm.setMesh">[docs]</a>
+<div class="viewcode-block" id="OptimizerAlgorithmFourier.setMesh">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithmFourier.setMesh">[docs]</a>
     <span class="k">def</span> <span class="nf">setMesh</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mesh</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span> <span class="o">=</span> <span class="n">mesh</span></div>
 
-<div class="viewcode-block" id="OptimizerAlgorithm.setSLMsizes">
-<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithm.setSLMsizes">[docs]</a>
+<div class="viewcode-block" id="OptimizerAlgorithmFourier.setSLMsizes">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithmFourier.setSLMsizes">[docs]</a>
     <span class="k">def</span> <span class="nf">setSLMsizes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">SLM_x_res</span><span class="p">,</span> <span class="n">SLM_y_res</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">SLM_x_res</span> <span class="o">=</span> <span class="n">SLM_x_res</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">SLM_y_res</span> <span class="o">=</span> <span class="n">SLM_y_res</span></div>
 
-<div class="viewcode-block" id="OptimizerAlgorithm.setIdsList">
-<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithm.setIdsList">[docs]</a>
+<div class="viewcode-block" id="OptimizerAlgorithmFourier.setIdsList">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithmFourier.setIdsList">[docs]</a>
     <span class="k">def</span> <span class="nf">setIdsList</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ids_list</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ids_list</span> <span class="o">=</span> <span class="n">ids_list</span></div>
 
-<div class="viewcode-block" id="OptimizerAlgorithm.initPattern">
-<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithm.initPattern">[docs]</a>
+<div class="viewcode-block" id="OptimizerAlgorithmFourier.initPattern">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithmFourier.initPattern">[docs]</a>
     <span class="k">def</span> <span class="nf">initPattern</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Initializating ... &quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pattern</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">SLM_y_res</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">SLM_x_res</span><span class="p">))</span>
@@ -446,15 +450,15 @@
 
 
 
-<div class="viewcode-block" id="OptimizerAlgorithm.SaveImg">
-<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithm.SaveImg">[docs]</a>
+<div class="viewcode-block" id="OptimizerAlgorithmFourier.SaveImg">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithmFourier.SaveImg">[docs]</a>
     <span class="k">def</span> <span class="nf">SaveImg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">frame</span><span class="p">,</span><span class="n">time</span><span class="p">):</span>
         <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mypath</span><span class="o">+</span><span class="s2">&quot;/Frames/frame_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">time</span><span class="p">)</span> <span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">frame</span><span class="p">))</span>
         <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mypath</span><span class="o">+</span><span class="s2">&quot;/Intensities/intensity_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">time</span><span class="p">)</span> <span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">frame</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)))</span> <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="OptimizerAlgorithm.SaveData">
-<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithm.SaveData">[docs]</a>
+<div class="viewcode-block" id="OptimizerAlgorithmFourier.SaveData">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithmFourier.SaveData">[docs]</a>
     <span class="k">def</span> <span class="nf">SaveData</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mypath</span> <span class="o">=</span> <span class="s1">&#39;Data/Optimizer_&#39;</span><span class="o">+</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">counter</span><span class="p">))</span> <span class="o">+</span><span class="s1">&#39;/&#39;</span>
@@ -474,8 +478,8 @@
 
 
 
-<div class="viewcode-block" id="OptimizerAlgorithm.GeneratePhases">
-<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithm.GeneratePhases">[docs]</a>
+<div class="viewcode-block" id="OptimizerAlgorithmFourier.GeneratePhases">
+<a class="viewcode-back" href="../../SLMcontroller.html#SLMcontroller.FourierWavefrontOptim.OptimizerAlgorithmFourier.GeneratePhases">[docs]</a>
     <span class="k">def</span> <span class="nf">GeneratePhases</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">time</span><span class="p">):</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;generating new phases ... &quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pattern</span> <span class="o">+=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">freqs</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">times</span><span class="p">[</span><span class="n">time</span><span class="p">]</span><span class="o">*</span><span class="mi">256</span><span class="p">)</span><span class="o">%</span><span class="mi">256</span>
