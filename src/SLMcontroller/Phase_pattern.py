@@ -12,7 +12,7 @@ __maintainer__ = "Matteo Mazzanti"
 import numpy as np
 import numba as nb
 
-@nb.jit(nopython=True)
+@nb.jit(nopython=True, parallel=True)
 def _generateGrating(X,Y,pxl,theta):
     """Generates a grating pattern.
 
@@ -25,10 +25,10 @@ def _generateGrating(X,Y,pxl,theta):
     Returns:
         np.array: Grating pattern.
     """
-    grating = (256*(Y/pxl*np.sin(theta)+X/pxl*np.cos(theta)))%256
+    grating = (256*(Y*np.sin(theta)+X*np.cos(theta))/pxl)%256
     return grating
 
-@nb.jit(nopython=True)
+@nb.jit(nopython=True, parallel=True)
 def _generateLens(X, Y, x_offset, y_offset, wl, focus, pixel_pitch):
     """Generates a lens pattern.
 

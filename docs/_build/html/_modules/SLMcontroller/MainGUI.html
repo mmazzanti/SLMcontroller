@@ -100,7 +100,7 @@
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">SLMcontroller.settings</span> <span class="k">as</span> <span class="nn">settings</span>
-<span class="kn">import</span> <span class="nn">SLMcontroller.camera.camera</span> <span class="k">as</span> <span class="nn">camera</span>
+<span class="kn">import</span> <span class="nn">SLMcontroller.CameraFunctions</span> <span class="k">as</span> <span class="nn">CameraFunctions</span>
 <span class="kn">import</span> <span class="nn">SLMcontroller.Phase_pattern</span> <span class="k">as</span> <span class="nn">Phase_pattern</span>
 <span class="kn">import</span> <span class="nn">SLMcontroller.OpticalElement</span> <span class="k">as</span> <span class="nn">opticalElement</span>
 <span class="kn">import</span> <span class="nn">SLMcontroller.Lens</span> <span class="k">as</span> <span class="nn">Lens</span>
@@ -605,7 +605,7 @@
     <span class="k">def</span> <span class="nf">start_camera</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Starts the camera feed</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cameraWindow</span> <span class="o">=</span> <span class="n">camera</span><span class="o">.</span><span class="n">CameraWindow</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cameraWindow</span> <span class="o">=</span> <span class="n">CameraFunctions</span><span class="o">.</span><span class="n">CameraWindow</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cameraWindow</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
 
 

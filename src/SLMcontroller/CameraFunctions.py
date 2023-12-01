@@ -13,6 +13,9 @@ import time
 import numpy as np
 import os
 
+from PIL import Image
+from io import BytesIO
+
 import cv2, queue, threading
 from PyQt6.QtCore import Qt, QThread,pyqtSignal
 from PyQt6.QtGui import QAction, QImage, QKeySequence, QPixmap
@@ -21,6 +24,7 @@ from PyQt6.QtWidgets import (QApplication, QComboBox, QGroupBox,
                                QSizePolicy, QVBoxLayout, QWidget, QSlider,QLabel,QGridLayout,QDoubleSpinBox)
 from PyQt6.QtCore import pyqtSignal as Signal, pyqtSlot as Slot
 
+from flask import jsonify, send_file, abort
 
 class RenderingThread(QThread):
     updateFrame = Signal(QImage)
@@ -34,7 +38,9 @@ class RenderingThread(QThread):
         self.cap.set(cv2.CAP_PROP_AUTO_EXPOSURE, 0.5)
         self.cap.set(cv2.CAP_PROP_FPS, 30.0)
         self.cap.set(cv2.CAP_PROP_EXPOSURE, 10)
+        # Hardcoded max resolution (TODO : try to get the max resolution from the camera)
         cols, rows = 2592,1944,
+        
         self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, cols)
         self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, rows)
         self.cap.set(cv2.CAP_PROP_BUFFERSIZE, 1);
@@ -84,10 +90,13 @@ class RenderingThread(QThread):
 
     def read(self):
         return self.q.get()
+    
     def start_video(self):
         self.video = True
+
     def stop_video(self):
         self.video = False
+
     def die(self):
         self.active = False
         self.cap.release()
@@ -256,6 +265,16 @@ class CameraWindow(QMainWindow):
     def take_picture(self):
         return self.th.take_picture()
 
+    def getCameraIMG(self):
+        img = Image.fromarray(self.take_picture())
+        # create file-object in memory
+        file_object = BytesIO()
+        # write PNG in file-object
+        img.save(file_object, 'PNG')
+        # move to beginning of file so `send_file()` it will read from start 
+        file_object.seek(0)
+        return send_file(file_object,mimetype='image/PNG',as_attachment=False,download_name='pattern.png')
+    
 
     @Slot()
     # sends a message to the zoom function if the "Zoom" button is pushed

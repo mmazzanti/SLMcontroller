@@ -441,6 +441,8 @@ class First(QtWidgets.QMainWindow):
         """Starts the camera feed
         """
         self.cameraWindow = CameraFunctions.CameraWindow()
+        self.flaskApp.add_endpoint('/camera/getImage', 'camera/getImage', self.cameraWindow.getCameraIMG, methods=['GET'])
+
         self.cameraWindow.show()
 
     def closeEvent(self,event):
