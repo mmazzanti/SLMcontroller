@@ -12,7 +12,7 @@ __maintainer__ = "Matteo Mazzanti"
 import numpy as np
 import numba as nb
 
-@nb.jit(nopython=True, parallel=True)
+@nb.jit(nopython = True, parallel = True, cache = True, fastmath = True)
 def _generateGrating(X,Y,pxl,theta):
     """Generates a grating pattern.
 
@@ -25,10 +25,13 @@ def _generateGrating(X,Y,pxl,theta):
     Returns:
         np.array: Grating pattern.
     """
-    grating = (256*(Y*np.sin(theta)+X*np.cos(theta))/pxl)%256
+    precomp_sin = np.sin(theta)
+    precomp_cos = np.cos(theta)
+    precomp_scaling = 256/pxl
+    grating = precomp_scaling*(Y*precomp_sin+X*precomp_cos)
     return grating
 
-@nb.jit(nopython=True, parallel=True)
+@nb.jit(nopython = True, parallel = True, cache = True, fastmath = True)
 def _generateLens(X, Y, x_offset, y_offset, wl, focus, pixel_pitch):
     """Generates a lens pattern.
 
@@ -49,7 +52,7 @@ def _generateLens(X, Y, x_offset, y_offset, wl, focus, pixel_pitch):
     mask = r < np.abs(rN/pixel_pitch)
     gamma = np.pi/(wl*focus)
     phi = gamma*(((X - x_offset)*pixel_pitch)**2+((Y - y_offset)*pixel_pitch)**2)/(2*np.pi)
-    lens = (mask*phi*256)%256
+    lens = (mask*phi*256)#%256
     return lens
 
 class Patter_generator:
@@ -81,8 +84,6 @@ class Patter_generator:
         """
         # TODO : Put the offset as extra parameter from user
         x_offset, y_offset= 0.0, 0.0
-
-        lens=np.zeros((res_Y, res_X))
         # Convert everything to meters
         if focus == 0 :
             focus = 1
@@ -108,8 +109,7 @@ class Patter_generator:
         Returns:
             np.array: Grating pattern.
         """
-        grating=np.zeros((res_Y, res_X))
-        if (lmm == 0 ): return grating
+        if (lmm == 0 ): return np.zeros((res_Y, res_X))
 
         # Number of pixel per line
         pixel_pitch = pixel_pitch*1e-6

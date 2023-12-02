@@ -606,6 +606,8 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Starts the camera feed</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cameraWindow</span> <span class="o">=</span> <span class="n">CameraFunctions</span><span class="o">.</span><span class="n">CameraWindow</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">flaskApp</span><span class="o">.</span><span class="n">add_endpoint</span><span class="p">(</span><span class="s1">&#39;/camera/getImage&#39;</span><span class="p">,</span> <span class="s1">&#39;camera/getImage&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cameraWindow</span><span class="o">.</span><span class="n">getCameraIMG</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">])</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">cameraWindow</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
 
 

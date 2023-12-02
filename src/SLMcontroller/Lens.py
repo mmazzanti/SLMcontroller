@@ -14,7 +14,7 @@ from PyQt6.QtCore import Qt
 
 
 import SLMcontroller.utils as utils
-
+import numpy as np
 
 class LensTab(QWidget):
     """Generates a tab used to control an optical lens element.
@@ -100,7 +100,7 @@ class LensTab(QWidget):
         self.layout.addLayout(self.image_preview_layout,1,0)
         self.layout.addLayout(self.general_controls_layout,2,0)
         self.patten = None
-
+        
         self.setLayout(self.layout)
 
 
@@ -134,6 +134,8 @@ class LensTab(QWidget):
         if self.liveupdate.isChecked():
             self.update_pattern()
             self.hologram_manager.updateSLMWindow()
+            
+            
 
     def update_pattern(self):
         """Updates the lens pattern.
@@ -141,6 +143,7 @@ class LensTab(QWidget):
         self.pattern = self.pattern_generator.GenerateLens(self.focus, self.settings_manager.get_wavelength(), self.settings_manager.get_pixel_pitch(), self.settings_manager.get_X_res(), self.settings_manager.get_Y_res())
         self.pattern_image.setImage(self.pattern)
         self.lastvals = [self.focus,self.settings_manager.get_wavelength(),self.settings_manager.get_pixel_pitch(),self.settings_manager.get_X_res(),self.settings_manager.get_Y_res()]
+        
     
     def needs_updates(self):
         """Checks if the lens needs to be updated.
