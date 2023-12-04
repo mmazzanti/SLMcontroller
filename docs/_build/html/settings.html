@@ -16,6 +16,7 @@
         <script src="_static/documentation_options.js?v=baaebd52"></script>
         <script src="_static/doctools.js?v=888ff710"></script>
         <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -84,6 +85,18 @@
              
   <section id="settings">
 <h1>Settings<a class="headerlink" href="#settings" title="Link to this heading"></a></h1>
+<p class="linemarker linemarker-4">Clicking on the <a class="reference internal" href="#settings"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Settings</span></code></a> menu of SLMcontroller allows to set the following parameters:</p>
+<ul class="simple">
+<li><p class="linemarker linemarker-6"><strong>SLM ID</strong>: the name of the SLM device to be used. This setting is still under development. The program will be extended to control multiple SLMs at the same time.</p></li>
+<li><p class="linemarker linemarker-7"><strong>Screen number</strong>: number of the screen on which the SLM is displayed. I advice you to use at least two screens (one to run the control software and one to display the SLM). If you use only one screen, the SLM will be displayed on the same screen as the control software.</p></li>
+<li><p class="linemarker linemarker-8"><strong>Laser wavelength</strong>: wavelength of the laser in use.</p></li>
+<li><p class="linemarker linemarker-9"><strong>SLM resolution</strong>: resolution of the SLM in use.</p></li>
+<li><p class="linemarker linemarker-10"><strong>SLM pixel pitch</strong>: pixel pitch of the SLM in use.</p></li>
+<li><p class="linemarker linemarker-11"><strong>SLM phase correction</strong>: Phase correction value for <span class="math notranslate nohighlight">\({2\pi}\)</span>  phase shift. This value can be found in the calibration sheet of the SLM (provided by the vendor). Or measured with the calibration procedure (see <a class="reference internal" href="examples.html#examples"><span class="std std-ref">Examples</span></a>)</p></li>
+<li><p class="linemarker linemarker-12"><strong>Pattern size</strong>: size of the pattern that needs to be rendered on the SLM. Notice that its size might differ from the SLM resolution as an SLM might use a higher display resolution that number of pixels available. The extra pixels will appear black.</p></li>
+<li><p class="linemarker linemarker-13"><strong>IP address &amp; port</strong>: IP address and port on which to listen for network connections. The software will accepts controls coming from any IP address. If you want to limit the IP addresses that can control the SLM, you can use a firewall. I strongly advice to use the software on a private network (this not for security reasons but to reduce the probability of incoming connections from other computers during sentive operations).</p></li>
+</ul>
+<a class="reference internal image-reference" href="https://raw.githubusercontent.com/mmazzanti/SLMcontroller/master/Documentation/Img/settings.png"><img alt="https://raw.githubusercontent.com/mmazzanti/SLMcontroller/master/Documentation/Img/settings.png" class="align-center" src="https://raw.githubusercontent.com/mmazzanti/SLMcontroller/master/Documentation/Img/settings.png" style="width: 400px;" /></a>
 </section>
 
 

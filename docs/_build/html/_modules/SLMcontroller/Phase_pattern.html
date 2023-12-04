@@ -95,7 +95,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">numba</span> <span class="k">as</span> <span class="nn">nb</span>
 
-<span class="nd">@nb</span><span class="o">.</span><span class="n">jit</span><span class="p">(</span><span class="n">nopython</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nd">@nb</span><span class="o">.</span><span class="n">jit</span><span class="p">(</span><span class="n">nopython</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">parallel</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">cache</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">fastmath</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">_generateGrating</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">Y</span><span class="p">,</span><span class="n">pxl</span><span class="p">,</span><span class="n">theta</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Generates a grating pattern.</span>
 
@@ -108,10 +108,13 @@
 <span class="sd">    Returns:</span>
 <span class="sd">        np.array: Grating pattern.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">grating</span> <span class="o">=</span> <span class="p">(</span><span class="mi">256</span><span class="o">*</span><span class="p">(</span><span class="n">Y</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span><span class="o">+</span><span class="n">X</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">))</span><span class="o">/</span><span class="n">pxl</span><span class="p">)</span><span class="o">%</span><span class="mi">256</span>
+    <span class="n">precomp_sin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+    <span class="n">precomp_cos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+    <span class="n">precomp_scaling</span> <span class="o">=</span> <span class="mi">256</span><span class="o">/</span><span class="n">pxl</span>
+    <span class="n">grating</span> <span class="o">=</span> <span class="n">precomp_scaling</span><span class="o">*</span><span class="p">(</span><span class="n">Y</span><span class="o">*</span><span class="n">precomp_sin</span><span class="o">+</span><span class="n">X</span><span class="o">*</span><span class="n">precomp_cos</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">grating</span>
 
-<span class="nd">@nb</span><span class="o">.</span><span class="n">jit</span><span class="p">(</span><span class="n">nopython</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nd">@nb</span><span class="o">.</span><span class="n">jit</span><span class="p">(</span><span class="n">nopython</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">parallel</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">cache</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">fastmath</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">_generateLens</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">x_offset</span><span class="p">,</span> <span class="n">y_offset</span><span class="p">,</span> <span class="n">wl</span><span class="p">,</span> <span class="n">focus</span><span class="p">,</span> <span class="n">pixel_pitch</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Generates a lens pattern.</span>
 
@@ -132,7 +135,7 @@
     <span class="n">mask</span> <span class="o">=</span> <span class="n">r</span> <span class="o">&lt;</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">rN</span><span class="o">/</span><span class="n">pixel_pitch</span><span class="p">)</span>
     <span class="n">gamma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="p">(</span><span class="n">wl</span><span class="o">*</span><span class="n">focus</span><span class="p">)</span>
     <span class="n">phi</span> <span class="o">=</span> <span class="n">gamma</span><span class="o">*</span><span class="p">(((</span><span class="n">X</span> <span class="o">-</span> <span class="n">x_offset</span><span class="p">)</span><span class="o">*</span><span class="n">pixel_pitch</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="p">((</span><span class="n">Y</span> <span class="o">-</span> <span class="n">y_offset</span><span class="p">)</span><span class="o">*</span><span class="n">pixel_pitch</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
-    <span class="n">lens</span> <span class="o">=</span> <span class="p">(</span><span class="n">mask</span><span class="o">*</span><span class="n">phi</span><span class="o">*</span><span class="mi">256</span><span class="p">)</span><span class="o">%</span><span class="mi">256</span>
+    <span class="n">lens</span> <span class="o">=</span> <span class="p">(</span><span class="n">mask</span><span class="o">*</span><span class="n">phi</span><span class="o">*</span><span class="mi">256</span><span class="p">)</span><span class="c1">#%256</span>
     <span class="k">return</span> <span class="n">lens</span>
 
 <div class="viewcode-block" id="Patter_generator">
@@ -168,8 +171,6 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># TODO : Put the offset as extra parameter from user</span>
         <span class="n">x_offset</span><span class="p">,</span> <span class="n">y_offset</span><span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span>
-
-        <span class="n">lens</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">res_Y</span><span class="p">,</span> <span class="n">res_X</span><span class="p">))</span>
         <span class="c1"># Convert everything to meters</span>
         <span class="k">if</span> <span class="n">focus</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">:</span>
             <span class="n">focus</span> <span class="o">=</span> <span class="mi">1</span>
@@ -198,8 +199,7 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            np.array: Grating pattern.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">grating</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">res_Y</span><span class="p">,</span> <span class="n">res_X</span><span class="p">))</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">lmm</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">):</span> <span class="k">return</span> <span class="n">grating</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">lmm</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">):</span> <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">res_Y</span><span class="p">,</span> <span class="n">res_X</span><span class="p">))</span>
 
         <span class="c1"># Number of pixel per line</span>
         <span class="n">pixel_pitch</span> <span class="o">=</span> <span class="n">pixel_pitch</span><span class="o">*</span><span class="mf">1e-6</span>

@@ -12,7 +12,7 @@ __maintainer__ = "Matteo Mazzanti"
 
 from PyQt6 import QtCore, QtWidgets
 from PyQt6.QtCore import Qt, QSize
-from PyQt6.QtWidgets import QMessageBox, QLabel, QGridLayout, QWidget, QPushButton, QToolBar, QApplication, QHBoxLayout, QSpinBox, QVBoxLayout, QFileDialog, QLabel, QErrorMessage, QTabWidget
+from PyQt6.QtWidgets import QMessageBox, QLabel, QGridLayout, QWidget, QPushButton, QToolBar, QApplication, QHBoxLayout, QSpinBox, QVBoxLayout, QFileDialog, QLabel, QTextBrowser, QTabWidget
 from PyQt6.QtGui import QPixmap, QImage, QAction, QScreen
 
 import numpy as np
@@ -427,6 +427,19 @@ class First(QtWidgets.QMainWindow):
         self.holograms_manager.addElementToList(id(tab), tab)
         self.add_endpoint_connections(tab)
 
+    def show_aknowledgements(self):
+        """Shows the aknowledgements dialog
+        """
+        dlg = QMessageBox(self)
+        #dlg.setIcon(QMessageBox.Icon.Information)
+        dlg.setWindowTitle("About")
+        dlg.about(self, "About", "<center><h1>SLM controller</h1>This software helps in controlling a Spatial Light Modulator (SLM) to generate holograms.<br><br> It was developed by Matteo Mazzanti at the University of Amsterdam.<br><br> Find more information <a href='https://slm-controller.readthedocs.io/en/latest/index.html'>here</a></center>")
+        #dlg.setText("This software helps in controlling a Spatial Light Modulator (SLM) to generate holograms.<br><br> It was developed by Matteo Mazzanti at the University of Amsterdam.<br><br> Find more information <a href='https://slm-controller.readthedocs.io/en/latest/index.html'>here</a>")
+        dlg.setModal(True)
+        #button = dlg.show()
+        #if button == QMessageBox.StandardButton.Ok:
+        #    return
+
     def edit_SLM_settings(self):
         """Opens the settings dialog
             Todo: 
@@ -521,6 +534,10 @@ class First(QtWidgets.QMainWindow):
         button_exit.setCheckable(True)
         buttons["Exit"] = button_exit
 
+        button_about = QAction("About", self)
+        button_about.triggered.connect(self.show_aknowledgements)
+        buttons["About"] = button_about
+
 
         button_camera = QAction("Start Camera", self)
         button_camera.triggered.connect(self.start_camera)
@@ -549,6 +566,7 @@ class First(QtWidgets.QMainWindow):
         toolbar.addSeparator()
         toolbar.addAction(buttons["Settings"])
         toolbar.addAction(buttons["Start Camera"])
+        toolbar.addAction(buttons["About"])
         toolbar.addAction(buttons["Exit"])
 
     def InitMenu(self,menu,buttons):
@@ -560,6 +578,7 @@ class First(QtWidgets.QMainWindow):
         """
         file_menu = menu.addMenu("&File")
         file_menu.addAction(buttons["Settings"])
+        file_menu.addAction(buttons["About"])
         file_menu.addAction(buttons["Exit"])
 
     def update_pattern(self):

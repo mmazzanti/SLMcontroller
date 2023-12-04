@@ -475,7 +475,7 @@ class SpotOptimTab_ext(QWidget):
             json(Probe zone, Reference zone, Phase): Returns information on the probe zone, reference zone and current phase in json format for remote clients.
         """
         phase = float(phase)
-        if phase > 0 and phase < 255:
+        if phase >= 0 and phase <= 255:
             self.theOptimizer.phase = phase
         return jsonify(RefZone = self.theOptimizer.refZoneID,ProbZone = self.theOptimizer.probZoneID,Phase = self.theOptimizer.phase)
 
