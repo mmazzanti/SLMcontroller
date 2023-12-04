@@ -434,11 +434,7 @@ class First(QtWidgets.QMainWindow):
         #dlg.setIcon(QMessageBox.Icon.Information)
         dlg.setWindowTitle("About")
         dlg.about(self, "About", "<center><h1>SLM controller</h1>This software helps in controlling a Spatial Light Modulator (SLM) to generate holograms.<br><br> It was developed by Matteo Mazzanti at the University of Amsterdam.<br><br> Find more information <a href='https://slm-controller.readthedocs.io/en/latest/index.html'>here</a></center>")
-        #dlg.setText("This software helps in controlling a Spatial Light Modulator (SLM) to generate holograms.<br><br> It was developed by Matteo Mazzanti at the University of Amsterdam.<br><br> Find more information <a href='https://slm-controller.readthedocs.io/en/latest/index.html'>here</a>")
         dlg.setModal(True)
-        #button = dlg.show()
-        #if button == QMessageBox.StandardButton.Ok:
-        #    return
 
     def edit_SLM_settings(self):
         """Opens the settings dialog
