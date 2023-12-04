@@ -474,6 +474,8 @@ class First(QtWidgets.QMainWindow):
         self.flaskApp.add_endpoint('/optimiser/phaseStep/<float:phaseStep>', 'optimiser/phaseStep/<phaseStep>', tab.setPhaseStep, methods=['GET'])
 
         self.flaskApp.add_endpoint('/optimiser/IDsList', 'optimiser/IDsList', tab.getIdsList, methods=['GET'])
+        self.flaskApp.add_endpoint('/optimiser/mesh', 'optimiser/mesh', tab.getMesh, methods=['GET'])
+
         self.flaskApp.add_endpoint('/optimiser/phasePattern', 'optimiser/phasePattern', tab.getPhasePatternIMG, methods=['GET'])
         self.flaskApp.add_endpoint('/optimiser/phasePatternData', 'optimiser/phasePatternData', tab.getPhasePattern, methods=['GET'])
 

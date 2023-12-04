@@ -533,6 +533,11 @@ class SpotOptimTab_ext(QWidget):
         if self.theOptimizer.getPhasePattern() is None:
             return abort(404, "No pattern defined")
         return jsonify(PhasePattern = self.theOptimizer.getPhasePattern().tolist())
+    
+    def getMesh(self):
+        if self.theOptimizer.mesh is None:
+            return abort(404, "No mesh defined")
+        return jsonify(Mesh = self.theOptimizer.mesh.tolist())
 
     def getPhasePatternIMG(self):
         """Returns the phase pattern
