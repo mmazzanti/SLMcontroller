@@ -9,7 +9,7 @@ You can install directly |slmcontroller|_ from PyPI using the following command:
 
 .. code-block:: python
    
-   pip install  SLMcontroller
+   pip install SLMcontroller
 
 afterwards you can run the following command to start the software:
 

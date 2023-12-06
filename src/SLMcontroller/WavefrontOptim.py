@@ -827,8 +827,10 @@ class OptimizerAlgorithm(QThread):
         If they were it needs to regenerate the grating patterns
         """
         self.remeshing()
+        print("Previous zones: ", self._prevzones)
+        print("New zones: ",np.array([self._refZoneID, self._probZoneID]))
         # If the user changed the zones call the slower function to reload the gratings patterns on the previous zones
-        if not np.array_equal(self._prevzones,[self._refZoneID, self._probZoneID]):
+        if not np.array_equal(self._prevzones,np.array([self._refZoneID, self._probZoneID])):
             self.pattern = load_pattern(self._mesh, self.grating_pattern,self.interf_grating_pattern,self._phase,self.SLM_x_res,self.SLM_y_res,self._refZoneID,self._probZoneID)
         self.pattern = next_step_fast(self.SLM_x_res, self.SLM_y_res, self._mesh, self.interf_grating_pattern, self._probZoneID, self.pattern, self._phase)
         print("Phase offset at this step: ", self._phase)
@@ -836,7 +838,7 @@ class OptimizerAlgorithm(QThread):
         # Increment phase for next step
         self._phase = self._phase + self._phaseStep
         self.hologram_manager.renderAlgorithmPattern(self.pattern, True)
-        self._prevzones = [self._refZoneID, self._probZoneID]
+        self._prevzones = np.array([self._refZoneID, self._probZoneID])
         
 
 
@@ -1033,12 +1035,12 @@ def next_step_fast(SIZEX, SIZEY, mesh, interf_grating, probZoneID, pattern, phas
         for j in range(0,SIZEX):
             tmp = mesh[i,j]
             if tmp == probZoneID:
-                pattern[i,j] = (interf_grating[i,j] + phase)%256
+                pattern[i,j] = interf_grating[i,j] + phase
     return pattern
 
 
 
-@jit(nopython=True) # Set "nopython" mode for best performance, equivalent to @njit
+@jit(nopython=True, parallel = True, cache = True) # Set "nopython" mode for best performance, equivalent to @njit
 def load_pattern(mesh, grating, interf_grating, phase, SIZEX, SIZEY, refZoneID, probZoneID):
     """Loads the phase pattern. Uses jit from numba to speed up the computation.
 
@@ -1062,7 +1064,7 @@ def load_pattern(mesh, grating, interf_grating, phase, SIZEX, SIZEY, refZoneID, 
                 if tmp == refZoneID:
                     pattern[i,j] = interf_grating[i,j]
                 elif tmp == probZoneID:
-                    pattern[i,j] = (interf_grating[i,j] + phase)%256
+                    pattern[i,j] = interf_grating[i,j] + phase
                 else:
                     pattern[i,j] = grating[i,j]
     return pattern
