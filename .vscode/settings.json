@@ -1,3 +1,4 @@
 {
-    "esbonio.sphinx.confDir": "${workspaceFolder}/docs"
+    "esbonio.sphinx.confDir": "${workspaceFolder}/docs",
+    "julia.environmentPath": "/Users/matteo/Library/CloudStorage/OneDrive-UvA/Documents/GitHub/SLMcontroller"
 }

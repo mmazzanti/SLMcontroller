@@ -3,7 +3,7 @@
 """Meshing_process.py: Meshing process class. Used to handle gmesh GUI on OS that do not allow to run gmsh in a separate thread"""
 
 __author__ = "Matteo Mazzanti"
-__copyright__ = "Copyright 2022, Matteo Mazzanti"
+__copyright__ = "Copyright 2023, Matteo Mazzanti"
 __license__ = "GNU GPL v3"
 __maintainer__ = "Matteo Mazzanti"
 

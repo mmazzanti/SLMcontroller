@@ -3,7 +3,7 @@
 """OpticalElement.py: Generates a dialog used to load an optical element."""
 
 __author__ = "Matteo Mazzanti"
-__copyright__ = "Copyright 2022, Matteo Mazzanti"
+__copyright__ = "Copyright 2023, Matteo Mazzanti"
 __license__ = "GNU GPL v3"
 __maintainer__ = "Matteo Mazzanti"
 

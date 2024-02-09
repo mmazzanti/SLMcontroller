@@ -3,7 +3,7 @@
 """FourierWavefrontOptim.py: Uses the camera to correct for aberrations using a Fourier-based algorithm. The algorithm is based on: https://www.frontiersin.org/articles/10.3389/fnano.2022.998656/full """
 
 __author__ = "Matteo Mazzanti"
-__copyright__ = "Copyright 2022, Matteo Mazzanti"
+__copyright__ = "Copyright 2023, Matteo Mazzanti"
 __license__ = "GNU GPL v3"
 __maintainer__ = "Matteo Mazzanti"
 

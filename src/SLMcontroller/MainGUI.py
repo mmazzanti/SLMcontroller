@@ -4,7 +4,7 @@
 This file contains the main window of the GUI and the SLM window."""
 
 __author__ = "Matteo Mazzanti"
-__copyright__ = "Copyright 2022, Matteo Mazzanti"
+__copyright__ = "Copyright 2023, Matteo Mazzanti"
 __license__ = "GNU GPL v3"
 __maintainer__ = "Matteo Mazzanti"
 
@@ -26,6 +26,7 @@ import SLMcontroller.FourierWavefrontOptim as FourierWavefrontOptim
 import SLMcontroller.WavefrontOptim as WavefrontOptim
 import SLMcontroller.FlatnessCorrection as FlatnessCorrection
 import SLMcontroller.Meshing_process as Meshing_process
+import SLMcontroller.Zernike as Zernike
 import SLMcontroller.Remote_control as Remote_control
 import SLMcontroller.utils as utils
 
@@ -380,7 +381,10 @@ class First(QtWidgets.QMainWindow):
             Todo: 
                 Implement Zernike tab
         """
-        pass
+        tab = Zernike.ZernikeTab(self.pattern_generator, self.settings_manager, self.holograms_manager)
+        self.tabwidget.addTab(tab,"Zernike polynomials")
+        self.holograms_manager.addElementToList(id(tab), tab)
+
     def LUT_tab(self):
         """Creates a new LUT tab and adds it to the tabwidget.
             Todo:

@@ -3,7 +3,7 @@
 """Grating.py: Generates a tab used to control an optical grating element. The grating can be rotated and its line density can be changed."""
 
 __author__ = "Matteo Mazzanti"
-__copyright__ = "Copyright 2022, Matteo Mazzanti"
+__copyright__ = "Copyright 2023, Matteo Mazzanti"
 __license__ = "GNU GPL v3"
 __maintainer__ = "Matteo Mazzanti"
 

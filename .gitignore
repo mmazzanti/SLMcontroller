@@ -8,6 +8,7 @@ testing/*
 docs/Makefile
 docs/make.bat
 dist/*
+.vscode/*
 src/SLMcontroller.egg-info/*
 
 tests/

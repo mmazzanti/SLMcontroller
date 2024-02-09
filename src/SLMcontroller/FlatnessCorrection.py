@@ -3,7 +3,7 @@
 """FlatnessCorrection.py: Generates a tab used to load an optical flatness correction element (this is usually a 8bit image given by the SLM producer)."""
 
 __author__ = "Matteo Mazzanti"
-__copyright__ = "Copyright 2022, Matteo Mazzanti"
+__copyright__ = "Copyright 2023, Matteo Mazzanti"
 __license__ = "GNU GPL v3"
 __maintainer__ = "Matteo Mazzanti"
 

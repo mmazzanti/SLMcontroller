@@ -3,7 +3,7 @@
 """Phase_pattern.py: Generates phase patterns for the SLM."""
 
 __author__ = "Matteo Mazzanti"
-__copyright__ = "Copyright 2022, Matteo Mazzanti"
+__copyright__ = "Copyright 2023, Matteo Mazzanti"
 __license__ = "GNU GPL v3"
 __maintainer__ = "Matteo Mazzanti"
 
@@ -11,6 +11,7 @@ __maintainer__ = "Matteo Mazzanti"
 
 import numpy as np
 import numba as nb
+from math import factorial
 
 @nb.jit(nopython = True, parallel = True, cache = True, fastmath = True)
 def _generateGrating(X,Y,pxl,theta):
@@ -55,6 +56,47 @@ def _generateLens(X, Y, x_offset, y_offset, wl, focus, pixel_pitch):
     lens = (mask*phi*256)#%256
     return lens
 
+## Zernike polynomials generation
+# This function determines the radial Zernike polynomials
+#@nb.jit(nopython = True, parallel = True, cache = True, fastmath = True)
+def _radialfunc(n, m1, rho):
+
+    if( m1 < 0  ):
+        m = -m1
+    else:
+        m = m1
+
+    val_i = int((n-m)/2);
+    val_j = int((n+m)/2);
+
+    rad = 0.0;
+
+    for k in (range(0, val_i+1)):
+        rad += ( ((-1)**k * factorial((n - k)) ) / (factorial((k)) * factorial((val_j - k)) * factorial((val_i - k)) ) )* rho**(n-2*k) 
+
+    return rad
+
+# Zernike Polynomial function, generates the corresponding polynomial for each given n,m 
+# along the cartesian (pixel) coordinates x,y
+#@nb.jit(nopython = True, parallel = True, cache = True, fastmath = True)
+def _ZernikePolynomial(n, m, x, y):
+    # theta is the azimuthal angle between 0 and 2pi; rho is the radial distance between 0 and 1
+    
+    rho =  np.sqrt(x**2 + y**2)
+    theta = np.arctan2(y,x) 
+    radial = _radialfunc(n, m , rho) 
+    
+    if( m > 0):
+        z_all = radial* np.cos( m * theta) * np.sqrt(2*n+2)
+    elif(m == 0):
+        z_all = radial * np.sqrt(n+1)
+    else :
+        z_all = radial* np.sin( m * theta) * np.sqrt(2*n+2)
+
+    #z_all[ rho > 1 ] = np.nan  # if i wanna restrict results to a radius of 1
+
+    return (z_all) #renormalization?
+
 class Patter_generator:
     """Class for generating phases patterns.
 
@@ -93,7 +135,30 @@ class Patter_generator:
         # Generate meshgrid if needed
         self.generate_mesh(res_X, res_Y)
 
-        return _generateLens(self.X,self.Y,x_offset, y_offset,wl,focus, pixel_pitch)
+        return _generateLens(self.X, self.Y, x_offset, y_offset, wl, focus, pixel_pitch)
+    
+    def GenerateZernike(self, coefficients, res_X, res_Y, x_offset, y_offset):
+        """Generates a Zernike pattern.
+
+        Args:
+            coefficients (list): List of coefficients for the Zernike polynomial.
+            res_X (int): SLM X resolution.
+            res_Y (int): SLM Y resolution.
+
+        Returns:
+            np.array: Zernike pattern.
+        """
+        self.generate_mesh(res_X, res_Y)
+        Zernike = np.zeros((res_Y, res_X))
+
+        for order in range(len(coefficients)):
+            if order == 0:
+                n,m = 0,0
+            else:
+                n = int(np.floor(np.sqrt(4/np.sqrt(3)*(order+1)))-1)
+                m = -n+2*(order+1-np.round(np.sqrt(3)/4*(n+1)**2))
+            Zernike += coefficients[order]*_ZernikePolynomial(n, m, self.X - x_offset + int(res_X/2), self.Y - int(res_Y/2) + y_offset)
+        return Zernike
 
     def GenerateGrating(self, wl, pixel_pitch, lmm, theta, res_X, res_Y):
         """Generates a grating pattern.
