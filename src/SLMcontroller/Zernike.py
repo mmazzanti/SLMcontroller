@@ -9,7 +9,7 @@ __maintainer__ = "Matteo Mazzanti"
 
 # -*- coding: utf-8 -*-
 
-from PyQt6.QtWidgets import QCheckBox, QSpinBox,QTableWidget,QStyledItemDelegate, QMessageBox, QLineEdit, QComboBox, QLabel, QSlider, QDoubleSpinBox,QGridLayout, QVBoxLayout, QGroupBox, QHBoxLayout, QWidget, QPushButton, QFileDialog
+from PyQt6.QtWidgets import QHeaderView, QTableWidgetItem, QCheckBox, QSpinBox,QTableWidget,QStyledItemDelegate, QMessageBox, QLineEdit, QComboBox, QLabel, QSlider, QDoubleSpinBox,QGridLayout, QVBoxLayout, QGroupBox, QHBoxLayout, QWidget, QPushButton, QFileDialog
 from PyQt6.QtCore import QRegularExpression
 from PyQt6.QtGui import QRegularExpressionValidator
 from PyQt6.QtCore import Qt
@@ -48,9 +48,13 @@ class ZernikeTab(QWidget):
 
         # Define widgets
         self.centerX = QSpinBox(text="Zernike Center X")
+        self.centerX.setMinimumWidth(120)
+        self.labelX = QLabel('X: ', self)
         self.centerX.setMinimum(0)
         self.centerX.setMaximum(self.SLM_x_res)
         self.centerY = QSpinBox(text="Zernike Center Y")
+        self.centerY.setMinimumWidth(120)
+        self.labelY = QLabel('Y: ', self)
         self.centerY.setMinimum(0)
         self.centerY.setMaximum(self.SLM_y_res)
         self.ZernikeOrders = 1
@@ -59,7 +63,11 @@ class ZernikeTab(QWidget):
         self.ZernikeTable = QTableWidget(1, self.ZernikeOrders)
         delegate = NumericDelegate(self.ZernikeTable)
         self.ZernikeTable.setItemDelegate(delegate)
-        
+        self.ZernikeTable.setItem(0,0, QTableWidgetItem("0"))
+        self.ZernikeTable.setHorizontalHeaderLabels(["Coefficient"])
+        self.ZernikeTable.horizontalHeader().setSectionResizeMode(0,QHeaderView.ResizeMode.Stretch)
+        self.ZernikeTable.item(0,0).setTextAlignment(Qt.AlignmentFlag.AlignCenter)
+
         # Sub layout for adding/removing Zernike orders
         self.add_remove_Zernike = QHBoxLayout()
         # Add button
@@ -72,17 +80,23 @@ class ZernikeTab(QWidget):
         self.add_remove_Zernike.addWidget(self.addOrder)
         self.add_remove_Zernike.addWidget(self.removeOrder)
 
+        self.loadZernikebutton = QPushButton("Load from file")
+        self.saveZernikebutton = QPushButton("Save to file")
+        self.loadZernikebutton.clicked.connect(self.loadZernikeFromFile)
+        self.saveZernikebutton.clicked.connect(self.saveZernikeToFile)
+
+
         # Activate/disable element
         self.isactive = QCheckBox("Activate element : ")
         self.isactive.setLayoutDirection(Qt.LayoutDirection.RightToLeft)
         
 
         self.ZernikeLayout = QVBoxLayout()
-        self.ZernikeLayout.addWidget(self.make_group("Zernike Center", self.centerX,self.centerY))
-        self.ZernikeLayout.addWidget(self.make_group("Polynomials coefficients", self.ZernikeTable))
-    
-        
+        self.ZernikeLayout.addWidget(self.make_group("Load/save coefficients", self.loadZernikebutton, self.saveZernikebutton))
+        self.ZernikeLayout.addWidget(self.make_group("Zernike Center", self.labelX, self.centerX, self.labelY, self.centerY))
+        self.ZernikeLayout.addWidget(self.make_group("Polynomials coefficients (OSA/ANSI)", self.ZernikeTable))
         self.ZernikeLayout.addLayout(self.add_remove_Zernike)
+        
 
         self.make_image_preview()
         self.ZernikeLayout.addLayout(self.image_preview_layout)
@@ -90,7 +104,8 @@ class ZernikeTab(QWidget):
         # self.testingbutton = QPushButton("Test")
         # self.testingbutton.clicked.connect(self.readZernikeTable)
         # self.ZernikeLayout.addWidget(self.make_group("Testing", self.testingbutton))
-        self.ZernikeLayout.addWidget(self.make_group("Activate", self.isactive))
+        #self.ZernikeLayout.addWidget(self.make_group("Activate", self.isactive))
+        self.ZernikeLayout.addWidget(self.isactive)
         self.setLayout(self.ZernikeLayout)
 
     def make_group(self, group_name, *widgets):
@@ -113,6 +128,9 @@ class ZernikeTab(QWidget):
         """
         self.ZernikeOrders += 1
         self.ZernikeTable.setRowCount(self.ZernikeOrders)
+        self.ZernikeTable.setItem(self.ZernikeOrders-1,0, QTableWidgetItem("0"))
+        self.ZernikeTable.item(self.ZernikeOrders-1,0).setTextAlignment(Qt.AlignmentFlag.AlignCenter)
+
 
     def readZernikeTable(self):
         """Reads the Zernike table and returns a list of coefficients.
@@ -125,6 +143,41 @@ class ZernikeTab(QWidget):
             else :
                 coefficients = np.append(coefficients, 0)
         return coefficients
+
+    def saveZernikeToFile(self):
+        """Saves Zernike parameters to file.
+        """
+        # Opens a prompt for the user to select a mesh file
+        ZernikeFile = QFileDialog.getSaveFileName(self,"Save File","","Numpy (*.npy);;")
+        datadict={'centerX':self.centerX.value(), 'centerY':self.centerY.value(),'coefficients':self.readZernikeTable()}
+        np.save(ZernikeFile[0], datadict)
+    
+    def loadZernikeFromFile(self):
+        """Loads Zernike parameters from file.
+        """
+        # Opens a prompt for the user to select a mesh file
+        ZernikeFile = QFileDialog.getOpenFileName(self,"Open File","${HOME}","Numpy (*.npy);;",)
+        try:
+            data = np.load(ZernikeFile[0], allow_pickle=True)
+            self.centerX.setValue(data.item().get('centerX'))
+            self.centerY.setValue(data.item().get('centerY'))
+
+            coefficients = data.item().get('coefficients')
+            # Clear the table
+            self.ZernikeTable.setRowCount(0)
+            self.ZernikeTable.setRowCount(len(coefficients))
+            for i in range(len(coefficients)):
+                self.ZernikeTable.setItem(i,0, QTableWidgetItem(str(coefficients[i])))
+                self.ZernikeTable.item(i,0).setTextAlignment(Qt.AlignmentFlag.AlignCenter)
+            self.ZernikeOrders = len(coefficients)
+        except:
+            dlg = QMessageBox(self)
+            dlg.setIcon(QMessageBox.Icon.Warning)
+            dlg.setWindowTitle("ERROR!")
+            dlg.setText("There is an error in the Zernike file, check that all variables are present and correctly formatted")
+            button = dlg.exec()
+            if button == QMessageBox.StandardButton.Ok:
+                return
     
     def update_pattern(self):
         """Updates the Zernike phase pattern.
@@ -149,7 +202,7 @@ class ZernikeTab(QWidget):
         self.image_preview_layout = QVBoxLayout()
         self.pattern_image = utils.ImageWidget()
         self.image_preview_layout.addWidget(self.pattern_image)
-    
+            
     def needs_updates(self):
         """Checks if the lens needs to be updated.
 
@@ -194,7 +247,7 @@ class NumericDelegate(QStyledItemDelegate):
     def createEditor(self, parent, option, index):
         editor = super(NumericDelegate, self).createEditor(parent, option, index)
         if isinstance(editor, QLineEdit):
-            reg_ex = QRegularExpression("[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?")
+            reg_ex = QRegularExpression("[+\-]?(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+\-]?\d+)?")
             validator = QRegularExpressionValidator(reg_ex, editor)
             editor.setValidator(validator)
         return editor
