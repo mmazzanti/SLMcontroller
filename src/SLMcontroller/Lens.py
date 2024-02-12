@@ -67,9 +67,9 @@ class LensTab(QWidget):
         self.slider_layout = QVBoxLayout()
         self.general_controls_layout = QVBoxLayout()
 
-        self.isactive = QCheckBox("Activate element : ")
+        self.isactive = QCheckBox("Activate element: ")
         self.isactive.setLayoutDirection(Qt.LayoutDirection.RightToLeft)
-        self.liveupdate = QCheckBox("Live updating : ")
+        self.liveupdate = QCheckBox("Live updating: ")
         self.liveupdate.setLayoutDirection(Qt.LayoutDirection.RightToLeft)
         self.general_controls_layout.addWidget(self.isactive)
         self.general_controls_layout.addWidget(self.liveupdate)

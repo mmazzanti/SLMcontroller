@@ -384,6 +384,7 @@ class First(QtWidgets.QMainWindow):
         tab = Zernike.ZernikeTab(self.pattern_generator, self.settings_manager, self.holograms_manager)
         self.tabwidget.addTab(tab,"Zernike polynomials")
         self.holograms_manager.addElementToList(id(tab), tab)
+        self.add_endpoint_connections_zernike(tab)
 
     def LUT_tab(self):
         """Creates a new LUT tab and adds it to the tabwidget.
@@ -429,7 +430,7 @@ class First(QtWidgets.QMainWindow):
         tab.setEventsHandlers(self.eventsDict, self.conditionsDict, self.queue)
         self.tabwidget.addTab(tab,"Optimizer (ext)")
         self.holograms_manager.addElementToList(id(tab), tab)
-        self.add_endpoint_connections(tab)
+        self.add_endpoint_connections_optim(tab)
 
     def show_aknowledgements(self):
         """Shows the aknowledgements dialog
@@ -466,7 +467,13 @@ class First(QtWidgets.QMainWindow):
         print("Closing Hologram window")
         QApplication.instance().quit()
     
-    def add_endpoint_connections(self,tab):
+    def add_endpoint_connections_zernike(self,tab):
+        self.flaskApp.add_endpoint('/zernike/render', 'zernike/render', tab.update_pattern, methods=['GET'])
+        self.flaskApp.add_endpoint('/zernike/<order>/<coeff>', 'zernike/<int:order>/<float:coeff>', tab.add_zernikeN, methods=['GET'])
+
+        pass
+
+    def add_endpoint_connections_optim(self,tab):
         """Adds the endpoints connections to the Flask app
 
         Args:

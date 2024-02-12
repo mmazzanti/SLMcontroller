@@ -67,6 +67,7 @@ class ZernikeTab(QWidget):
         self.ZernikeTable.setHorizontalHeaderLabels(["Coefficient"])
         self.ZernikeTable.horizontalHeader().setSectionResizeMode(0,QHeaderView.ResizeMode.Stretch)
         self.ZernikeTable.item(0,0).setTextAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.ZernikeTable.itemChanged.connect(self.auto_update)
 
         # Sub layout for adding/removing Zernike orders
         self.add_remove_Zernike = QHBoxLayout()
@@ -87,8 +88,10 @@ class ZernikeTab(QWidget):
 
 
         # Activate/disable element
-        self.isactive = QCheckBox("Activate element : ")
+        self.isactive = QCheckBox("Activate element: ")
         self.isactive.setLayoutDirection(Qt.LayoutDirection.RightToLeft)
+        self.liveupdate = QCheckBox("Live updating: ")
+        self.liveupdate.setLayoutDirection(Qt.LayoutDirection.RightToLeft)
         
 
         self.ZernikeLayout = QVBoxLayout()
@@ -106,6 +109,7 @@ class ZernikeTab(QWidget):
         # self.ZernikeLayout.addWidget(self.make_group("Testing", self.testingbutton))
         #self.ZernikeLayout.addWidget(self.make_group("Activate", self.isactive))
         self.ZernikeLayout.addWidget(self.isactive)
+        self.ZernikeLayout.addWidget(self.liveupdate)
         self.setLayout(self.ZernikeLayout)
 
     def make_group(self, group_name, *widgets):
@@ -131,6 +135,34 @@ class ZernikeTab(QWidget):
         self.ZernikeTable.setItem(self.ZernikeOrders-1,0, QTableWidgetItem("0"))
         self.ZernikeTable.item(self.ZernikeOrders-1,0).setTextAlignment(Qt.AlignmentFlag.AlignCenter)
 
+    def add_zernikeN(self,order,coeff):
+        """Adds a new Zernike order to the table. Fills the table with 0 in case lower orders are missing.
+        """
+        order = int(order)
+        coeff = float(coeff)
+        print("Adding Zernike order ",order," with coefficient ",coeff)
+        if order > self.ZernikeOrders:
+            # Fill the table with missing coefficients
+            self.ZernikeTable.setRowCount(order)
+            print(self.ZernikeOrders," ---- ", order-self.ZernikeOrders)
+            for i in range(self.ZernikeOrders,order-1):
+                self.ZernikeTable.setItem(i,0, QTableWidgetItem("0"))
+                self.ZernikeTable.item(i,0).setTextAlignment(Qt.AlignmentFlag.AlignCenter)
+                print(i)
+            #print(order," : ",coeff)
+            self.ZernikeTable.setItem(order-1,0, QTableWidgetItem(str(coeff)))
+            self.ZernikeTable.item(order-1,0).setTextAlignment(Qt.AlignmentFlag.AlignCenter)
+            self.ZernikeOrders = order
+        else:
+            self.ZernikeTable.setItem(order-1,0, QTableWidgetItem(str(coeff)))
+            self.ZernikeTable.item(order-1,0).setTextAlignment(Qt.AlignmentFlag.AlignCenter)
+        return jsonify(coefficients = self.readZernikeTable().tolist())#,ProbZone = self.theOptimizer.probZoneID,Phase = self.theOptimizer.phase)
+
+        #self.ZernikeOrders += 1
+        #self.ZernikeTable.setRowCount(self.ZernikeOrders)
+        #self.ZernikeTable.setItem(self.ZernikeOrders-1,0, QTableWidgetItem(str(coeff)))
+        #self.ZernikeTable.item(self.ZernikeOrders-1,0).setTextAlignment(Qt.AlignmentFlag.AlignCenter)
+        
 
     def readZernikeTable(self):
         """Reads the Zernike table and returns a list of coefficients.
@@ -179,6 +211,13 @@ class ZernikeTab(QWidget):
             if button == QMessageBox.StandardButton.Ok:
                 return
     
+    def auto_update(self):
+        """Updates the Zernike pattern when the table is modified.
+        """
+        if self.liveupdate.isChecked():
+            self.update_pattern()
+            self.hologram_manager.updateSLMWindow()
+            
     def update_pattern(self):
         """Updates the Zernike phase pattern.
         """

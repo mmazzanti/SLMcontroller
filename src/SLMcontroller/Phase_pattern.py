@@ -11,7 +11,7 @@ __maintainer__ = "Matteo Mazzanti"
 
 import numpy as np
 import numba as nb
-from math import factorial
+import math as math
 
 @nb.jit(nopython = True, parallel = True, cache = True, fastmath = True)
 def _generateGrating(X,Y,pxl,theta):
@@ -72,7 +72,10 @@ def _radialfunc(n, m1, rho):
     rad = 0.0;
 
     for k in (range(0, val_i+1)):
-        rad += ( ((-1)**k * factorial((n - k)) ) / (factorial((k)) * factorial((val_j - k)) * factorial((val_i - k)) ) )* rho**(n-2*k) 
+        # Numba cannot deal with math.factorial, so I've tried math.gamma but also no luck
+        #rad += ( ((-1)**k * math.gamma(n - k + 1) ) / (math.gamma(k+1) * math.gamma(val_j - k + 1) * math.gamma(val_i - k + 1) ) )* rho**(n-2*k) 
+
+        rad += ( ((-1)**k * math.factorial((n - k)) ) / (math.factorial((k)) * math.factorial((val_j - k)) * math.factorial((val_i - k)) ) )* rho**(n-2*k) 
 
     return rad
 
@@ -83,7 +86,7 @@ def _ZernikePolynomial(n, m, x, y):
     # theta is the azimuthal angle between 0 and 2pi; rho is the radial distance between 0 and 1
     
     rho =  np.sqrt(x**2 + y**2)
-    theta = np.arctan2(y,x) 
+    theta = np.arctan2(x,y) 
     radial = _radialfunc(n, m , rho) 
     
     if( m > 0):
@@ -148,16 +151,18 @@ class Patter_generator:
         Returns:
             np.array: Zernike pattern.
         """
+
         self.generate_mesh(res_X, res_Y)
         Zernike = np.zeros((res_Y, res_X))
-
+        n = 0
+        m = -n
         for order in range(len(coefficients)):
-            if order == 0:
-                n,m = 0,0
-            else:
-                n = int(np.floor(np.sqrt(4/np.sqrt(3)*(order+1)))-1)
-                m = -n+2*(order+1-np.round(np.sqrt(3)/4*(n+1)**2))
-            Zernike += coefficients[order]*_ZernikePolynomial(n, m, self.X - x_offset + int(res_X/2), self.Y - int(res_Y/2) + y_offset)
+            while (n*(n+2)+m)/2 <= order:
+                Zernike +=  coefficients[order] * _ZernikePolynomial(n, m, -x_offset + self.X + int(res_X/2), self.Y - int(res_Y/2) + y_offset )
+                m += 2
+                if m > n:
+                    n += 1
+                    m = -n 
         return Zernike
 
     def GenerateGrating(self, wl, pixel_pitch, lmm, theta, res_X, res_Y):
@@ -211,11 +216,3 @@ class Patter_generator:
             y_list = np.linspace(-int(res_Y/2),int(res_Y/2),res_Y)
             self.X, self.Y = np.meshgrid(x_list,y_list)
 
-    def MakeZernike(self):
-        """Generates a Zernike pattern.
-
-        Todo: 
-            Implement this function.
-        """
-        print(1)
-        pass
