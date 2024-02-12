@@ -28,7 +28,7 @@ def _generateGrating(X,Y,pxl,theta):
     """
     precomp_sin = np.sin(theta)
     precomp_cos = np.cos(theta)
-    precomp_scaling = 256/pxl
+    precomp_scaling = 255/pxl
     grating = precomp_scaling*(Y*precomp_sin+X*precomp_cos)
     return grating
 
@@ -53,7 +53,7 @@ def _generateLens(X, Y, x_offset, y_offset, wl, focus, pixel_pitch):
     mask = r < np.abs(rN/pixel_pitch)
     gamma = np.pi/(wl*focus)
     phi = gamma*(((X - x_offset)*pixel_pitch)**2+((Y - y_offset)*pixel_pitch)**2)/(2*np.pi)
-    lens = (mask*phi*256)#%256
+    lens = (mask*phi*255)#%256
     return lens
 
 ## Zernike polynomials generation
@@ -163,7 +163,7 @@ class Patter_generator:
                 if m > n:
                     n += 1
                     m = -n 
-        return Zernike
+        return Zernike*255
 
     def GenerateGrating(self, wl, pixel_pitch, lmm, theta, res_X, res_Y):
         """Generates a grating pattern.
