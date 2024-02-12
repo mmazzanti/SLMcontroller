@@ -229,9 +229,8 @@ class HologramsManager():
         e.g. at 760nm 255(2pi) ---> 226(new 2pi value)
         So we need to renormalize the hologram such that value%226
         """
-        self.pattern = (np.fmod(self.pattern,256)*(self.settings_manager.get_phase_correction())/255).astype(np.uint8)
-
-
+        self.pattern = (np.mod(self.pattern,256)*(self.settings_manager.get_phase_correction())/255).astype(np.uint8)
+        
     def getPatterns(self):
         """This function gets all the patterns from the active elements and combines them
         """
@@ -251,7 +250,7 @@ class HologramsManager():
 
     def renderPattern(self):
         """This function does the actual render of the phase pattern. Updates the QPixmap used on the SLM window
-        """     
+        """   
         self.RenormalizePattern()
         q_img = QImage(self.pattern, self.settings_manager.get_X_res(), self.settings_manager.get_Y_res(), self.settings_manager.get_X_res(), QImage.Format.Format_Grayscale8)
 #        label = QLabel(self)
@@ -464,7 +463,7 @@ class First(QtWidgets.QMainWindow):
         At the closing event remove all tabs in memory calling their destructor
         """
         self.holograms_manager.removeAll()
-        print("Closing Hologram window")
+        #print("Closing Hologram window")
         QApplication.instance().quit()
     
     def add_endpoint_connections_zernike(self,tab):

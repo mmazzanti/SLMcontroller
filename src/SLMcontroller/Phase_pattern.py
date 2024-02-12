@@ -13,6 +13,7 @@ import numpy as np
 import numba as nb
 import math as math
 
+
 @nb.jit(nopython = True, parallel = True, cache = True, fastmath = True)
 def _generateGrating(X,Y,pxl,theta):
     """Generates a grating pattern.
@@ -56,38 +57,48 @@ def _generateLens(X, Y, x_offset, y_offset, wl, focus, pixel_pitch):
     lens = (mask*phi*255)#%256
     return lens
 
+LOOKUP_TABLE = np.array([
+    1, 1, 2, 6, 24, 120, 720, 5040, 40320,
+    362880, 3628800, 39916800, 479001600,
+    6227020800, 87178291200, 1307674368000,
+    20922789888000, 355687428096000, 6402373705728000,
+    121645100408832000, 2432902008176640000], dtype='int64')
+
+# This part to speed up Zernike polynomial generation
+@nb.jit(nopython = True, cache = True, fastmath = True)
+def _fast_factorial(n):
+    if n > 20:
+        raise ValueError
+    return LOOKUP_TABLE[n]
+
 ## Zernike polynomials generation
 # This function determines the radial Zernike polynomials
-#@nb.jit(nopython = True, parallel = True, cache = True, fastmath = True)
+@nb.jit(nopython = True, cache = True, fastmath = True)
 def _radialfunc(n, m1, rho):
-
     if( m1 < 0  ):
         m = -m1
     else:
         m = m1
-
     val_i = int((n-m)/2);
     val_j = int((n+m)/2);
 
-    rad = 0.0;
+    #rad = 0.0;
+    rad = np.zeros_like(rho)
 
     for k in (range(0, val_i+1)):
-        # Numba cannot deal with math.factorial, so I've tried math.gamma but also no luck
-        #rad += ( ((-1)**k * math.gamma(n - k + 1) ) / (math.gamma(k+1) * math.gamma(val_j - k + 1) * math.gamma(val_i - k + 1) ) )* rho**(n-2*k) 
-
-        rad += ( ((-1)**k * math.factorial((n - k)) ) / (math.factorial((k)) * math.factorial((val_j - k)) * math.factorial((val_i - k)) ) )* rho**(n-2*k) 
+        rad += ( ((-1)**k * _fast_factorial(n - k) ) / (_fast_factorial(k)*_fast_factorial(val_j - k)*_fast_factorial(val_i - k) ) )* rho**(n-2*k) 
 
     return rad
 
 # Zernike Polynomial function, generates the corresponding polynomial for each given n,m 
 # along the cartesian (pixel) coordinates x,y
-#@nb.jit(nopython = True, parallel = True, cache = True, fastmath = True)
+@nb.jit(nopython = True, cache = True, fastmath = True)
 def _ZernikePolynomial(n, m, x, y):
     # theta is the azimuthal angle between 0 and 2pi; rho is the radial distance between 0 and 1
     
     rho =  np.sqrt(x**2 + y**2)
     theta = np.arctan2(x,y) 
-    radial = _radialfunc(n, m , rho) 
+    radial = _radialfunc(n, m , rho)
     
     if( m > 0):
         z_all = radial* np.cos( m * theta) * np.sqrt(2*n+2)
@@ -95,9 +106,6 @@ def _ZernikePolynomial(n, m, x, y):
         z_all = radial * np.sqrt(n+1)
     else :
         z_all = radial* np.sin( m * theta) * np.sqrt(2*n+2)
-
-    #z_all[ rho > 1 ] = np.nan  # if i wanna restrict results to a radius of 1
-
     return (z_all) #renormalization?
 
 class Patter_generator:
@@ -163,7 +171,8 @@ class Patter_generator:
                 if m > n:
                     n += 1
                     m = -n 
-        return Zernike*255
+        # As the Zernike pattern is a sum of various patterns it needs renormalization
+        return (Zernike*255)#%256
 
     def GenerateGrating(self, wl, pixel_pitch, lmm, theta, res_X, res_Y):
         """Generates a grating pattern.
