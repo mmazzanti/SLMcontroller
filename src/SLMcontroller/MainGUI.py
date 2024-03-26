@@ -193,7 +193,7 @@ class HologramsManager():
     # This function is used to render a pattern generated from an algorithm, 
     # bypassing the active optical elements
     def renderAlgorithmPattern(self, pattern, others):
-        """Renders a phase pattern generated from an algorithm, bypassing the active optical elements
+        """Renders a phase pattern generated from an algorithm, bypassing the active optical elements & renormalisation
 
         Args:
             pattern (np.array): Phase pattern to be rendered on the SLM

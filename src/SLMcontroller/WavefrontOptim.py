@@ -431,7 +431,10 @@ class SpotOptimTab_ext(QWidget):
             self.theOptimizer.refZoneID = int(refzone)
             # Return the value of the new reference zone
             # Used for Flask as a return code to double check everything went fine
-        return jsonify(RefZone = self.theOptimizer.refZoneID,ProbZone = self.theOptimizer.probZoneID,Phase = self.theOptimizer.phase)
+            return jsonify(RefZone = self.theOptimizer.refZoneID,ProbZone = self.theOptimizer.probZoneID,Phase = self.theOptimizer.phase)
+        else:
+            return[500, 'Invalid reference zone']
+        
 
     def getProbRefZone(self):
         """Returns the zones IDs and optimizer process state (running/not running) zone remotely
@@ -463,7 +466,9 @@ class SpotOptimTab_ext(QWidget):
             self.theOptimizer.probZoneID = int(probzone)
             # Return the value of the new reference zone
             # Used for Flask as a return code to double check everything went fine
-        return jsonify(RefZone = self.theOptimizer.refZoneID,ProbZone = self.theOptimizer.probZoneID,Phase = self.theOptimizer.phase)
+            return jsonify(RefZone = self.theOptimizer.refZoneID,ProbZone = self.theOptimizer.probZoneID,Phase = self.theOptimizer.phase)
+        else:
+            return[500, 'Invalid probe zone']
 
     def setPhase(self,phase):
         """Sets the phase remotely
