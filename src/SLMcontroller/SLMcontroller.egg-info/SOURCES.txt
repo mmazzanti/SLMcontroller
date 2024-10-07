@@ -1,0 +1,11 @@
+LICENSE
+README.md
+pyproject.toml
+SLMcontroller/SLMcontroller.egg-info/PKG-INFO
+SLMcontroller/SLMcontroller.egg-info/SOURCES.txt
+SLMcontroller/SLMcontroller.egg-info/dependency_links.txt
+SLMcontroller/SLMcontroller.egg-info/entry_points.txt
+SLMcontroller/SLMcontroller.egg-info/requires.txt
+SLMcontroller/SLMcontroller.egg-info/top_level.txt
+tests/test_gmsh_parallel.py
+tests/testcv.py

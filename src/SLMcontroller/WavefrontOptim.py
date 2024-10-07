@@ -422,7 +422,7 @@ class SpotOptimTab_ext(QWidget):
             refzone (int/str): Reference zone to set. Flask will input this as a string.
         """
         refzone = int(refzone)
-        if (refzone in self.ids_list) and not(refzone == self.ref_zone):
+        if (refzone in self.ids_list) and not(refzone == self.prob_zone):
             # Change ref zone in the GUI
             self.zones_ref_combobox.setCurrentText(str(refzone))
             # Set the new reference zone

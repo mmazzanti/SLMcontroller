@@ -1,0 +1,13 @@
+flask
+gmsh
+numba
+numpy
+opencv_python
+Pillow
+PyQt6
+
+[dev]
+check-manifest
+
+[test]
+coverage

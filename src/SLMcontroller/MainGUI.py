@@ -25,6 +25,7 @@ import SLMcontroller.Grating as Grating
 import SLMcontroller.FourierWavefrontOptim as FourierWavefrontOptim
 import SLMcontroller.WavefrontOptim as WavefrontOptim
 import SLMcontroller.FlatnessCorrection as FlatnessCorrection
+import SLMcontroller.AmplitudeMask as AmplitudeMask
 import SLMcontroller.Meshing_process as Meshing_process
 import SLMcontroller.Zernike as Zernike
 import SLMcontroller.Remote_control as Remote_control
@@ -230,10 +231,30 @@ class HologramsManager():
         So we need to renormalize the hologram such that value%226
         """
         self.pattern = (np.mod(self.pattern,256)*(self.settings_manager.get_phase_correction())/255).astype(np.uint8)
+
+        ## Renormalize pattern by the user amplitude scalings
+        amplitudesScalings = self.getAmplitudeScalings()
+        for pattern in amplitudesScalings:
+            self.pattern = np.mod(np.multiply(self.pattern,pattern),256).astype(np.uint8)
+
+    def getAmplitudeScalings(self):
+        """Returns the amplitude scalings of the active optical elements
+
+        Returns:
+            list: List of amplitude scalings
+        """
+        amplitudesScaling = []
+        for el in self.optical_elements:
+            if el is not None:
+                if self.optical_elements[el].is_active():
+                    if type(self.optical_elements[el]).__name__ == "AmplitudeMaskTab":
+                        amplitudesScaling.append(self.optical_elements[el].get_pattern())
+        return amplitudesScaling
         
     def getPatterns(self):
         """This function gets all the patterns from the active elements and combines them
         """
+        amplitudesScaling = []
         for el in self.optical_elements:
             if el is not None:
                 if self.optical_elements[el].is_active():
@@ -308,8 +329,8 @@ class First(QtWidgets.QMainWindow):
         self.SLMWindow = SLMWindow(self.settings_manager.get_X_res(), self.settings_manager.get_Y_res(),self.settings_manager.get_SLM_window())
         self.holograms_manager = HologramsManager(self.SLMWindow, self.settings_manager, self.pattern_generator,self.tabwidget)
 
-        self.possible_optical_elements = ["Lens", "Grating", "Flatness correction", "Zernike", "LUT", "Spot optimization", "Spot optimization (ext)"]
-        self.tabs_constructors = [self.lens_tab, self.grating_tab, self.flatness_correction_tab, self.zernike_tab, self.LUT_tab, self.Spot_optim, self.Spot_optim_ext]
+        self.possible_optical_elements = ["Lens", "Grating", "Flatness correction", "Zernike", "LUT", "Amplitude Mask", "Spot optimization", "Spot optimization (ext)"]
+        self.tabs_constructors = [self.lens_tab, self.grating_tab, self.flatness_correction_tab, self.zernike_tab, self.LUT_tab, self.amplitude_mask_tab, self.Spot_optim, self.Spot_optim_ext]
 
         wid = QtWidgets.QWidget(self)
         self.setCentralWidget(wid)
@@ -373,6 +394,13 @@ class First(QtWidgets.QMainWindow):
         """
         tab = FlatnessCorrection.FlatnessCorrectionTab(self.pattern_generator, self.settings_manager, self.holograms_manager)
         self.tabwidget.addTab(tab,"Flatness Correction")
+        self.holograms_manager.addElementToList(id(tab), tab)
+
+    def amplitude_mask_tab(self):
+        """Creates a new Amplitude mask tab and adds it to the tabwidget
+        """
+        tab = AmplitudeMask.AmplitudeMaskTab(self.pattern_generator, self.settings_manager, self.holograms_manager)
+        self.tabwidget.addTab(tab,"Amplitude Mask")
         self.holograms_manager.addElementToList(id(tab), tab)
 
     def zernike_tab(self):

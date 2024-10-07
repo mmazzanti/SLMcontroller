@@ -1,0 +1,2 @@
+[gui_scripts]
+SLMcontroller = SLMcontroller:main

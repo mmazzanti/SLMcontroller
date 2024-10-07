@@ -116,7 +116,8 @@ class GratingTab(QWidget):
         self.spin_lmm.setSuffix(' l/mm')
         self.spin_lmm.valueChanged.connect(self.update_lmm_slide)
         self.spin_lmm.setKeyboardTracking(False)
-        self.spin_lmm.setSingleStep(0.01)
+        self.spin_lmm.setDecimals(4)
+        self.spin_lmm.setSingleStep(0.001)
         self.spin_lmm.setMaximum(self.maxlmm)
         self.spin_lmm.setMinimum(self.minlmm)
 
@@ -140,7 +141,9 @@ class GratingTab(QWidget):
         self.spin_angle.setSuffix(' π')
         self.spin_angle.valueChanged.connect(self.update_angle_slide)
         self.spin_angle.setKeyboardTracking(False)
-        self.spin_angle.setSingleStep(0.01)
+        self.spin_angle.setSingleStep(0.001)
+        self.spin_angle.setDecimals(4)
+        self.spin_angle.setSingleStep(0.001)
 
         self.angle_slider = utils.DoubleSlider()
         self.angle_slider.setGeometry(50,50, 200, 50)
