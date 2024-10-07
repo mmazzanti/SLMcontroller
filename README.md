@@ -76,7 +76,7 @@ The flatness correction is normally an image and its size should match the SLM s
 Applies an amplitude pattern (renormalized in the range [0,1] where 1 = 255 and 0 = 0) to the SLM surface to normalize its diffractive efficiency when correcting for optical aberrations observed by the camera. By matching the amplitude pattern to the shape of the incoming beam, the diffractive efficiency of the SLM can be equalized across all zones, ensuring consistent interference amplitude and preventing camera saturation or weak signals.
 
 <p align="center">
-   <img src="" alt="Grating tab"/>
+   <img src="https://github.com/mmazzanti/SLMcontroller/blob/1a0aa1acd6684fdb1a80e36183bdfa7a542b8922/Documentation/Img/inverted_gaussian_amplitude.png" alt="Inverted gaussian mask"/>
 </p>
 
 
